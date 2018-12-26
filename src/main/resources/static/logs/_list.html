@@ -1,0 +1,136 @@
+<div class="search-div" style="text-align: right;margin: 20px 2% 20px;">
+	<form enctype="multipartformdata" style="border: 1px #999a99 solid;border-radius: 5px;padding: 20px 20px;">
+		<input type="file" id="sql" accept=".*" style="float: left;padding: 4px 9px;border: 1px solid #e0e0e0;"/>
+		<a class="btn btn-sm btn-blue" translate="content.data.import" style="width: 100px;" data-ng-click="importSql()"></a>
+		<a class="btn btn-sm btn-blue" translate="content.data.import_accounts" style="width: 100px;" data-ng-click="importExcel()"></a>
+		<a class="btn btn-sm btn-blue" translate="content.data.export" style="width: 100px;" data-ng-click="exportSql()"></a>
+		<a class="btn btn-sm btn-blue" translate="content.logs.export" style="width: 120px;" data-ng-click="exportExcel()"></a>
+	</form>
+</div>
+
+<div class="content-div">
+	<div class="table-div">
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" class="tb-title"><span translate="content.logs.list"></span></th>
+					<th ></th>
+				</tr>
+			</thead>
+		</table>			
+		<table>
+			<thead>
+				<tr>
+					<td nowrap="nowrap"><span translate="content.no"></span></td>
+					<td nowrap="nowrap"><span translate="content.logs.username"></span></td>
+					<td nowrap="nowrap"><span translate="content.operations.operation"></span></td>
+					<td nowrap="nowrap"><span translate="content.logs.resource"></span></td>
+					<td nowrap="nowrap"><span translate="content.logs.status"></span></td>
+					<td nowrap="nowrap"><span translate="content.logs.url"></span></td>
+					<td nowrap="nowrap"><span translate="content.logs.time"></span></td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-ng-if="!(pageInfo) || pageInfo.totalElements<1">
+					<td colspan="7" class="empty-td">
+   						<span translate="content.table.nodata"></span>
+					</td>
+				</tr>
+				<tr data-ng-if="pageInfo" data-ng-repeat="log in logs">
+					<td data-ng-bind="$index+1+pageInfo.index"></td>
+					<td><span>{{log.operator.username}}</span></td>
+					<td><span>{{log.operation}}</span></td>
+					<td><span>{{log.resource}}</span></td>
+					<td><span>{{log.status}}</span></td>
+					<td><span>{{log.url}}</span></td>
+					<td><span>{{log.updatedAt}}</span></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+		
+  	<div align="right" class="pageInfo" >
+		<form data-ng-submit="searchList(pageInfo.showPage-1,pageInfo)">
+			<span class="span-lt"><span translate="content.operations.results"></span>{{pageInfo.totalElements}}</span>
+			<span class="span-lt"><span translate="content.operations.pages"></span>{{pageInfo.totalPages}}</span>
+			<span class="span-lt"><span translate="content.operations.size"></span>
+				<select data-ng-model="pageInfo.size" data-ng-change="searchList(0, pageInfo)"
+						data-ng-options="x for x in [10,20,50,100]">
+				</select>
+			</span>
+   			<span>
+   				<button type="button" data-ng-click="searchList(0,pageInfo)" data-ng-if="!(pageInfo.number<0)"
+   					class="btn-sm btn-white" translate="content.pageInfo.first"></button>
+   			</span>
+   			<span>
+   				<button type="button" data-ng-click="searchList(pageInfo.number-1,pageInfo)" class="btn-sm btn-blue"
+   					data-ng-if="(pageInfo.number>0)" translate="content.pageInfo.prev" ></button>
+				<button type="button" class="btn-sm btn-blue btn-disabled" data-ng-if="!(pageInfo.number>0)"
+					translate="content.pageInfo.prev" ></button>
+   			</span>
+   			<span class="pageInfo-number">
+   				<a data-ng-click="searchList(0,pageInfo)" data-ng-if="(pageInfo.number>2)">1</a>
+   				<a data-ng-click="searchList(1,pageInfo)" data-ng-if="(pageInfo.number>3)">2</a>
+   				<a data-ng-if="(pageInfo.number>4)">......</a>
+   				<a data-ng-click="searchList(pageInfo.number-2,pageInfo)"
+   					data-ng-if="(pageInfo.number>1)">{{pageInfo.number-1}}</a>
+   				<a data-ng-click="searchList(pageInfo.number-1,pageInfo)"
+   					data-ng-if="(pageInfo.number>0)">{{pageInfo.number}}</a>
+   				<a style="color: black;">{{pageInfo.number+1}}</a>
+   				<a data-ng-click="searchList(pageInfo.number+1,pageInfo)"
+   					data-ng-if="(pageInfo.number+1<pageInfo.totalPages)">{{pageInfo.number+2}}</a>
+   				<a data-ng-click="searchList(pageInfo.number+2,pageInfo)"
+   					data-ng-if="(pageInfo.number+2<pageInfo.totalPages)">{{pageInfo.number+3}}</a>
+   				<a data-ng-if="(pageInfo.number+5<pageInfo.totalPages)">......</a>
+   				<a data-ng-click="searchList(pageInfo.totalPages-2,pageInfo)"
+  					data-ng-if="(pageInfo.number+3<pageInfo.totalPages) && (pageInfo.number+4!=pageInfo.totalPages)">
+  					{{pageInfo.totalPages-1}}</a>
+  				<a data-ng-click="searchList(pageInfo.totalPages-1,pageInfo)"
+  					data-ng-if="(pageInfo.number+4<=pageInfo.totalPages)">{{pageInfo.totalPages}}</a>
+   			</span>
+   			<span>
+   				<button type="button" data-ng-click="searchList(pageInfo.number+1,pageInfo)" class="btn-sm btn-blue"
+   					data-ng-if="(pageInfo.number+1<pageInfo.totalPages)" translate="content.pageInfo.next"></button>
+				<button type="button" class="btn-sm btn-blue btn-disabled" data-ng-if="!(pageInfo.number+1<pageInfo.totalPages)"
+					translate="content.pageInfo.next"></button>
+   			</span>
+   			<span>
+				<button type="button" data-ng-click="searchList(pageInfo.totalPages-1,pageInfo)" data-ng-if="!(pageInfo.number<0)"
+					class="btn-sm btn-white" translate="content.pageInfo.last"></button>
+			</span>
+   			<span>
+   				<input type="number" step="1" data-ng-model="pageInfo.showPage" max="{{pageInfo.totalPages}}" required="required"
+   						min="1" data-ng-if="(pageInfo.totalPages>0)" >
+   				<input type="number" step="1" data-ng-model="pageInfo.showPage" max="1" min="1" readonly="readonly"
+   						data-ng-if="!(pageInfo.totalPages>0)" >
+   				<input type="submit" class="btn-sm btn-blue btn-go" value="GO">
+   			</span>
+		</form>
+	</div>
+  		
+   	<div class="modal fade" id="alertModal" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">×</button>
+					<h4 class="modal-title" data-ng-bind="alert_title"></h4>
+				</div>
+				<div class="modal-body">
+					<span data-ng-bind="alert_message" style="margin-left: 6em;"></span>
+				</div>
+	            <div class="modal-footer"></div>
+	        </div>  
+	    </div> 
+	</div>
+
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<span data-ng-bind="alert_message" translate="content.modals.waitting"></span>
+			</div>
+    	</div>  
+	</div>
+</div>

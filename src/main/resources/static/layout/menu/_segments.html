@@ -1,0 +1,26 @@
+<div class="menu-div">
+	<ul class="menu-ul">
+		<li>
+			<a href="javascript:void(0)" data-ng-click="toggleMenuLi('segmentsMenu')" >
+				<span translate="menu.segments.head" style="vertical-align: middle;"></span>
+			</a>
+		</li>
+	</ul>
+	<ul class="menu-li" id="segmentsMenu">
+		<li  data-ng-if="loginUser.type==1">
+			<a data-ui-sref-active="active" data-ui-sref="segments.listAgentSegments" translate="menu.segments.listAgentSegments"></a>
+		</li>
+		<hr style="margin-left: -10%;" />
+		<li >
+			<a data-ui-sref-active="active" data-ui-sref="segments.listGroupSegments" translate="menu.segments.listGroupSegments"></a>
+		</li>
+		<hr style="margin-left: -10%;" data-ng-if="loginUser.type==1"/>
+		<li data-ng-if="loginUser.type==1">
+			<a data-ui-sref-active="active" data-ui-sref="segments.createAgentSegment" translate="menu.segments.createAgentSegments"></a>
+		</li>
+		<hr style="margin-left: -10%;" data-ng-if="loginUser.type==1"/>
+		<li data-ng-if="loginUser.type==1">
+			<a data-ui-sref-active="active" data-ui-sref="segments.createGroupSegment" translate="menu.segments.createGroupSegments"></a>
+		</li>
+	</ul>
+</div>

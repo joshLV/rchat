@@ -1,0 +1,63 @@
+<div class="content-div">
+	<div class="table-div">
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" class="tb-title"><span translate="menu.credits.back"></span></th>
+					<th ></th>
+				</tr>
+			</thead>
+		</table>
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" style="border-right: none;" ><span translate="content.credits.form_back"></span></th>
+					<th style="border-left: none;"></th>
+				</tr>
+			</thead>
+		</table>
+		<form name="creditForm" data-ng-submit="backCredit(credit)">
+			<div>
+				<label><span translate="content.credits.back_number"></span></label>
+				<input type="text" class="text-class" data-ng-model="credit.credit" pattern="[+]{0,1}(\d+)" name="credit"
+						maxlength="20" required="required" data-ng-blur="creditForm.credit.checked=true"
+						data-ng-focus="creditForm.credit.checked=false"/>
+				<span translate="content.credits.point"></span>
+			</div>
+			<div>
+				<label><span translate="content.credits.latest_time"></span></label>
+				<input type="text" id="dead" class="text-class"  data-ng-model="credit.dead" onClick="WdatePicker()">
+			</div>
+			<div data-ng-if="(credit.credit>0) && (creditUnitPrice>0)">
+				<label><span translate="content.credits.back_money"></span></label>
+				<input type="text" class="text-class disabled-class" value="{{creditUnitPrice*credit.credit}}"readonly="readonly">
+				<span translate="content.credits.yuan"></span>		
+			</div>
+			<div data-ng-if="!(credit.credit>0) || !(creditUnitPrice>0)">
+				<label><span translate="content.credits.back_money"></span></label>
+				<input type="text" class="text-class disabled-class" value="0" readonly="readonly">
+				<span translate="content.credits.yuan"></span>		
+			</div>
+			<div>
+				<label></label>
+				<button type="submit" class="btn-sm btn-blue" data-ng-disabled="creditForm.credit.$invalid"
+					translate="content.operations.ok"></button>
+				<button type="reset" data-ng-click="reset()" class="btn-sm btn-white" translate="content.operations.reset"></button>
+			</div>
+		</form>
+	</div>
+	<div class="modal fade" id="alertModal" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">×</button>
+					<h4 class="modal-title" data-ng-bind="alert_title"></h4>
+				</div>
+				<div class="modal-body">
+					<span data-ng-bind="alert_message" style="margin-left: 6em;"></span>
+				</div>
+	            <div class="modal-footer"></div>
+	        </div>  
+	    </div> 
+	</div>
+</div>

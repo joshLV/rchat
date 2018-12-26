@@ -1,0 +1,337 @@
+<!-- <div style="height: 100%;overflow: auto;margin-right: -17px;"> -->
+<div style="overflow: auto;height: 100%;">
+	<div class="table-title">
+		<i class="iconfont icon-cushuxian"></i>
+		<h4 translate="content.index.title"></h4>
+		<a style="margin-left: 80%" class="btn-sm btn-blue" data-toggle="modal" data-target="#updatePassword" translate="content.agents.admin.modify"></a>		
+	</div>
+
+	<div class="table-div" data-ng-if="loginUser.type==1">
+		<table>
+			<thead>
+				<tr>
+					<th width="20%" class="tb-title"><span translate="content.table.title"></span></th>
+					<th></th>
+				</tr>
+			</thead>
+		</table>
+		
+		<table >
+			<tbody>
+				<tr>
+					<th width="20%"><span translate="content.accounts.total"></span></th>
+					<td width="20%"><span>{{summary.userAmount}} </span></td>
+					<td width="10%"><a href="#" data-ng-click="getUserByType(0)" translate="content.export"></a></td>
+					<th width="20%"><span translate="content.accounts.unactivated"></span></th>
+					<td width="20%"><span>{{summary.nonactiveUserAmount}}</span></td>
+					<td width="10%"><a href="#" data-ng-click="getUserByType(6)" translate="content.export"></a></td>
+				</tr>
+				<tr>
+					<th><span translate="content.accounts.expired"></span></th>
+					<td><span>{{summary.expiredUserAmount}}</span></td>
+					<td><a href="#" translate="content.export" data-ng-click="getUserByType(2)"></a></td>
+					<th><span translate="content.accounts.expiring"></span></th>
+					<td><span>{{summary.expiringUserAmount}}</span></td>
+					<td><a href="#" translate="content.export" data-ng-click="getUserByType(1)"></a></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<table>
+			<tbody>
+				<tr>
+					<th width="20%"><span translate="content.accounts.created"></span></th>
+					<td width="20%"><span>{{summary.newUserAmount}}</span></td>
+					<td width="10%"><a href="#" translate="content.export" data-ng-click="getUserByType(3)"></a></td>
+					<th width="20%"><span translate="content.accounts.actived"></span></th>
+					<td width="20%"><span>{{summary.newActivatedUserAmmout}}</span></td>
+					<td width="10%"><a href="#" translate="content.export" data-ng-click="getUserByType(4)"></a></td>
+				</tr>
+				<tr>
+					<th><span translate="content.accounts.expired_current"></span></th>
+					<td><span>{{summary.newExpiredUserAmmount}}</span></td>
+					<td><a href="#" translate="content.export" data-ng-click="getUserByType(5)"></a></td>
+					<th><span></span></th>
+					<td><span></span></td>
+					<td><a></a></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<table>
+			<tbody>
+				<tr>
+					<th width="20%"><span translate="content.credits.credit_current"></span></th>
+					<td width="30%"><span>{{summary.creditConsumption}}</span></td>
+					<td width="20%"></td>
+					<td width="30%"><span> </span></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<table>
+			<tbody>
+				<tr>
+					<th width="20%"><span translate="content.agents.total"></span></th>
+					<td width="30%"><span>{{summary.agentAmount}}</span></td>
+					<th width="20%"><span translate="content.agents.created_current"></span></th>
+					<td width="30%"><span>{{summary.newAgentAmount}}</span></td>
+				</tr>
+				<tr>
+					<th><span translate="content.agents.level1"></span></th>
+					<td><span>{{summary.firstAgentAmount}}</span></td>
+					<td></td>
+					<td><a href="#" translate="content.details" data-ng-click="getAgentByLevel(1)"></a></td>
+				</tr>
+				<tr>
+					<th><span translate="content.agents.level2"></span></th>
+					<td><span>{{summary.secondAgentAmount}}</span></td>
+					<td></td>
+					<td><a href="#" translate="content.details" data-ng-click="getAgentByLevel(2)"></a></td>
+				</tr>
+				<tr>
+					<th><span translate="content.agents.level3"></span></th>
+					<td><span>{{summary.thirdAgentAmount}}</span></td>
+					<td></td>
+					<td><a href="#" translate="content.details" data-ng-click="getAgentByLevel(3)"></a></td>
+				</tr>
+				<tr>
+					<th><span translate="content.agents.level4"></span></th>
+					<td><span>{{summary.forthAgentAmount}}</span></td>
+					<td></td>
+					<td><a href="#" translate="content.details" data-ng-click="getAgentByLevel(4)"></a></td>
+				</tr>
+				<tr>
+					<th><span translate="content.agents.level5"></span></th>
+					<td><span>{{summary.fifthAgentAmount}}</span></td>
+					<td></td>
+					<td><a href="#" translate="content.details" data-ng-click="getAgentByLevel(5)"></a></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<table>
+			<tbody>
+				<tr>
+					<th width="20%"><span translate="content.groups.total"></span></th>
+					<td width="30%"><span>{{summary.groupAmount}}</span></td>
+					<th width="20%"><span translate="content.groups.created_current"></span></th>
+					<td width="30%"><span>{{summary.newGroupAmount}}</span></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="table-div" data-ng-if="loginUser.type==2 || loginUser.type==3">
+		<table>
+			<tbody>
+				<tr>
+					<th width="20%"><span translate="content.agents.agent"></span></th>
+					<td width="30%"><span>{{defaultAgent.name}}</span></td>
+					<th width="20%"><span translate="content.agents.segment"></span></th>
+					<td width="30%"><span>{{defaultAgent.segment}}</span></td>
+				</tr>
+				<tr>
+					<th><span translate="content.agents.region"></span></th>
+					<td><span>{{defaultAgent.region}}</span></td>
+					<th><span translate="content.agents.level"></span></th>
+					<td>
+						<span data-ng-if="defaultAgent.level==1" translate="content.agents.level1"></span>
+						<span data-ng-if="defaultAgent.level==2" translate="content.agents.level2"></span>
+						<span data-ng-if="defaultAgent.level==3" translate="content.agents.level3"></span>
+						<span data-ng-if="defaultAgent.level==4" translate="content.agents.level4"></span>
+						<span data-ng-if="defaultAgent.level==5" translate="content.agents.level5"></span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<table>
+			<tbody>
+				<tr>
+					<th ><span translate="content.credits.rest"></span></th>
+					<td>{{creditSummary.creditRemaint}}</td>
+					<td><a href="javascript:void(0);" data-ui-sref="credits.give" translate="content.credits.buy"></a></td>
+					<th ><span translate="content.credits.total"></span></th>
+					<td colspan="2">{{creditSummary.creditAccumulation}}</td>
+				</tr>
+				<tr>
+					<th ><span translate="content.credits.buy_month"></span></th>
+					<td width="15%">{{creditSummary.creditMonthAccumulation}}</td>
+					<td><a href="javascript:void(0);" data-ui-sref="credits.list" translate="content.credits.record"></a></td>
+					<th ><span translate="content.credits.buy_season"></span></th>
+					<td width="15%">{{creditSummary.creditSeasonAccumulation}}</td>
+					<td><a href="javascript:void(0);" data-ui-sref="credits.list" translate="content.credits.record"></a></td>
+				</tr>
+				<tr>
+					<th ><span translate="content.credits.reward_season"></span></th>
+					<td>0</td>
+					<td><a href="javascript:void(0);" translate="content.credits.reward"></a></td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<table>
+			<thead>
+				<tr>
+					<th width="20%"></th>
+					<th width="20%" translate="content.number"></th>
+					<th width="20%" translate="content.credits.rest"></th>
+					<th width="20%" translate="content.credits.total"></th>
+					<th width="20%" translate="content.operations.operation"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th><span translate="content.groups.group"></span></th>
+					<td>{{summary.groupAmount}}</td>
+					<td></td>
+					<td></td>
+					<td><a data-ui-sref="groups.list" translate="content.groups.check_groups" ></a></td>
+				</tr>
+				<tr>
+					<th><span translate="content.agents.agent"></span></th>
+					<td>{{summary.agentAmount}}</td>
+					<td></td>
+					<td></td>
+					<td><a data-ui-sref="agents.list" translate="content.agents.check_agents" ></a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="table-div" data-ng-if="loginUser.type == 4" style="width: 95%;">
+		<table>
+			<tr>
+				<th width="20%"><span translate="content.groups.name"></span></th>
+				<td width="30%">{{defaultGroup.name}}</td>
+				<th width="20%"><span translate="content.groups.admin.name"></span></th>
+				<td width="30%">{{defaultGroup.administrator.name}}</td>
+			</tr>
+		</table>
+		
+		<table>
+			<tbody>
+				<tr>
+					<th width="20%"><span translate="content.accounts.total"></span></th>
+					<td width="15%">{{summary.userAmount}}</td>
+					<td width="15%"><a href="javascript:void(0);" data-ng-click="getUserByType(0)" translate="content.export"></a></td>
+					<th width="20%"><span translate="content.accounts.expiring"></span></th>
+					<td width="15%">{{summary.expiringUserAmount}}</td>
+					<td width="15%"><a href="javascript:void(0);" data-ng-click="getUserByType(1)" translate="content.export"></a></td>
+				</tr>
+				<tr>
+					<th><span translate="content.accounts.expired"></span></th>
+					<td>{{summary.expiredUserAmount}}</td>
+					<td><a href="javascript:void(0);" data-ng-click="getUserByType(2)" translate="content.export"></a></td>
+					<th></th>
+					<td colspan="2"></td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<table style="width: 50%">
+			<tbody>
+				<tr>
+					<th width="20%"><span translate="content.credits.rest"></span></th>
+					<td width="15%">{{creditSummary.creditRemaint}}</td>
+					<td width="15%"><a href="javascript:void(0);" data-ui-sref="credits.give" translate="content.credits.buy"></a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="table-div" data-ng-if="loginUser.type == 5 || loginUser.type == 6" style="width: 95%;">
+		<table>
+			<tr>
+				<th width="20%"><span translate="content.departments.name"></span></th>
+				<td width="30%">{{defaultDepartment.name}}</td>
+				<th width="20%"><span translate="content.departments.admin.name"></span></th>
+				<td width="30%">{{defaultDepartment.administrator.name}}</td>
+			</tr>
+		</table>
+		
+		<table>
+			<tbody>
+				<tr>
+					<th width="20%"><span translate="content.accounts.total"></span></th>
+					<td width="15%">{{defaultDepartment.userAmount}}</td>
+					<td width="15%"><a href="javascript:void(0);" data-ng-click="getUserByType(0)" translate="content.export"></a></td>
+					<th width="20%"><span translate="content.accounts.expiring"></span></th>
+					<td width="15%">{{defaultDepartment.expiringUserAmount}}</td>
+					<td width="15%"><a href="javascript:void(0);" data-ng-click="getUserByType(1)" translate="content.export"></a></td>
+				</tr>
+				<tr>
+					<th><span translate="content.accounts.expired"></span></th>
+					<td>{{defaultDepartment.expiredUserAmount}}</td>
+					<td><a href="javascript:void(0);" data-ng-click="getUserByType(2)" translate="content.export"></a></td>
+					<th></th>
+					<td colspan="2"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<!-- 修改密码模态框 -->
+<div class="modal fade" id="updatePassword" tabindex="-1">  
+    <div class="modal-dialog">  
+        <div class="modal-content">  
+        	<div class="modal-header">    
+            	<button type="button" class="close" data-dismiss="modal" data-ng-click="closePwd()">x</button>   
+                <h4 class="modal-title" id="myModalLabel"><span translate="content.operations.modifyPassword"></span></h4>  
+            </div>
+            <form name="updatePwdForm" data-ng-submit="updatePwd(user)">  
+	            <div class="modal-body">
+                	<div>
+                		<label><span translate="content.agents.admin.old_password"></span></label>
+			            <input type="password" data-ng-model="user.oldPassword" name="oldPassword" autocomplete="off" pattern="[\w\d@_]*"
+            				 data-ng-blur="updatePwdForm.oldPassword.error=true" data-ng-focus="updatePwdForm.oldPassword.error=false"
+            				 maxlength="50" data-ng-minlength="8" required class="text-class"/>
+		                <div class="error-msg" data-ng-show="updatePwdForm.oldPassword.error">
+							<span data-ng-show="updatePwdForm.oldPassword.$invalid" translate="content.errors.err2"></span>
+						</div>
+					</div>
+					<div>
+						<label><span translate="content.agents.admin.new_password"></span></label>
+						<input type="password" data-ng-model="user.newPassword" name="newPassword" autocomplete="off" pattern="[\w\d@_]*"
+	           				 data-ng-blur="updatePwdForm.newPassword.error=true" data-ng-focus="updatePwdForm.newPassword.error=false"
+	           				 maxlength="50" data-ng-minlength="8" required class="text-class"/>
+	            		<div class="error-msg" data-ng-show="updatePwdForm.newPassword.error && updatePwdForm.oldPassword.$valid">
+							<span data-ng-show="updatePwdForm.newPassword.$invalid" translate="content.errors.err3"></span>
+						</div>
+				    </div>
+				    <div>
+				        <label><span translate="content.agents.admin.re_password"></span></label>
+			    	  	<input type="password" data-ng-model="user.rePassword" name="rePassword" autocomplete="off" maxlength="50"
+								class="text-class" data-ng-minlength="8" required />
+						<div class="error-msg" data-ng-show="updatePwdForm.rePassword.error">
+							<span data-ng-show="departments.newPassword != departments.rePassword" translate="content.errors.err4"></span>
+						</div>
+			    	</div>
+	            </div>
+	           	<div>
+					<div id="message" class="error-msg"></div>
+				</div>
+	            <div class="modal-footer">  
+	                <button type="submit" class="btn-sm btn-blue" data-ng-disabled="updatePwdForm.$invalid
+	                	|| user.newPassword != user.rePassword" translate="content.operations.ok"></button>  
+	                <button type="button" class="btn-sm btn-white" data-dismiss="modal" data-ng-click="closePwd()" translate="content.operations.close"></button>  
+	            </div>
+			</form>
+        </div>  
+    </div> 
+</div>
+<div class="modal fade" id="alertModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title" data-ng-bind="alert_title"></h4>
+			</div>
+			<div class="modal-body">
+				<span data-ng-bind="alert_message" style="margin-left: 6em;"></span>
+			</div>
+            <div class="modal-footer"></div>
+        </div>  
+    </div> 
+</div>

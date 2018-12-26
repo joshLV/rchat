@@ -1,0 +1,20 @@
+<div class="head">
+	<img class="head-png" title="RCHAT" src="images/head/rchat.png" >
+	<i class="iconfont icon-shuxian" style="vertical-align: middle;"></i>
+	<h3>
+		<a data-ui-sref="index" data-ng-if="loginUser.type==1" translate="head.title.rchat" id="title"></a>
+		<a data-ui-sref="index" data-ng-if="loginUser.type==2 || loginUser.type==3" translate="head.title.agent" id="title"></a>
+		<a data-ui-sref="index" data-ng-if="loginUser.type>3" translate="head.title.group" id="title"></a>
+	</h3>
+	
+	<h5>
+		<span translate="head.welcome" style="margin-right: 0.5em;"></span> {{loginUser.name}} : {{loginUser.username}}
+		<i class="iconfont icon-shuxian" style="vertical-align: middle;"></i>
+		<span translate="head.now" ></span><span>{{date}}</span>
+<!-- 		<i class="iconfont icon-shuxian" style="vertical-align: middle;"></i> -->
+<!-- 		<a data-ng-click="changeLang('en')" title="English" href="javascript:void(0)" data-ng-if="lang=='zh'">English</a> -->
+<!-- 		<a data-ng-click="changeLang('zh')" title="中文" href="javascript:void(0)" data-ng-if="lang=='en'">中文</a> -->
+		<i class="iconfont icon-shuxian" style="vertical-align: middle;"></i>
+		<a href="logout" translate="head.logout" ></a>
+	</h5>
+</div>

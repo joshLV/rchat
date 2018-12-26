@@ -1,0 +1,140 @@
+<div class="content-div">
+	<div class="table-div">
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" class="tb-title"><span translate="content.accounts.operations.modify"></span></th>
+					<th ></th>
+				</tr>
+			</thead>
+		</table>
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" style="border-right: none;" ><span translate="content.accounts.form"></span></th>
+					<th style="border-left: none;"></th>
+				</tr>
+			</thead>
+		</table>
+		<form name="accountForm">
+			<div>
+				<label><span translate="content.accounts.account"></span></label>
+				<input type="text" class="disabled-class" data-ng-model="accountDetail.number.fullValue" readonly="readonly" />
+			</div>
+			<div>
+				<label><span translate="content.departments.name_zh"></span></label>
+				<input type="text" class="text-class" name="name" data-ng-model="accountDetail.name" autocomplete="off" required="required" minlength="1" maxlength="16"
+					pattern="^[\u4e00-\u9fa5a-zA-Z0-9]+$"/>
+				<span style="color: #f15533" data-ng-show="accountForm.name.$invalid">
+					<span data-ng-show="accountForm.name.$error.pattern" data-translate="content.errors.err9"></span>
+					<span data-ng-show="accountForm.name.$error.required"><font color="red">*</font></span>
+				</span>
+			</div>
+			<div>
+				<label><span translate="content.accounts.password"></span></label>
+				<input type="password" class="text-class" data-ng-model="accountDetail.password" autocomplete="off" required="required"
+					maxlength="16" pattern="[\w\d@_]*">
+			</div>
+			<div>
+				<label><span translate="content.agents.attach_agent"></span></label>
+				<input type="text" class="disabled-class" data-ng-model="accountDetail.group.agent.name"
+					data-ng-if="accountDetail.group.agent.name" readonly="readonly" />
+				<input type="text" class="disabled-class" data-ng-model="accountDetail.number.groupSegment.agent.name"
+					data-ng-if="accountDetail.number.groupSegment.agent.name" readonly="readonly" />
+			</div>
+			<div>
+				<label><span translate="content.departments.attach_group"></span></label>
+				<input type="text" class="disabled-class" data-ng-model="accountDetail.group.name" readonly="readonly" />
+			</div>
+			<div>
+				<label><span translate="content.departments.attach_department"></span></label>
+				<select class="text-class" data-ng-model="accountDetail.department.id" data-ng-options="dpt.id as dpt.name for dpt in dptsList">
+				</select>
+			</div>
+			<div>
+				<label><span translate="content.teams.defaultTeam"></span></label>
+				<select class="text-class" data-ng-model="accountDetail.dGroup.id" data-ng-options="adg.id as adg.name for adg in gList">
+				</select>
+			</div>
+			<div>
+				<label>设备类型</label>
+				<select class="text-class" data-ng-model="accountDetail.type" data-ng-options="tl.id as tl.name for tl in typeList">
+				</select>
+			</div>
+			<div>
+				<label><span translate="content.accounts.priority"></span></label>
+				<input type="number" data-ng-model="accountDetail.priority" name="priority" max="10" min="1" step="1" class="text-class" required="required"/>
+				<span style="color: #f15533" data-ng-show="accountForm.priority.$invalid">
+					<span data-ng-show="accountForm.priority.$error.required"><font color="red">*</font></span>
+				</span>
+			</div>
+			<div>
+				<label><span translate="content.accounts.attach_team"></span></label>
+				<div class="box-group">
+					<label data-ng-repeat="acteam in acTeams"  style="min-width: 25em">
+						<input type="checkbox" name="grps" data-ng-checked="checkAccountTeams(acteam,accountDetail.groups)"
+							data-ng-click="addCheckValue(acteam.id)" data-ng-value="acteam.id" />{{acteam.name}}
+					</label>
+				</div>
+			</div>
+			<div class="radio-set" style="margin-top: 60px;">
+				<label><span translate="content.accounts.role"></span></label>
+				<label>
+					<input type="radio" data-ng-model="accountDetail.role" data-ng-value="0" />
+					<span translate="content.accounts.role0"></span>
+				</label>
+				<label>
+					<input type="radio" data-ng-model="accountDetail.role" data-ng-value="1" />
+					<span translate="content.accounts.role1"></span>
+				</label>
+			</div>
+			<div class="radio-set">
+				<label><span translate="content.accounts.represent"></span></label>
+				<label>
+					<input type="radio" data-ng-model="accountDetail.representative" data-ng-value="true" />
+					<span translate="content.operations.yes"></span>
+				</label>
+				<label>
+					<input type="radio" data-ng-model="accountDetail.representative" data-ng-value="false" />
+					<span translate="content.operations.no"></span>
+				</label>
+			</div>
+<!-- 			<div> -->
+<!-- 				<label>优先级</label> -->
+<!-- 				<select name="priority" disabled="disabled" class="text-class"> -->
+<!-- 					<option value="5">5</option> -->
+<!-- 				</select> -->
+<!-- 			</div> -->
+			<div style="min-height: 10em;">			
+				<div style="margin-left: 25%; margin-top: 0em" data-ng-repeat="business in accountDetail.businessRents">
+					{{business.business.name}}到期时间: "{{business.deadline}}"
+				</div>
+				<label></label>
+				<button type="button" class="btn-sm btn-blue" data-ng-disabled="accountForm.name.$invalid" data-ng-click="updateAccount(accountDetail,accountForm.grps)"
+					translate="content.operations.ok"></button>
+				<button type="button" class="btn-sm btn-white" onclick="javascript:history.go(-1)" translate="content.operations.return"></button>
+			</div>
+<!-- 			<div style="margin-top: 3em"> -->
+<!-- 				<label></label> -->
+<!-- 				<button type="button" class="btn-sm btn-blue" data-ng-click="updateAccount(accountDetail,accountForm.grps)" -->
+<!-- 					translate="content.operations.ok"></button> -->
+<!-- 				<button type="button" class="btn-sm btn-white" onclick="javascript:history.go(-1)" translate="content.operations.return"></button> -->
+<!-- 			</div> -->
+		</form>		
+	</div>
+</div>
+
+<div class="modal fade" id="alertModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title" data-ng-bind="alert_title"></h4>
+			</div>
+			<div class="modal-body">
+				<span data-ng-bind="alert_message"></span>
+			</div>
+            <div class="modal-footer"></div>
+        </div>  
+    </div> 
+</div>

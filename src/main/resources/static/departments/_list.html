@@ -1,0 +1,398 @@
+<div class="search-div department-div">
+	<form data-ng-submit="searchDepartments(search)" data-ng-if="loginUser.type==1" >
+		<div class="row">
+			<div class="col-sm-4" style="width:30%">
+				<label><span translate="content.agents.attach_agent"></span></label> 
+				<select class="text-class" id="selectOptions" data-ng-model="search.agentId" data-ng-change="getGroups(search.agentId)" style="width:60%">
+				</select>
+			</div>
+			<div class="col-sm-4" style="width:30%">
+			<label><span translate="content.departments.attach_group"></span></label> 
+				<select class="text-class" data-ng-model="search.groupId" style="width:60%"
+					data-ng-options="group.id as group.name for group in groups.content  | orderBy:'-name'" >
+					<option value="" translate="content.operations.selection"></option>
+				</select>
+			</div>
+			<div class="col-sm-4" style="width:30%">
+				<label><span translate="content.departments.name"></span></label>
+				<input type="text" class="text-class" data-ng-model="search.departmentName" style="width:60%"/>
+			</div>
+  		</div>
+  		<br/>
+		<div class="row">
+			<div class="col-sm-4" style="width:30%">
+				<label><span translate="content.agents.admin.name"></span></label>
+				<input type="text" class="text-class" data-ng-model="search.adminName" style="width:60%"/>
+			</div>
+			<div class="col-sm-4" style="width:30%">
+				<label><span translate="content.agents.admin.username"></span></label>
+				<input type="text" class="text-class" data-ng-model="search.adminUsername" style="width:60%"/>
+			</div>
+			<div class="col-sm-4" style="width:30%">
+				<button class="btn-sm btn-blue" type="submit" data-ng-disabled="!(search.groupId)"
+					style="margin: 0;width: 70px;" translate="content.operations.search"></button>
+			</div>
+		</div>
+	</form>
+	<form data-ng-submit="searchDepartments(search)" data-ng-if="loginUser.type!=1">
+		<div class="row">
+			<div class="col-sm-4" style="width:40%">
+				<label><span translate="content.departments.name"></span></label>
+				<input type="text" class="text-class" data-ng-model="search.departmentName" style="width:60%"/>
+			</div>
+			<div class="col-sm-4" style="width:40%">
+				<label><span translate="content.agents.admin.name"></span></label>
+				<input type="text" class="text-class" data-ng-model="search.adminName" style="width:60%"/>
+			</div>
+		</div>
+		<br/>
+		<div class="row">
+			<div class="col-sm-4" style="width:40%">
+				<label><span translate="content.agents.admin.username"></span></label>
+				<input type="text" class="text-class" data-ng-model="search.adminUsername" style="width:60%"/>
+			</div>
+			<div class="col-sm-4" style="width:40%;">
+				<button class="btn-sm btn-blue" type="submit" translate="content.operations.search"></button>
+				<button type="button" class="btn-sm btn-blue" data-ui-sref="departments.update({id:department.id})"
+					data-ng-if="(loginUser.type!=1) && (department.id) && (department.isSon || department.id == defaultDepartment.id)" translate="content.departments.operations.modify"></button>
+				<button type="button" class="btn-sm btn-blue" data-toggle="modal" data-target="#deleteModal"
+					data-ng-if="(loginUser.type!=1) && (department.id) && department.isSon && department.id != defaultDepartment.id" data-ng-click="deleteModal(department)"
+					translate="content.departments.operations.delete"></button>								
+			</div>
+		</div>
+	</form>
+</div>
+	
+<div class="content-div">
+	<div data-ng-if="!(showSearch)" class="table-div">
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" class="tb-title"><span translate="content.departments.list"></span></th>
+					<th ></th>
+				</tr>
+			</thead>
+		</table>
+		<table>
+			<tr>
+				<th width="15%" nowrap="nowrap" data-ng-if="!(department.parent.name)"><span translate="content.departments.attach_group"></span></th>
+				<th width="15%" nowrap="nowrap" data-ng-if="(department.parent.name)"><span translate="content.departments.parent"></span></th>
+				<td width="35%" nowrap="nowrap" data-ng-if="!(department.parent.name)"><span>{{department.group.name}}</span></td>
+				<td width="35%" nowrap="nowrap" data-ng-if="(department.parent.name)"><span>{{department.parent.name}}</span></td>
+				<th width="15%" nowrap="nowrap"><span translate="content.departments.account"></span></th>
+				<td width="35%" nowrap="nowrap"><span>{{department.administrator.username}}</span></td>
+			</tr>
+			<tr>
+				<th><span translate="content.departments.name"></span></th>
+				<td><span>{{department.name}}</span></td>
+				<th><span translate="content.departments.name_zh"></span></th>
+				<td><span>{{department.name}}</span></td>
+			</tr>
+			<tr data-ng-if="loginUser.type!=1 && department.id">
+				<th><span translate="content.departments.admin.name"></span></th>
+				<td><span>{{department.administrator.name}}</span></td>
+				<td colspan="2" style="text-align: right;padding-right: 20px;">
+					<span><a class="btn btn-sm btn-blue" data-toggle="modal" data-ng-if="department.isSon" data-ng-click="getAdmin(department)" data-target="#updatePwd" translate="content.operations.modifyPassword"></a></span>
+					<span><a class="btn btn-sm btn-blue" data-ng-if="false" translate="content.operations.resetPassword"></a></span>
+				</td>
+			</tr>
+		</table>
+		<form class="departmentList-authority">
+			<div class="radio-div">
+				<label id="departments-table-form-div-title"><span translate="content.departments.authority"></span></label>
+				<label id="overLevelCallTypeLabel"><span translate="content.departments.overLevelCallType1"></span></label>
+			</div>
+			<div class="radio-div">
+				<label></label>
+				<label>
+					<input type="radio" data-ng-model="department.privilege.overLevelCallType" value="0" disabled="disabled"/>
+					<span translate="content.departments.disabled"></span>
+				</label>
+				<label>
+					<input type="radio" data-ng-model="department.privilege.overLevelCallType" value="1" disabled="disabled"/>
+					<span translate="content.departments.enabled1"></span>
+				</label>
+				<label>
+					<input type="radio" data-ng-model="department.privilege.overLevelCallType" value="2" disabled="disabled"/>
+					<span translate="content.departments.enabled2"></span>
+				</label>
+			</div>
+			<div class="radio-div">
+				<label></label>			
+				<label id="overGroupEnabledLabel"><span translate="content.departments.overGroupCallType1"></span></label>
+			</div>
+			<div class="radio-div">
+				<label></label>
+				<label>
+					<input type="radio" data-ng-model="department.privilege.overGroupEnabled" value="1" disabled="disabled"/>
+					<span translate="content.departments.enabled"></span>
+				</label>
+				<label>
+					<input type="radio" data-ng-model="department.privilege.overGroupEnabled" value="0" disabled="disabled"/>
+					<span translate="content.departments.disabled"></span>
+				</label>
+			</div>
+			<div class="radio-div">
+				<label></label>
+				<label id="gpsEnabledLabel"><span translate="content.departments.gpsType1"></span></label>
+			</div>
+			<div class="radio-div">
+				<label></label>
+				<label>
+					<input type="radio" data-ng-model="department.privilege.gpsEnabled" value="1" disabled="disabled"/>
+					<span translate="content.departments.enabled"></span>
+				</label>
+				<label>
+					<input type="radio" data-ng-model="department.privilege.gpsEnabled" value="0" disabled="disabled"/>
+					<span translate="content.departments.disabled"></span>
+				</label>
+			</div>
+		</form>
+		
+		<table>
+			<tr>
+				<th width="15%" nowrap="nowrap"><span translate="content.accounts.total"></span></th>
+				<td width="35%" nowrap="nowrap"><span>{{department.userAmount}}</span></td>
+				<th width="15%" nowrap="nowrap"><span translate="content.accounts.expiring"></span></th>
+				<td width="35%" nowrap="nowrap"><span>{{department.expiringUserAmount}}</span></td>
+			</tr>
+			<tr>
+				<th><span translate="content.accounts.expired"></span></th>
+				<td><span>{{department.expiredUserAmount}}</span></td>
+				<th></th>
+				<td></td>
+			</tr>
+		</table>
+
+		<table data-ng-show="loginUser.type==1 && departments.length>0" >
+			<thead>
+				<tr>
+					<th><span translate="content.departments.name"></span></th>
+<!-- 					<th><span translate="content.accounts.total"></span></th> -->
+<!-- 					<th><span translate="content.accounts.expiring"></span></th> -->
+<!-- 					<th><span translate="content.accounts.expired"></span></th> -->
+					<th><span translate="content.operations.operation"></span></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-ng-repeat="department in departments">
+					<th>{{department.name}}</th>
+<!-- 					<td><span></span></td> -->
+<!-- 					<td><span></span></td> -->
+<!-- 					<td><span></span></td> -->
+					<td>
+						<span>
+							<a data-ng-click="departmentDetail(department.id)" class="btn btn-sm btn-blue" translate="content.operations.detail"></a>
+						</span>
+						<span>
+							<a data-ui-sref="departments.update({id:department.id})" class="btn btn-sm btn-blue" translate="content.operations.modify"></a>
+						</span>
+						<span>
+							<a data-toggle="modal" data-target="#deleteModal" data-ng-click="deleteModal(department)"
+								class="btn btn-sm btn-blue" translate="content.operations.delete"></a>
+						</span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<table data-ng-show="loginUser.type!=1" style="width:50%;">
+			<thead>
+				<tr>
+					<th width="15%"></th>
+					<th width="35%"><span translate="content.operations.total"></span></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th><span translate="content.departments.children"></span></th>
+					<td><span>{{lowerOrganization}}</span></td>
+				</tr>
+			</tbody>
+		</table>		
+	</div>
+	
+	<div data-ng-if="(showSearch)">
+	<div class="table-div" >
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" class="tb-title"><span translate="content.departments.list"></span></th>
+					<th ></th>
+				</tr>
+			</thead>
+		</table>		
+		<table id="table1">
+			<thead>
+				<tr>
+					<th><span translate="content.no"></span></th>						
+					<th><span translate="content.groups.name"></span></th>
+					<th><span translate="content.departments.name"></span></th>
+					<th><span translate="content.operations.operation"></span></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-ng-repeat="department in departmentsList">
+					<td data-ng-bind="$index+1+pageInfo.number*pageInfo.usize"></td>
+					<td>{{department.group.name}}</td>
+					<td>{{department.name}}</td>
+					<td>
+						<a data-ng-click="returnList(department.id)" data-ng-show="loginUser.type==1"
+							class="btn btn-sm btn-blue" translate="content.operations.detail"></a>
+						<a data-ng-click="returnList(department.id)" data-ng-show="loginUser.type!=1"
+							class="btn btn-sm btn-blue" translate="content.operations.detail"></a>
+						<span>
+							<a data-ui-sref="departments.update({id:department.id})" class="btn btn-sm btn-blue" translate="content.operations.modify"></a>
+						</span>
+						<span>
+							<a data-toggle="modal" data-target="#deleteModal" data-ng-click="deleteModal(department)"
+								class="btn btn-sm btn-blue" translate="content.operations.delete"></a>
+						</span>
+					</td>
+				</tr>
+				<tr data-ng-if="pageInfo.totalElements<1">
+					<td class="empty-td" colspan="4"><span translate="content.table.nodata"></span></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<a data-ng-click="returnList()" class="btn btn-sm btn-white" style="float: left;margin-left: 2%;" translate="content.operations.return"></a>
+	<div align="right" class="pageInfo" >
+		<form data-ng-submit="searchList1(search,pageInfo,pageInfo.showPage-1)">
+   			<span>
+   				<button type="button" data-ng-click="searchList1(search,pageInfo,0)" data-ng-if="!(pageInfo.number<0)"
+   					class="btn-sm btn-white" translate="content.pageInfo.first"></button>
+   			</span>
+   			<span>
+   				<button type="button" data-ng-click="searchList1(search,pageInfo,pageInfo.number-1)" class="btn-sm btn-blue"
+   					data-ng-if="(pageInfo.number>0)" translate="content.pageInfo.prev" ></button>
+				<button type="button" class="btn-sm btn-blue btn-disabled" data-ng-if="!(pageInfo.number>0)"
+					translate="content.pageInfo.prev" ></button>
+   			</span>
+   			<span class="pageInfo-number">
+   				<a data-ng-click="searchList1(search,pageInfo,0)" data-ng-if="(pageInfo.number>2)">1</a>
+   				<a data-ng-click="searchList1(search,pageInfo,1)" data-ng-if="(pageInfo.number>3)">2</a>
+   				<a data-ng-if="(pageInfo.number>4)">......</a>
+   				<a data-ng-click="searchList1(search,pageInfo,pageInfo.number-2)"
+   					data-ng-if="(pageInfo.number>1)">{{pageInfo.number-1}}</a>
+   				<a data-ng-click="searchList1(search,pageInfo,pageInfo.number-1)"
+   					data-ng-if="(pageInfo.number>0)">{{pageInfo.number}}</a>
+   				<a style="color: black;">{{pageInfo.number+1}}</a>
+   				<a data-ng-click="searchList1(search,pageInfo,pageInfo.number+1)"
+   					data-ng-if="(pageInfo.number+1<pageInfo.totalPages)">{{pageInfo.number+2}}</a>
+   				<a data-ng-click="searchList1(search,pageInfo,pageInfo.number+2)"
+   					data-ng-if="(pageInfo.number+2<pageInfo.totalPages)">{{pageInfo.number+3}}</a>
+   				<a data-ng-if="(pageInfo.number+5<pageInfo.totalPages)">......</a>
+   				<a data-ng-click="searchList(pageInfo.totalPages-2,pageInfo)"
+  					data-ng-if="(pageInfo.number+3<pageInfo.totalPages) && (pageInfo.number+4!=pageInfo.totalPages)">
+  					{{pageInfo.totalPages-1}}</a>
+  				<a data-ng-click="searchList(pageInfo.totalPages-1,pageInfo)"
+  					data-ng-if="(pageInfo.number+4<=pageInfo.totalPages)">{{pageInfo.totalPages}}</a>
+   			</span>
+   			<span>
+   				<button type="button" data-ng-click="searchList1(search,pageInfo,pageInfo.number+1)" class="btn-sm btn-blue"
+   					data-ng-if="(pageInfo.number+1<pageInfo.totalPages)" translate="content.pageInfo.next"></button>
+				<button type="button" class="btn-sm btn-blue btn-disabled" data-ng-if="!(pageInfo.number+1<pageInfo.totalPages)"
+					translate="content.pageInfo.next"></button>
+   			</span>
+   			<span>
+				<button type="button" data-ng-click="searchList1(search,pageInfo,pageInfo.totalPages-1)" data-ng-if="!(pageInfo.number<0)"
+					class="btn-sm btn-white" translate="content.pageInfo.last"></button>
+			</span>
+   			<span>
+   				<input type="number" step="1" data-ng-model="pageInfo.showPage" max="{{pageInfo.totalPages}}" required="required"
+   						min="1" data-ng-if="(pageInfo.totalPages>0)" >
+   				<input type="number" step="1" data-ng-model="pageInfo.showPage" max="1" min="1" readonly="readonly"
+   						data-ng-if="!(pageInfo.totalPages>0)" >
+   				<input type="submit" class="btn-sm btn-blue btn-go" value="GO">
+   			</span>
+		</form>
+	</div>
+	</div>
+</div>
+
+<!-- 修改密码模态框 -->
+<div class="modal fade" id="updatePwd" tabindex="-1">  
+    <div class="modal-dialog">  
+        <div class="modal-content">  
+        	<div class="modal-header">    
+            	<button type="button" class="close" data-dismiss="modal" data-ng-click="closePwd()">x</button>   
+                <h4 class="modal-title" id="myModalLabel"><span translate="content.operations.modifyPassword"></span></h4>  
+            </div>
+            <form name="updatePwdForm" data-ng-submit="updatePwd(departments)">  
+	            <div class="modal-body">
+                	<div>
+                		<label><span translate="content.agents.admin.old_password"></span></label>
+			            <input type="password" data-ng-model="departments.oldPassword" name="oldPassword" autocomplete="off" pattern="[\w\d@_]*"
+            				 data-ng-blur="updatePwdForm.oldPassword.error=true" data-ng-focus="updatePwdForm.oldPassword.error=false"
+            				 maxlength="50" data-ng-minlength="8" required class="text-class"/>
+		                <div class="error-msg" data-ng-show="updatePwdForm.oldPassword.error">
+							<span data-ng-show="updatePwdForm.oldPassword.$invalid" translate="content.errors.err2"></span>
+						</div>
+					</div>
+					<div>
+						<label><span translate="content.agents.admin.new_password"></span></label>
+						<input type="password" data-ng-model="departments.newPassword" name="newPassword" autocomplete="off" pattern="[\w\d@_]*"
+	           				 data-ng-blur="updatePwdForm.newPassword.error=true" data-ng-focus="updatePwdForm.newPassword.error=false"
+	           				 maxlength="50" data-ng-minlength="8" required class="text-class"/>
+	            		<div class="error-msg" data-ng-show="updatePwdForm.newPassword.error && updatePwdForm.oldPassword.$valid">
+							<span data-ng-show="updatePwdForm.newPassword.$invalid" translate="content.errors.err3"></span>
+						</div>
+				    </div>
+				    <div>
+				        <label><span translate="content.agents.admin.re_password"></span></label>
+			    	  	<input type="password" data-ng-model="departments.rePassword" name="rePassword" autocomplete="off" maxlength="50"
+								class="text-class" data-ng-minlength="8" required />
+						<div class="error-msg" data-ng-show="updatePwdForm.rePassword.error">
+							<span data-ng-show="departments.newPassword != departments.rePassword" translate="content.errors.err4"></span>
+						</div>
+			    	</div>
+	            </div>
+	           	<div>
+					<div id="message" class="error-msg"></div>
+				</div>
+	            <div class="modal-footer">  
+	                <button type="submit" class="btn-sm btn-blue" data-ng-disabled="updatePwdForm.$invalid
+	                	|| departments.newPassword != departments.rePassword" translate="content.operations.ok"></button>  
+	                <button type="button" class="btn-sm btn-white" data-dismiss="modal" data-ng-click="closePwd()" translate="content.operations.close"></button>  
+	            </div>
+			</form>
+        </div>  
+    </div> 
+</div>
+<div class="modal fade" id="alertModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title" data-ng-bind="alert_title"></h4>
+			</div>
+			<div class="modal-body">
+				<span data-ng-bind="alert_message" style="margin-left: 6em;"></span>
+			</div>
+            <div class="modal-footer"></div>
+        </div>  
+    </div> 
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title"><span translate="content.departments.operations.delete"></span></h4>
+			</div>
+			<div class="modal-body">
+				<span translate="content.departments.operations.delete"></span>
+				<span style="margin: 10px 10px;" data-ng-bind="removing_department.name"></span>
+				<span translate="content.modals.marks.mark1"></span>
+			</div>
+            <div class="modal-footer">
+            	<button type="button" class="btn btn-primary" data-ng-click="removeDepartment(removing_department)"
+            		translate="content.operations.ok"></button>  
+                <button type="button" class="btn btn-default" data-dismiss="modal" translate="content.operations.close"></button>  
+            </div>
+        </div>  
+    </div> 
+</div>

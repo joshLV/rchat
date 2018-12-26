@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+
+    <base th:href="${#httpServletRequest.getContextPath() + '/'}" />
+	<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+	<title>融洽对讲管理平台--日志</title>
+	
+	<!-- Bootstrap -->
+    <link href="stylesheets/bootstrap.min.css" rel="stylesheet" />
+    
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+		<script src="javascripts/html5shiv.min.js"></script>
+		<script src="javascripts/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="container">
+        <h1>你好，世界！</h1>
+        <div class="alert alert-info">
+            <a class="alert-link" th:href="@{/log.html}">返回</a>
+        </div>
+        <div class="well">
+            <table class="table table-bordered table-hover table-striped">
+            	<thead>
+            	   <tr>
+            	   	<th>步骤</th>
+            	   	<th>资源标识</th>
+            	   	<th>操作</th>
+            	   	<th>资源名</th>
+            	   	<th>描述</th>
+            	   	<th>时间</th>
+            	   </tr>
+            	</thead>
+            	<tbody>
+            	   <tr th:if="${#lists.isEmpty(details)}">
+            	       <td colspan="7" align="center">无数据</td>
+            	   </tr>
+            	   <tr th:each="d : ${details}">
+            	       <td th:text="${d.step}"></td>
+            	       <td th:text="${d.resourceId}"></td>
+            	       <td th:text="${d.operation}"></td>
+            	       <td th:text="${d.resourceName}"></td>
+            	       <td th:text="${d.description}"></td>
+            	       <td th:text="${d.createdAt}"></td>
+            	   </tr>
+            	</tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

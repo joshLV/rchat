@@ -1,0 +1,149 @@
+<div class="details-view" data-ng-controller="departmentsCtrl">
+	<div class="table-title">
+		<i class="iconfont icon-cushuxian"></i>
+		<h4 translate="content.departments.title"></h4>
+	</div>
+	<div class="details-div" >
+		<div id="departmentTreeView" data-ng-if="loginUser.type==1">
+			<div class="tree-class">
+				<div data-ng-repeat="agentTree in agentsTree">
+					<a href="javascript:void(0)" data-ng-click="toggleMenu(agentTree)" >{{agentTree.name}}</a>
+					<div data-ng-repeat="groupTree in agentTree.groups | orderBy:'-createdAt':true" class="group-tree">
+						<a data-ng-click="getDepartmentsByGroup(groupTree)" >{{groupTree.name}}(集团)</a>
+					</div>
+					<div data-ng-repeat="agent1 in agentTree.children | orderBy:'-createdAt':true" data-ng-if="agentTree.showTree">
+						<hr />
+						<a href="javascript:void(0)" data-ng-click="toggleMenu(agent1)" class="icon-jianhao"
+							 data-ng-if="agent1.showTree">&nbsp;&nbsp;</a>
+					 	<a href="javascript:void(0)" data-ng-click="toggleMenu(agent1)" class="icon-jiahao"
+							 data-ng-if="!(agent1.showTree)">&nbsp;&nbsp;</a>
+						<a >{{agent1.name}}</a>
+						<div data-ng-repeat="groupTree in agent1.groups | orderBy:'-createdAt':true" data-ng-if="agent1.showTree">
+							<a data-ng-click="getDepartmentsByGroup(groupTree)" >{{groupTree.name}}(集团)</a>
+						</div>
+						<div data-ng-repeat="agent2 in agent1.children | orderBy:'-createdAt':true" data-ng-if="agent1.showTree">
+							<a href="javascript:void(0)" data-ng-click="toggleMenu(agent2)" class="icon-jianhao"
+								data-ng-if="agent2.showTree">&nbsp;&nbsp;</a>
+							<a href="javascript:void(0)" data-ng-click="toggleMenu(agent2)" class="icon-jiahao"
+								data-ng-if="!(agent2.showTree)">&nbsp;&nbsp;</a>
+							<a >{{agent2.name}}</a>
+							<div data-ng-repeat="groupTree in agent2.groups | orderBy:'-createdAt':true" data-ng-if="agent2.showTree">
+								<a data-ng-click="getDepartmentsByGroup(groupTree)" >{{groupTree.name}}(集团)</a>
+							</div>
+							<div data-ng-repeat="agent3 in agent2.children | orderBy:'-createdAt':true" data-ng-if="agent2.showTree">
+								<a >{{agent3.name}}</a>
+								<div data-ng-repeat="groupTree in agent3.groups | orderBy:'-createdAt':true">
+									<a data-ng-click="getDepartmentsByGroup(groupTree)" >{{groupTree.name}}(集团)</a>
+								</div>
+								<div data-ng-repeat="agent4 in agent3.children | orderBy:'-createdAt':true" >
+									<a >{{agent4.name}}</a>
+									<div data-ng-repeat="groupTree in agent4.groups | orderBy:'-createdAt':true">
+										<a data-ng-click="getDepartmentsByGroup(groupTree)" >{{groupTree.name}}(集团)</a>
+									</div>
+									<div data-ng-repeat="agent5 in agent4.children | orderBy:'-createdAt':true" >
+										<a >{{agent5.name}}</a>
+										<div data-ng-repeat="groupTree in agent5.groups | orderBy:'-createdAt':true">
+											<a data-ng-click="getDepartmentsByGroup(groupTree)" >{{groupTree.name}}(集团)</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="departmentTreeView" data-ng-if="loginUser.type==4">
+			<div class="tree-class">
+				<div>
+					<a href="javascript:void(0)" >{{agentTree.name}}</a>
+					<div data-ng-repeat="agent1 in agentTree.children | orderBy:'-createdAt':true" data-ng-if="agentTree.showTree">
+						<a href="javascript:void(0)" data-ng-click="toggleMenu(agent1)" class="icon-jianhao"
+				 				data-ng-if="agent1.showTree">&nbsp;&nbsp;</a>
+					 	<a href="javascript:void(0)" data-ng-click="toggleMenu(agent1)" class="icon-jiahao"
+							 	data-ng-if="!(agent1.showTree)">&nbsp;&nbsp;</a>
+						<a data-ng-click="getDepartmentDetails(agent1)">{{agent1.name}}</a>
+						<div data-ng-repeat="agent2 in agent1.children | orderBy:'-createdAt':true" data-ng-if="agent1.showTree">
+							<a href="javascript:void(0)" data-ng-click="toggleMenu(agent2)" class="icon-jianhao"
+									data-ng-if="agent2.showTree">&nbsp;&nbsp;</a>
+							<a href="javascript:void(0)" data-ng-click="toggleMenu(agent2)" class="icon-jiahao"
+									data-ng-if="!(agent2.showTree)">&nbsp;&nbsp;</a>
+							<a data-ng-click="getDepartmentDetails(agent2)">{{agent2.name}}</a>
+							<div data-ng-repeat="agent3 in agent2.children | orderBy:'-createdAt':true" data-ng-if="agent2.showTree">
+								<a data-ng-click="getDepartmentDetails(agent3)">{{agent3.name}}</a>
+								<div data-ng-repeat="agent4 in agent3.children | orderBy:'-createdAt':true" >
+									<a data-ng-click="getDepartmentDetails(agent4)">{{agent4.name}}</a>
+									<div data-ng-repeat="agent5 in agent4.children | orderBy:'-createdAt':true" >
+										<a data-ng-click="getDepartmentDetails(agent5)">{{agent5.name}}</a>
+										<div data-ng-repeat="agent6 in agent5.children | orderBy:'-createdAt':true" >
+											<a data-ng-click="getDepartmentDetails(agent6)">{{agent6.name}}</a>
+											<div data-ng-repeat="agent7 in agent6.children | orderBy:'-createdAt':true" >
+												<a data-ng-click="getDepartmentDetails(agent7)">{{agent7.name}}</a>
+												<div data-ng-repeat="agent8 in agent7.children | orderBy:'-createdAt':true" >
+													<a data-ng-click="getDepartmentDetails(agent8)">{{agent8.name}}</a>
+													<div data-ng-repeat="agent9 in agent8.children | orderBy:'-createdAt':true" >
+														<a data-ng-click="getDepartmentDetails(agent9)">{{agent9.name}}</a>
+														<div data-ng-repeat="agent10 in agent9.children | orderBy:'-createdAt':true" >
+															<a data-ng-click="getDepartmentDetails(agent10)">{{agent10.name}}</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="departmentTreeView" data-ng-if="loginUser.type>4">
+			<div class="tree-class">
+				<div>
+					<a href="javascript:void(0)" data-ng-click="getDepartmentDetails(agentTree)" >{{agentTree.name}}</a>
+					<div data-ng-repeat="agent1 in agentTree.children | orderBy:'-createdAt':true" data-ng-if="agentTree.showTree">
+						<a href="javascript:void(0)" data-ng-click="toggleMenu(agent1)" class="icon-jianhao"
+				 				data-ng-if="agent1.showTree">&nbsp;&nbsp;</a>
+					 	<a href="javascript:void(0)" data-ng-click="toggleMenu(agent1)" class="icon-jiahao"
+							 	data-ng-if="!(agent1.showTree)">&nbsp;&nbsp;</a>
+						<a data-ng-click="getDepartmentDetails(agent1)">{{agent1.name}}</a>
+						<div data-ng-repeat="agent2 in agent1.children | orderBy:'-createdAt':true" data-ng-if="agent1.showTree">
+							<a href="javascript:void(0)" data-ng-click="toggleMenu(agent2)" class="icon-jianhao"
+									data-ng-if="agent2.showTree">&nbsp;&nbsp;</a>
+							<a href="javascript:void(0)" data-ng-click="toggleMenu(agent2)" class="icon-jiahao"
+									data-ng-if="!(agent2.showTree)">&nbsp;&nbsp;</a>
+							<a data-ng-click="getDepartmentDetails(agent2)">{{agent2.name}}</a>
+							<div data-ng-repeat="agent3 in agent2.children | orderBy:'-createdAt':true" data-ng-if="agent2.showTree">
+								<a data-ng-click="getDepartmentDetails(agent3)">{{agent3.name}}</a>
+								<div data-ng-repeat="agent4 in agent3.children | orderBy:'-createdAt':true" >
+									<a data-ng-click="getDepartmentDetails(agent4)">{{agent4.name}}</a>
+									<div data-ng-repeat="agent5 in agent4.children | orderBy:'-createdAt':true" >
+										<a data-ng-click="getDepartmentDetails(agent5)">{{agent5.name}}</a>
+										<div data-ng-repeat="agent6 in agent5.children | orderBy:'-createdAt':true" >
+											<a data-ng-click="getDepartmentDetails(agent6)">{{agent6.name}}</a>
+											<div data-ng-repeat="agent7 in agent6.children | orderBy:'-createdAt':true" >
+												<a data-ng-click="getDepartmentDetails(agent7)">{{agent7.name}}</a>
+												<div data-ng-repeat="agent8 in agent7.children | orderBy:'-createdAt':true" >
+													<a data-ng-click="getDepartmentDetails(agent8)">{{agent8.name}}</a>
+													<div data-ng-repeat="agent9 in agent8.children | orderBy:'-createdAt':true" >
+														<a data-ng-click="getDepartmentDetails(agent9)">{{agent9.name}}</a>
+														<div data-ng-repeat="agent10 in agent10.children | orderBy:'-createdAt':true" >
+															<a data-ng-click="getDepartmentDetails(agent10)">{{agent10.name}}</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div data-ui-view="content" class="details-content0"></div>
+	</div>
+</div>
+

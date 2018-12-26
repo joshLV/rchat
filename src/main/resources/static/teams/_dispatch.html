@@ -1,0 +1,160 @@
+<div class="content-div">
+	<div class="table-div">
+<!-- 			<div class="search-div" style="margin: 0px 1.6%;"> -->
+<!-- 				<label>群组名称：</label> -->
+<!-- 				<input type="text" class="text-class" data-ng-model="teamName" style="border-style: none;" readonly="readonly">			 		  -->
+<!-- 			</div>	 -->
+<!-- 			<div class="search-div" style="margin: 0px 1.3%;height: 1.5em"> -->
+<!-- 				<label id="dispatch-title">群组成员</label>		 		  -->
+<!-- 			</div> -->
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" style="border-right: none;"><span translate="content.teams.dispatch"></span></th>
+					<th style="border-left: none;"></th>
+				</tr>
+			</thead>
+		</table>
+		<table >
+			<tr>
+				<td width="20%">
+					<span translate="content.teams.name"></span>
+				</td>
+				<td style="text-align: left;text-indent: 3em;">
+					<span >{{teamName}}</span>
+					<input type="text" class="text-class" data-ng-model="teamName" style="display: none;" readonly="readonly">
+				</td>
+			</tr>
+		</table>
+		<table>
+			<thead>
+				<tr>
+					<td><span translate="content.teams.no"></span></td>
+					<td><span translate="content.departments.name_zh"></span></td>
+					<td><span translate="content.accounts.account"></span></td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-ng-repeat="user in teams">
+					<td data-ng-bind="$index+1+pageInfo.number*pageInfo.usize"></td>
+					<td><span>{{user.name}}</span></td>
+					<td><span>{{user.number.fullValue}}</span></td>
+				</tr>
+				<tr data-ng-if="pageInfo.totalElements<1">
+					<td colspan="3" class="empty-td">
+   						<span translate="content.table.nodata"></span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+				
+		<div align="right" class="pageInfo" >
+			<form data-ng-submit="searchUsersList(pageInfo,pageInfo.showPage,1)">
+		  			<span>
+		  				<button type="button" data-ng-click="searchList(0,pageInfo,1)" data-ng-if="!(pageInfo.number<0)"
+		  					class="btn-sm btn-white" translate="content.pageInfo.first"></button>
+		  			</span>
+		  			<span>
+		  				<button type="button" data-ng-click="searchList(pageInfo.number-1,pageInfo,1)" class="btn-sm btn-blue"
+		  					data-ng-if="(pageInfo.number>0)" translate="content.pageInfo.prev" ></button>
+					<button type="button" class="btn-sm btn-blue btn-disabled" data-ng-if="!(pageInfo.number>0)"
+						translate="content.pageInfo.prev" ></button>
+		  			</span>
+		  			<span class="pageInfo-number">
+		  				<a data-ng-click="searchList(0,pageInfo,1)" data-ng-if="(pageInfo.number>2)">1</a>
+		  				<a data-ng-click="searchList(1,pageInfo,1)" data-ng-if="(pageInfo.number>3)">2</a>
+		  				<a data-ng-if="(pageInfo.number>4)">......</a>
+		  				<a data-ng-click="searchList(pageInfo.number-2,pageInfo,1)"
+		  					data-ng-if="(pageInfo.number>1)">{{pageInfo.number-1}}</a>
+		  				<a data-ng-click="searchList(pageInfo.number-1,pageInfo,1)"
+		  					data-ng-if="(pageInfo.number>0)">{{pageInfo.number}}</a>
+		  				<a style="color: black;">{{pageInfo.number+1}}</a>
+		  				<a data-ng-click="searchList(pageInfo.number+1,pageInfo,1)"
+		  					data-ng-if="(pageInfo.number+1<pageInfo.totalPages)">{{pageInfo.number+2}}</a>
+		  				<a data-ng-click="searchList(pageInfo.number+2,pageInfo,1)"
+		  					data-ng-if="(pageInfo.number+2<pageInfo.totalPages)">{{pageInfo.number+3}}</a>
+		  				<a data-ng-if="(pageInfo.number+5<pageInfo.totalPages)">......</a>
+		  				<a data-ng-click="searchList(pageInfo.totalPages-2,pageInfo,1)"
+		  					data-ng-if="(pageInfo.number+3<pageInfo.totalPages) && (pageInfo.number+4!=pageInfo.totalPages)">
+		  					{{pageInfo.totalPages-1}}</a>
+		  				<a data-ng-click="searchList(pageInfo.totalPages-1,pageInfo,1)"
+		  					data-ng-if="(pageInfo.number+4<=pageInfo.totalPages)">{{pageInfo.totalPages}}</a>
+		  			</span>
+		  			<span>
+		  				<button type="button" data-ng-click="searchList(pageInfo.number+1,pageInfo,1)" class="btn-sm btn-blue"
+		  					data-ng-if="(pageInfo.number+1<pageInfo.totalPages)" translate="content.pageInfo.next"></button>
+					<button type="button" class="btn-sm btn-blue btn-disabled" data-ng-if="!(pageInfo.number+1<pageInfo.totalPages)"
+						translate="content.pageInfo.next"></button>
+		  			</span>
+		  			<span>
+					<button type="button" data-ng-click="searchList(pageInfo.totalPages-1,pageInfo,1)" data-ng-if="!(pageInfo.number<0)"
+						class="btn-sm btn-white" translate="content.pageInfo.last"></button>
+				</span>
+	  			<span>
+	  				<input type="number" step="1" data-ng-model="pageInfo.showPage" max="{{pageInfo.totalPages}}" required="required"
+	  						min="1" data-ng-if="(pageInfo.totalPages>0)" >
+	  				<input type="number" step="1" data-ng-model="pageInfo.showPage" max="1" min="1" readonly="readonly"
+	  						data-ng-if="!(pageInfo.totalPages>0)" >
+	  				<input type="submit" class="btn-sm btn-blue btn-go" value="GO">
+	  			</span>
+			</form>
+		</div>
+    		
+		<form data-ng-submit="dispatchTeam(teamUsers)">
+			<div>
+				<label ><span translate="content.departments.attach_group"></span></label>
+				<input type="text" class="text-class disabled-class" data-ng-model="group.name" readonly="readonly">
+				<input type="text" id="groupid" class="text-class disabled-class" data-ng-model="group.id" readonly="readonly" style="display: none;">
+			</div>
+			<div>
+				<label><span translate="content.departments.attach_department"></span></label>
+				<select class="text-class" data-ng-model="team.departmentId" data-ng-options="dpt.id as dpt.name for dpt in dptsList | orderBy:['level','name']">
+					<option value="" translate="content.operations.selection"></option>
+				</select>	
+				<div class="btn-group btn-teams">
+					<button id="departmentReset" type="button" class="btn-sm btn-blue" data-ng-click="searchUsers(team)"
+						translate="content.operations.search"></button>	
+					<button id="departmentAddAll" type="button" class="btn-sm btn-blue" data-ng-click="addAll()"
+						translate="content.operations.all"></button>
+					<button id="departmentAdd" type="button" class="btn-sm btn-blue" data-ng-click="addSelected()"
+						translate="content.operations.add"></button>
+					<button id="departmentRemove" type="button" class="btn-sm btn-blue" data-ng-click="removeSelected()"
+						translate="content.operations.remove"></button>
+					<button id="departmentRemoveAll" type="button" class="btn-sm btn-blue" data-ng-click="removeAll()"
+						translate="content.operations.clear"></button>
+				</div>	 		 						
+			</div>
+			<div >
+				<label style="vertical-align:top"><span translate="content.teams.member"></span></label>
+				<select class="text-class" id="unselected" multiple="multiple" size="8" style="min-height: 15em">
+					<option disabled="disabled" translate="content.teams.all"></option>
+					<option data-ng-repeat="user in users  | unique: 'id'" data-ng-value="user.id">{{user.show}}</option>
+				</select>
+				<select class="text-class" id="selected" multiple="multiple" size="8" style="min-height: 15em">
+					<option disabled="disabled" translate="content.operations.selected"></option>
+					<option data-ng-repeat="user in teamUsers  | unique: 'id'" data-ng-value="user.id">{{user.show}}</option>
+				</select>
+			</div>
+			<div style="margin-top: 12.5em">
+				<label></label>
+				<button type="submit" class="btn-sm btn-blue" translate="content.operations.submit"></button>
+				<button id="teamReset" type="button" class="btn-sm btn-white" onclick="javascript:history.go(-1);"
+					translate="content.operations.return"></button>				
+			</div>							
+		</form>
+    </div>
+</div>
+<div class="modal fade" id="alertModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title" data-ng-bind="alert_title"></h4>
+			</div>
+			<div class="modal-body">
+				<span data-ng-bind="alert_message"></span>
+			</div>
+     		<div class="modal-footer"></div>
+		</div>  
+    </div> 
+</div>

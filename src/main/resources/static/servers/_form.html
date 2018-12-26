@@ -1,0 +1,63 @@
+<div class="content-div">
+	<div class="table-div">
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" class="tb-title">
+						<span translate="content.servers.title"></span>
+					</th>
+					<th ></th>
+				</tr>
+			</thead>
+		</table>
+		
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" style="border-right: none;"><span translate="content.servers.form"></span></th>
+					<th style="border-left: none;"></th>
+				</tr>
+			</thead>
+		</table>
+		<form name="serverForm" data-ng-submit="createOrUpdateServer(server)">
+			<div >
+				<label><span translate="content.servers.name"></span></label> 
+				<input type="text" class="text-class" data-ng-model="server.name" required="required" maxlength="100"/>
+			</div>
+<!-- 			<div > -->
+<!-- 				<label><span translate="content.servers.ip"></span></label>  -->
+<!-- 				<input type="text" class="text-class" data-ng-model="server.ipAddress" maxlength="255"/> -->
+<!-- 			</div> -->
+			<div >
+				<label><span translate="content.servers.ipAddress"></span></label> 
+				<input type="text" class="text-class" data-ng-model="server.domain" maxlength="255"/>
+			</div>
+			<div >
+				<label><span translate="content.servers.max"></span></label> 
+				<input type="number" class="text-class" data-ng-model="server.maxCapacity" required="required" min="0"/>
+			</div>
+			<div>
+				<label></label>
+				<button type="submit" class="btn-sm btn-blue" translate="content.operations.submit"></button>
+				<button type="reset" class="btn-sm btn-white" data-ng-if="!(server.id)" translate="content.operations.clear"></button>
+				<button type="button" class="btn-sm btn-white" data-ng-if="(server.id)" translate="content.operations.return"
+					data-ng-click="backList(pageInfo)"></button>				
+			</div>
+		</form>
+    </div>
+</div>
+
+<div class="modal fade" id="alertModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title" data-ng-bind="alert_title"></h4>
+			</div>
+			<div class="modal-body">
+				<span data-ng-bind="alert_message"></span>
+			</div>
+      		<div class="modal-footer"></div>
+		</div>  
+	</div>
+</div>

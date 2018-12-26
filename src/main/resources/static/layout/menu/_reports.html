@@ -1,0 +1,26 @@
+<div class="menu-div">
+	<ul class="menu-ul">
+		<li>
+			<a href="javascript:void(0)" data-ng-click="toggleMenuLi('reportsMenu')" >
+				<span translate="menu.reports.head" style="vertical-align: middle;"></span>
+			</a>
+		</li>
+	</ul>
+	<ul class="menu-li" id="reportsMenu" data-ng-if="loginUser.type<5">
+		<li data-ng-if="loginUser.type==1 || loginUser.type==4">
+			<a data-ui-sref-active="active" data-ui-sref="reports.list" translate="menu.reports.records"></a>
+		</li>
+		<hr style="margin-left: -10%;" data-ng-if="loginUser.type==1 || loginUser.type==4"/>
+		<li >
+			<a data-ui-sref-active="active" data-ui-sref="reports.statistics" translate="menu.reports.statistics"></a>
+		</li>
+		<hr style="margin-left: -10%;"/>
+		<li >
+			<a data-ui-sref-active="active" data-ui-sref="reports.expired" translate="menu.reports.expired"></a>
+		</li>
+		<hr style="margin-left: -10%;" />
+		<li >
+			<a data-ui-sref-active="active" data-ui-sref="reports.alarm" translate="menu.reports.alarm"></a>
+		</li>
+	</ul>
+</div>

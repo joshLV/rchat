@@ -1,0 +1,264 @@
+<div class="search-div">
+	<form data-ng-submit="searchAgents(agentName,adminName,adminUsername)">
+		<div class="row">
+			<div class="col-sm-3" style="width:28%">
+				<label translate="content.agents.name"></label>
+				<input type="text" class="text-class" data-ng-model="agentName" style="width:55%"/>
+			</div>
+			<div class="col-sm-3" style="width:28%">
+				<label translate="content.agents.admin.name"></label>
+				<input type="text" class="text-class" data-ng-model="adminName" style="width:55%"/>
+			</div>
+			<div class="col-sm-3" style="width:28%">
+				<label translate="content.agents.admin.username"></label>
+				<input type="text" class="text-class" data-ng-model="adminUsername" style="width:55%"/>
+			</div>
+			<div class="col-sm-3" style="width:14%">
+				<button class="btn-sm btn-blue" type="submit" translate="content.operations.search"></button>
+				<button class="btn-sm btn-blue" type="button" translate="content.operations.showAll" data-ng-if="0>1" /></button>
+			</div>
+		</div>
+	</form>
+</div>
+
+<div class="content-div" >
+	<div class="table-div" data-ng-if="(loginUser.type == 1) && !(agentsPageInfo.size)">
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" class="tb-title"><span translate="content.agents.agent"></span></th>
+					<th ></th>
+				</tr>
+			</thead>
+		</table>
+		<table >
+			<tbody>
+				<tr>
+					<th width="30%"><span translate="content.agents.total"></span></th>
+					<td ><span> {{summary.agentAmount}} </span></td>
+				</tr>
+				<tr>
+					<th ><span translate="content.credits.rest"></span></th>
+					<td ><span>  </span></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<table >
+			<thead>
+				<tr>
+					<th width="30%"><span translate="content.agents.agent"></span></th>
+					<th ><span translate="content.number"></span></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th ><span translate="content.agents.level1"></span></th>
+					<td ><span> {{summary.firstAgentAmount}} </span></td>
+				</tr>
+				<tr>
+					<th ><span translate="content.agents.level2"></span></th>
+					<td ><span> {{summary.secondAgentAmount}} </span></td>
+				</tr>
+				<tr>
+					<th ><span translate="content.agents.level3"></span></th>
+					<td ><span> {{summary.thirdAgentAmount}} </span></td>
+				</tr>
+				<tr>
+					<th ><span translate="content.agents.level4"></span></th>
+					<td ><span> {{summary.forthAgentAmount}} </span></td>
+				</tr>
+				<tr>
+					<th ><span translate="content.agents.level5"></span></th>
+					<td ><span> {{summary.fifthAgentAmount}} </span></td>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+
+	<div class="table-div" data-ng-if="(loginUser.type != 1) || (agentsPageInfo.size)">
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" class="tb-title"><span translate="content.agents.list"></span></th>
+					<th ></th>
+				</tr>
+			</thead>
+		</table>
+		<table>
+			<thead>
+				<tr>
+					<td><span translate="content.no"></span></td>
+					<td><span translate="content.agents.name"></span></td>
+					<td><span translate="content.agents.region"></span></td>
+					<td><span translate="content.credits.total"></span></td>
+					<td><span translate="content.credits.rest"></span></td>
+					<td><span translate="content.operations.operation"></span></td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-ng-repeat="agent in agentsList | orderBy:agent.createdAt:'desc'">
+					<td data-ng-bind="$index+1+agentsPageInfo.index"></td>
+					<td>{{agent.name}}</td>
+					<td>{{agent.region}}</td>
+					<td>{{agent.creditAccumulation}}</td>
+					<td>{{agent.creditRemaint}}</td>
+					<td>
+						<a data-ui-sref="agents.details({id:agent.id})" class="btn btn-sm btn-blue" translate="content.operations.detail"></a>
+<!-- 							<a href="javascript:void(0);" data-ng-click="showCountInfo(agent)">统计</a> -->
+						<a data-ui-sref="agents.update({id:agent.id})" class="btn btn-sm btn-blue" translate="content.operations.modify"></a>
+						<a data-toggle="modal" data-target="#deleteModal" data-ng-click="deleteModal(agent)"
+							translate="content.operations.delete" class="btn btn-sm btn-blue"></a>
+						<a data-toggle="modal" data-target="#petchCredit" data-ng-click="getCredit(agent.id)"
+							class="btn btn-sm btn-blue" translate="content.credits.push"></a>
+<!-- 						<a data-ng-if="loginUser.type>1" class="btn btn-sm btn-blue" translate="content.operations.resetPassword"></a> -->
+					</td>
+				</tr>
+				<tr data-ng-if="agentsPageInfo.totalElements < 1">
+					<td colspan="6" class="empty-td">
+						<span translate="content.table.nodata"></span>
+					</td>
+				</tr>
+				<tr data-ng-if="agentsPageInfo.totalPages < agentsPageInfo.number+1 && agentsPageInfo.totalElements > 0">
+					<td colspan="6" class="empty-td">
+						<span translate="content.table.pageError"></span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div align="right" class="pageInfo" data-ng-if="(loginUser.type != 1) || (agentsPageInfo.size)">
+		<form data-ng-submit="searchList(agentsPageInfo.page-1,agentsPageInfo)">
+			<span class="span-lt"><span translate="content.operations.results"></span>{{agentsPageInfo.totalElements}}</span>
+			<span class="span-lt"><span translate="content.operations.pages"></span>{{agentsPageInfo.totalPages}}</span>
+			<span class="span-lt"><span translate="content.operations.size"></span>
+				<select data-ng-model="agentsPageInfo.size" data-ng-change="searchList(0, agentsPageInfo)"
+						data-ng-options="x for x in [10,20,50,100]">
+				</select>
+			</span>
+   			<span>
+   				<button type="button" data-ng-click="searchList(0,agentsPageInfo)" data-ng-if="!(agentsPageInfo.number<0)"
+   					class="btn-sm btn-white" translate="content.pageInfo.first"></button>
+<!--     				<button type="button" data-ng-if="!(agentsPageInfo.number>0)" class="btn-sm btn-white">首页</button> -->
+   			</span>
+   			<span>
+   				<button type="button" data-ng-click="searchList(agentsPageInfo.number-1,agentsPageInfo)" class="btn-sm btn-blue"
+   					data-ng-if="(agentsPageInfo.number>0)" translate="content.pageInfo.prev" ></button>
+  					<button type="button" class="btn-sm btn-blue btn-disabled" data-ng-if="!(agentsPageInfo.number>0)"
+  						translate="content.pageInfo.prev" ></button>
+<!--     				<a href="javascript:void(0);" data-ng-if="!(agentsPageInfo.number>0)" style="color: grey" title="不可用">上一页</a> -->
+   			</span>
+   			<span class="pageInfo-number">
+   				<a data-ng-click="searchList(0,agentsPageInfo)" data-ng-if="(agentsPageInfo.number>2)">1</a>
+   				<a data-ng-click="searchList(1,agentsPageInfo)" data-ng-if="(agentsPageInfo.number>3)">2</a>
+   				<a data-ng-if="(agentsPageInfo.number>4)">......</a>
+   				<a data-ng-click="searchList(agentsPageInfo.number-2,agentsPageInfo)"
+   					data-ng-if="(agentsPageInfo.number>1)">{{agentsPageInfo.number-1}}</a>
+   				<a data-ng-click="searchList(agentsPageInfo.number-1,agentsPageInfo)"
+   					data-ng-if="(agentsPageInfo.number>0)">{{agentsPageInfo.number}}</a>
+   				<a style="color: black;">{{agentsPageInfo.number+1}}</a>
+   				<a data-ng-click="searchList(agentsPageInfo.number+1,agentsPageInfo)"
+   					data-ng-if="(agentsPageInfo.number+1<agentsPageInfo.totalPages)">{{agentsPageInfo.number+2}}</a>
+   				<a data-ng-click="searchList(agentsPageInfo.number+2,agentsPageInfo)"
+   					data-ng-if="(agentsPageInfo.number+2<agentsPageInfo.totalPages)">{{agentsPageInfo.number+3}}</a>
+   				<a data-ng-if="(agentsPageInfo.number+5<agentsPageInfo.totalPages)">......</a>
+   				<a data-ng-click="searchList(agentsPageInfo.totalPages-2,agentsPageInfo)"
+  					data-ng-if="(agentsPageInfo.number+3<agentsPageInfo.totalPages) && (agentsPageInfo.number+4!=agentsPageInfo.totalPages)">
+  					{{agentsPageInfo.totalPages-1}}</a>
+  				<a data-ng-click="searchList(agentsPageInfo.totalPages-1,agentsPageInfo)"
+  					data-ng-if="(agentsPageInfo.number+4<=agentsPageInfo.totalPages)">{{agentsPageInfo.totalPages}}</a>
+   			</span>
+   			<span>
+   				<button type="button" data-ng-click="searchList(agentsPageInfo.number+1,agentsPageInfo)" class="btn-sm btn-blue"
+   					data-ng-if="(agentsPageInfo.number+1<agentsPageInfo.totalPages)" translate="content.pageInfo.next"></button>
+  					<button type="button" class="btn-sm btn-blue btn-disabled" data-ng-if="!(agentsPageInfo.number+1<agentsPageInfo.totalPages)"
+  						translate="content.pageInfo.next"></button>
+<!--     				<a href="javascript:void(0);" data-ng-if="!(agentsPageInfo.page<agentsPageInfo.totalPages)" style="color: grey" title="不可用">下一页</a> -->
+   			</span>
+   			<span>
+  					<button type="button" data-ng-click="searchList(agentsPageInfo.totalPages-1,agentsPageInfo)" data-ng-if="!(agentsPageInfo.number<0)"
+  						class="btn-sm btn-white" translate="content.pageInfo.last"></button>
+<!--     				<a href="javascript:void(0);" data-ng-if="!(agentsPageInfo.page<agentsPageInfo.totalPages)" style="color: grey" title="不可用">尾页</a> -->
+  				</span>
+   			<span>
+   				<input type="number" step="1" data-ng-model="agentsPageInfo.page" max="{{agentsPageInfo.totalPages}}" required="required"
+   						min="1" data-ng-if="(agentsPageInfo.totalPages>0)" >
+   				<input type="number" step="1" data-ng-model="agentsPageInfo.page" max="1" min="1" readonly="readonly"
+   						data-ng-if="!(agentsPageInfo.totalPages>0)" >
+   				<input type="submit" class="btn-sm btn-blue btn-go" value="GO">
+   			</span>
+		</form>
+	</div>
+</div>
+
+<div class="modal fade" id="alertModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title" data-ng-bind="alert_title"></h4>
+			</div>
+			<div class="modal-body">
+				<span data-ng-bind="alert_message"></span>
+			</div>
+            <div class="modal-footer"></div>
+        </div>  
+    </div> 
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title"><span translate="content.agents.operations.delete"></span></h4>
+			</div>
+			<div class="modal-body">
+				<span translate="content.agents.operations.delete"></span>
+				<span style="margin: 10px 10px;color: red;" data-ng-bind="removing_agent.name"></span>
+				<span translate="content.modals.marks.mark1"></span>
+			</div>
+            <div class="modal-footer">
+            	<button type="button" class="btn-sm btn-blue" data-ng-click="removeAgent(removing_agent)" translate="content.operations.delete"></button>  
+                <button type="button" class="btn-sm btn-blue" data-dismiss="modal" translate="content.operations.cancel"></button>  
+            </div>
+        </div>  
+    </div> 
+</div>
+<!-- 下发额度模态框 -->
+<div class="modal fade" id="petchCredit" tabindex="-1">  
+   	<div class="modal-dialog">  
+       	<div class="modal-content">  
+           	<div class="modal-header">    
+               	<button type="button" class="close" data-dismiss="modal" data-ng-click="closeCredit()">  
+                   ×  
+               	</button>   
+               	<h4 class="modal-title" id="myModalLabel">
+					<span translate="content.credits.push"></span>				
+				</h4>  
+           </div>
+           <form name="petchCreditForm" data-ng-submit="updateCredit(credit)">  
+            	<div class="modal-body">
+				    <div data-ng-if ="(loginUser.type<4)">
+				        <label><span translate="content.credits.rest"></span></label>
+				        <input type="text" class="text-class disabled-class" data-ng-model="credit.credit" name="credit"
+							maxlength="20" readonly="readonly">
+						<span translate="content.credits.point"></span>
+				    </div>
+				    <div data-ng-if ="(loginUser.type<4)">
+				        <label><span translate="content.credits.push"></span></label>
+				        <input type="text" class="text-class disabled-class" data-ng-model="credit.sub" name="sub" maxlength="20" >
+			 			<span translate="content.credits.point"></span>
+				    </div>
+	            </div>  
+	            <div class="modal-footer">  
+	                <button type="submit" class="btn-sm btn-blue" translate="content.operations.push"></button>  
+	                <button type="button" class="btn-sm btn-white" data-dismiss="modal" data-ng-click="closeCredit()"
+	                	translate="content.operations.close"></button>  
+	            </div>
+           </form>  
+       </div>  
+   </div> 
+</div>

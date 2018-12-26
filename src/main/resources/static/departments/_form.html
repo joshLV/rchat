@@ -1,0 +1,214 @@
+<div class="content-div">
+	<div class="table-div">
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" class="tb-title"><span translate="content.departments.title"></span></th>
+					<th ></th>
+				</tr>
+			</thead>
+		</table>
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" style="border-right: none;" ><span translate="content.departments.form"></span></th>
+					<th style="border-left: none;"></th>
+				</tr>
+			</thead>
+		</table>
+		<form name="departmentForm" data-ng-submit="createOrUpdateDepartment(department)">
+			<div data-ng-if="loginUser.type==1 && !(department.id)">
+				<label><span translate="content.agents.attach_agent"></span></label> 
+				<select class="text-class" id="selectOptions" data-ng-model="agent.id" data-ng-change="getGroups(agent.id)" required="required">
+				</select>
+				<span ><font color="red">*</font></span>
+			</div>
+			<div data-ng-if="loginUser.type==1" >
+				<label><span translate="content.departments.attach_group"></span></label> 
+				<select class="text-class" data-ng-if="!(department.id)" data-ng-model="department.group.id" data-ng-change="getDepartments(department.group.id)"
+					data-ng-options="group.id as group.name for group in groups.content  | orderBy:'-name'" required="required">
+					<option value="" translate="content.operations.selection"></option>
+				</select>
+				<input type="text" class="text-class disabled-class" data-ng-model="department.group.name"
+					data-ng-options="group.id as group.name for group in groups.content" data-ng-if="department.id" readonly="readonly">
+				<input type="hidden" data-ng-model="department.parent.id"> 
+				<span ><font color="red">*</font></span>
+			</div> 
+			<div data-ng-if="loginUser.type==1 && !(department.id)">
+				<label ><span translate="content.departments.attach_department"></span></label> 
+				<select class="text-class" data-ng-model="department.parent.id" data-ng-if="!(department.id)"
+						data-ng-options="department.id as department.name for department in dptsList | orderBy:['level','name']">
+					<option value="" translate="content.operations.selection"></option>
+				</select>
+<!-- 				<input type="text" class="text-class disabled-class" data-ng-model="department.parent.name" -->
+<!-- 					data-ng-options="department.id as department.name for department in dptsList" data-ng-if="department.id" readonly="readonly"> -->
+				<input type="hidden" id="parentId" data-ng-model="createGroupId">
+				<input type="hidden" data-ng-model="department.parent.id"> 
+			</div>
+			<div data-ng-if="loginUser.type!=1 && !(department.id)">
+				<label ><span translate="content.departments.attach_department"></span></label> 
+				<select class="text-class" data-ng-model="department.parent.id" data-ng-if="!(department.id)"
+						data-ng-options="department.id as department.name for department in dptsList | orderBy:['level','name']">
+					<option value="" translate="content.operations.selection"></option>
+				</select>
+				<input type="hidden" id="parentId" data-ng-model="createGroupId">
+				<input type="hidden" data-ng-model="department.parent.id"> 
+			</div>
+			<div>
+				<label><span translate="content.departments.name"></span></label> 
+				<input type="text" class="text-class" data-ng-model="department.name" pattern="^[\u4e00-\u9fa5a-zA-Z0-9]+$"  name="name"
+					 maxlength="16" title="不超过16位的数字、字母、汉字的组合!" required="required"/>
+				<span style="color: #ff3138" data-ng-show="departmentForm.name.$invalid">
+					<span data-ng-show="departmentForm.name.$error.required"><font color="red">*</font></span>
+					<span data-ng-show="departmentForm.name.$error.pattern" data-translate="content.errors.err5"></span>
+				</span>				
+			</div>
+			<div>
+				<label><span translate="content.departments.admin.name"></span></label> 
+				<input type="text" class="text-class"  data-ng-model="department.administrator.name" pattern="^[\u4e00-\u9fa5a-zA-Z0-9]+$" 
+					 maxlength="16" name="adminname" title="是不超过16位的数字、字母、汉字的组合!" required="required" />
+				<span style="color: #ff3138" data-ng-show="departmentForm.adminname.$invalid">
+					<span data-ng-show="departmentForm.adminname.$error.required"><font color="red">*</font></span>
+					<span data-ng-show="departmentForm.adminname.$error.pattern" data-translate="content.errors.err5"></span>
+				</span>
+			</div>
+			<div>
+				<label><span translate="content.departments.admin.username"></span></label> 
+				<input type="text" class="text-class"  data-ng-model="department.administrator.username" name="username" 
+					data-ng-if="!(department.id)" id="administrator_username" minlength="8" maxlength="16" autocomplete="off" 
+					pattern="^[_a-zA-Z0-9]+$"  title="管理员账号由8-16位的数字、字母,下划线组成!" required="required" />
+				<input type="text" id="administrator_username" class="text-class disabled-class" data-ng-model="department.administrator.username"
+					 required="required" data-ng-if="department.id" readonly="readonly" name="username">
+				<span style="color: #ff3138" data-ng-show="departmentForm.username.$invalid">
+					<span data-ng-show="departmentForm.username.$error.required"><font color="red">*</font></span>
+					<span data-ng-show="departmentForm.username.$error.minlength" data-translate="content.errors.err6"></span>
+					<span data-ng-show="departmentForm.username.$error.pattern" data-translate="content.errors.err7"></span>
+				</span>
+			</div>
+		    <div data-ng-if="!(department.id)">
+		        <label><span translate="content.agents.admin.password"></span></label>
+            	<input class="text-class" type="password"  data-ng-model="department.administrator.password" name="password" minlength="8" 
+                   maxlength="16" autocomplete="off" pattern="[\w\d@_]*" title="管理员账号由8-16位的数字、字母、下划线和@组成!" required="required">
+            	<span style="color: #ff3138" data-ng-show="departmentForm.password.$invalid">
+					<span data-ng-show="departmentForm.password.$error.required"><font color="red">*</font></span>
+					<span data-ng-show="departmentForm.password.$error.minlength" data-translate="content.errors.err6"></span>
+					<span data-ng-show="departmentForm.password.$error.pattern" data-translate="content.errors.err8"></span>
+				</span>
+		    </div>
+		    <div data-ng-if="!(department.id)">
+		        <label for="rePassword"><span translate="content.agents.admin.re_password"></span></label>
+            	<input class="text-class" type="password"  data-ng-model="department.administrator.re_password" name="re_password" autocomplete="off" 
+                   	maxlength="16" minlength="8" pattern="[\w\d@_]*" required="required">
+		        <span style="color: #ff3138" data-ng-show="department.administrator.re_password">
+		        	<span data-ng-show="departmentForm.re_password.$error.required"><font color="red">*</font></span>
+					<span data-ng-show="departmentForm.re_password.$error.pattern" data-translate="content.errors.err8"></span>
+					<span data-ng-show="department.administrator.password != department.administrator.re_password" data-translate="content.errors.err4"></span>
+				</span>
+		    </div>
+			<div data-ng-if="false">
+				<label><span translate="content.departments.admin.email"></span></label>
+				<input type="email" class="text-class"  data-ng-model="department.administrator.email" name="email" data-ng-if="!(department.id)"
+					 id="administrator_email" maxlength="100"/>
+				<input type="email" id="administrator_email" class="text-class disabled-class" data-ng-model="department.administrator.email"
+					 data-ng-if="department.id" readonly="readonly" name="email">
+			</div>
+			<div>
+				<label><span translate="content.agents.linkman"></span></label> 
+				<input type="text" class="text-class" maxlength="100"  data-ng-model="department.linkman" id="department.linkman" />
+			</div>
+			<div>
+				<label><span translate="content.agents.phone"></span></label> 
+				<input type="tel" class="text-class" maxlength="100" data-ng-model="department.phone" id="department.phone" />
+			</div>
+			<div>
+				<label><span translate="content.agents.email"></span></label> 
+				<input type="email" class="text-class" maxlength="100" data-ng-model="department.email" id="department.email" />
+			</div>
+			<div >
+				<label ><span translate="content.departments.authority"></span></label>										
+				<label id="overLevelCallTypeLabel" ><span translate="content.departments.overLevelCallType"></span></label>
+			</div>
+			<div class="radio-div">
+				<label></label>
+				<label >
+					<input type="radio" id="overLevelCallTypeZero" name="overLevelCallType"
+						data-ng-model="department.privilege.overLevelCallType" value="0"/>
+					<span translate="content.departments.disabled"></span>
+				</label>
+				<label >
+					<input type="radio" id="overLevelCallTypeOne" name="overLevelCallType"
+						data-ng-model="department.privilege.overLevelCallType" value="1"/>
+					<span translate="content.departments.enabled1"></span>
+				</label>
+				<label >
+					<input type="radio" id="overLevelCallTypeTwo" name="overLevelCallType"
+						data-ng-model="department.privilege.overLevelCallType" value="2"/>
+					<span translate="content.departments.enabled2"></span>
+				</label>
+			</div>
+			<div>					
+				<label ></label>
+				<label id="overGroupEnabledLabel">
+					<span translate="content.departments.overGroupCallType"></span>
+				</label>
+			</div>
+			<div class="radio-div">
+				<label></label>
+				<label >
+					<input type="radio" id="overGroupEnabledTrue" name="overGroupEnabled"
+						data-ng-model="department.privilege.overGroupEnabled" value="1" />
+					<span translate="content.departments.enabled"></span>
+				</label>
+				<label >
+					<input type="radio" id="overGroupEnabledFalse" name="overGroupEnabled"
+						data-ng-model="department.privilege.overGroupEnabled" value="0" />
+					<span translate="content.departments.disabled"></span>
+				</label>
+			</div>
+			<div>
+				<label ></label> 
+				<label id="gpsEnabledLabel">
+					<span translate="content.departments.gpsType"></span>
+				</label>
+			</div>
+			<div class="radio-div">
+				<label></label>
+				<label >
+					<input type="radio" id="gpsEnabledTrue" name="gpsEnabled" data-ng-model="department.privilege.gpsEnabled" value="1" />
+					<span translate="content.departments.enabled"></span>
+				</label>
+				<label >
+					<input type="radio" id="gpsEnabledFalse" name="gpsEnabled" data-ng-model="department.privilege.gpsEnabled" value="0" />
+					<span translate="content.departments.disabled"></span>
+				</label>
+			</div>
+			<div>
+				<label></label>
+				<button type="submit" class="btn-sm btn-blue"
+					 data-ng-disabled="departmentForm.password.$invalid || department.administrator.password != department.administrator.re_password"
+					 data-ng-if="!(department.id)" translate="content.operations.ok"></button>
+<!-- 					 || !(department.privilege.gpsEnabled) || !(department.privilege.overGroupEnabled) || !(department.privilege.overLevelCallType)" -->
+				<button type="submit" class="btn-sm btn-blue" data-ng-if="department.id" translate="content.operations.ok"></button>
+				<button type="button" class="btn-sm btn-white" data-ng-if="!(department.id)"
+					data-ng-click="resetCreate()" translate="content.operations.reset"></button>
+				<button id="departmentReset" type="button" class="btn-sm btn-white" data-ng-if="department.id"
+					data-ng-click="resetDepartment()" translate="content.operations.reset"></button>
+			</div>
+		</form>
+	</div>
+</div>
+
+<div class="modal fade" id="alertModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title" data-ng-bind="alert_title"></h4>
+			</div>
+			<div class="modal-body">
+				<span data-ng-bind="alert_message"></span>
+			</div>
+      		<div class="modal-footer"></div>
+   		</div>  
+   	</div> 
+</div>

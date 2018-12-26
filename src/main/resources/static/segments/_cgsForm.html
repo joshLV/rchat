@@ -1,0 +1,67 @@
+<div class="content-div">
+	<div class="table-div">
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" class="tb-title"><span translate="content.segments.groupsSegment_title"></span></th>
+					<th ></th>
+				</tr>
+			</thead>
+		</table>
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" style="border-right: none;"><span translate="content.segments.form_groupSegment"></span></th>
+					<th style="border-left: none;"></th>
+				</tr>
+			</thead>
+		</table>
+		<form name="segmentForm" data-ng-submit="createGroupSegment(segment)">
+			<div>
+				<label><span translate="content.agents.attach_agent"></span></label>
+				<select class="text-class" data-ng-model="segment.agent" data-ng-change="getAgentSegments(segment.agent)"
+						data-ng-options="agt.id as agt.name for agt in agentsList">
+				</select>
+			</div>
+			<div>
+				<label><span translate="content.groups.attach_agentSegment"></span></label>
+				<select class="text-class" data-ng-model="segment.agentSegment"
+						data-ng-options="agtSegment.id as agtSegment.fullValue for agtSegment in agentSegmentsList">
+				</select>
+			</div>
+			<div>
+				<label><span translate="content.departments.attach_group"></span></label>
+				<select class="text-class" data-ng-model="segment.group" 
+						data-ng-options="grp.id as grp.name for grp in groupsList">
+						<option value="" translate="content.segments.reserve"></option>
+				</select>
+			</div>
+			<div>
+				<label><span translate="content.segments.create"></span></label>
+				<input type="text" class="text-class" name="groupSegment" data-ng-model="segment.value" required="required"
+						maxlength="4" pattern="[\d]*" />
+				<i class="iconfont icon-bitianxiang"></i>
+			</div>
+			<div>
+				<label></label>
+				<button type="submit" class="btn-sm btn-blue" translate="content.operations.ok"></button>
+				<button type="button" class="btn-sm btn-white" data-ng-click="resetForm('cgsForm')" translate="content.operations.clear"></button>
+			</div>
+		</form>
+	</div>
+	
+	<div class="modal fade" id="alertModal" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">×</button>
+					<h4 class="modal-title" data-ng-bind="alert_title"></h4>
+				</div>
+				<div class="modal-body">
+					<span data-ng-bind="alert_message"></span>
+				</div>
+	            <div class="modal-footer"></div>
+	        </div>  
+	    </div> 
+	</div>
+</div>

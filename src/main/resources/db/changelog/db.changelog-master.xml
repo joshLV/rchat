@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="schema-init" author="dzhang">
+        <createTable tableName="t_user">
+            <column name="id" autoIncrement="true" type="int">
+                <constraints primaryKey="true" primaryKeyName="pk_user_id" />
+            </column>
+            <column name="name" type="varchar(50)" />
+            <column name="username" type="varchar(100)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="uq_user_username" />
+            </column>
+            <column name="password" type="varchar(100)">
+                <constraints nullable="false" />
+            </column>
+            <column name="salt" type="varchar(100)">
+                <constraints nullable="false" />
+            </column>
+            <column name="email" type="varchar(100)" />
+            <column name="phone" type="varchar(20)" />
+            <column name="activated" type="boolean" />
+            <column name="enabled" type="boolean" />
+            <column name="expired" type="boolean" />
+            <column name="online" type="boolean" />
+            <column name="created_at" type="datetime" />
+            <column name="updated_at" type="datetime" />
+        </createTable>
+        <createTable tableName="t_role">
+            <column name="id" autoIncrement="true" type="int">
+                <constraints primaryKey="true" primaryKeyName="pk_role_id" />
+            </column>
+            <column name="name" type="varchar(100)">
+                <constraints unique="true" uniqueConstraintName="uq_role_name" nullable="false" />
+            </column>
+            <column name="description" type="varchar(200)" />
+        </createTable>
+        <createTable tableName="t_user_role">
+            <column name="user_id" type="int">
+                <constraints foreignKeyName="fk_user_r" references="t_user(id)" />
+            </column>
+            <column name="role_id" type="int">
+                <constraints foreignKeyName="fk_role_r" references="t_role(id)" />
+            </column>
+        </createTable>
+        <createTable tableName="t_resource_group">
+            <column name="id" autoIncrement="true" type="int">
+                <constraints primaryKey="true" primaryKeyName="pk_resource_group_id" />
+            </column>
+            <column name="name" type="varchar(100)">
+                <constraints unique="true" uniqueConstraintName="uq_resource_group_name" nullable="false" />
+            </column>
+            <column name="description" type="varchar(255)" />
+        </createTable>
+        <createTable tableName="t_resource">
+            <column name="id" autoIncrement="true" type="int">
+                <constraints primaryKey="true" primaryKeyName="pk_resource_id" />
+            </column>
+            <column name="name" type="varchar(100)">
+                <constraints unique="true" uniqueConstraintName="uq_resource_name" nullable="false" />
+            </column>
+            <column name="description" type="varchar(200)" />
+            <column name="resource_group_id" type="int">
+                <constraints foreignKeyName="fk_resource_group" references="t_resource_group(id)" />
+            </column>
+        </createTable>
+        <createTable tableName="t_operation">
+            <column name="id" autoIncrement="true" type="int">
+                <constraints primaryKey="true" primaryKeyName="pk_operation_id" />
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
+            <column name="code" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="description" type="varchar(255)" />
+        </createTable>
+        <createTable tableName="t_authority">
+            <column name="id" autoIncrement="true" type="int">
+                <constraints primaryKey="true" primaryKeyName="pk_authority_id" />
+            </column>
+            <column name="operations" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="resource_id" type="int">
+                <constraints foreignKeyName="fk_authority_resource" references="t_resource(id)" />
+            </column>
+            <column name="role_id" type="int">
+                <constraints foreignKeyName="fk_authority_role" references="t_role(id)" />
+            </column>
+        </createTable>
+        <createTable tableName="t_agent">
+            <column name="id" autoIncrement="true" type="int">
+                <constraints primaryKey="true" primaryKeyName="pk_agent_id" />
+            </column>
+            <column name="name" type="varchar(100)">
+                <constraints nullable="false" />
+            </column>
+            <column name="type" type="int" />
+            <column name="credit_unit_price" type="double" />
+            <column name="linkman" type="varchar(100)" />
+            <column name="email" type="varchar(100)" />
+            <column name="phone" type="varchar(100)" />
+            <column name="region" type="varchar(100)" />
+            <column name="administrator" type="int">
+                <constraints foreignKeyName="fk_agent_admin" references="t_user(id)" />
+            </column>
+            <column name="creator" type="int">
+                <constraints foreignKeyName="fk_agent_creator" references="t_user(id)" />
+            </column>
+            <column name="parent" type="int">
+                <constraints foreignKeyName="fk_agent_parent" references="t_agent(id)" />
+            </column>
+            <column name="created_at" type="datetime" />
+            <column name="updated_at" type="datetime" />
+        </createTable>
+        <createTable tableName="t_group">
+            <column name="id" autoIncrement="true" type="int">
+                <constraints primaryKey="true" primaryKeyName="pk_group_id" />
+            </column>
+            <column name="name" type="varchar(100)">
+                <constraints nullable="false" />
+            </column>
+            <column name="type" type="int" />
+            <column name="credit_unit_price" type="double" />
+            <column name="linkman" type="varchar(100)" />
+            <column name="email" type="varchar(100)" />
+            <column name="phone" type="varchar(100)" />
+            <column name="administrator" type="int">
+                <constraints foreignKeyName="fk_group_admin" references="t_user(id)" />
+            </column>
+            <column name="creator" type="int">
+                <constraints foreignKeyName="fk_group_creator" references="t_user(id)" />
+            </column>
+            <column name="agent_id" type="int">
+                <constraints foreignKeyName="fk_group_agent" references="t_agent(id)" nullable="false" />
+            </column>
+            <column name="description" type="varchar(255)" />
+            <column name="created_at" type="datetime" />
+            <column name="updated_at" type="datetime" />
+        </createTable>
+        <createTable tableName="t_business">
+            <column name="id" autoIncrement="true" type="int">
+                <constraints primaryKey="true" primaryKeyName="pk_business_id" />
+            </column>
+            <column name="name" type="varchar(100)">
+                <constraints nullable="false" />
+            </column>
+            <column name="code" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="credit_per_month" type="double" />
+            <column name="description" type="varchar(255)" />
+        </createTable>
+        <createTable tableName="t_group_business">
+            <column name="group_id" type="int">
+                <constraints primaryKey="true" primaryKeyName="pk_group" foreignKeyName="fk_group_r" references="t_group(id)" />
+            </column>
+            <column name="business_id" type="int">
+                <constraints primaryKey="true" primaryKeyName="pk_business" foreignKeyName="fk_business_r" references="t_business(id)" />
+            </column>
+        </createTable>
+        <createTable tableName="t_department">
+            <column name="id" autoIncrement="true" type="int">
+                <constraints primaryKey="true" primaryKeyName="pk_department_id" />
+            </column>
+            <column name="name" type="varchar(100)">
+                <constraints nullable="false" />
+            </column>
+            <column name="linkman" type="varchar(100)" />
+            <column name="email" type="varchar(100)" />
+            <column name="phone" type="varchar(100)" />
+            <column name="over_level_call_type" type="int" />
+            <column name="gps_enabled" type="boolean" />
+            <column name="over_group_enabled" type="boolean" />
+            <column name="group_id" type="int">
+                <constraints foreignKeyName="fk_department_group" references="t_group(id)" />
+            </column>
+            <column name="administrator" type="int">
+                <constraints foreignKeyName="fk_department_admin" references="t_user(id)" />
+            </column>
+            <column name="creator" type="int">
+                <constraints foreignKeyName="fk_department_creator" references="t_user(id)" />
+            </column>
+            <column name="parent" type="int">
+                <constraints foreignKeyName="fk_department_parent" references="t_department(id)" />
+            </column>
+        </createTable>
+        <!-- 额度账户 -->
+        <createTable tableName="t_credit_account">
+            <column name="id" autoIncrement="true" type="int">
+                <constraints primaryKey="true" primaryKeyName="pk_credit_account_id" />
+            </column>
+            <column name="credit" type="int" defaultValue="0">
+                <constraints nullable="false" />
+            </column>
+            <column name="group_id" type="int">
+                <constraints foreignKeyName="fk_credit_account_group" references="t_group(id)" />
+            </column>
+            <column name="agent_id" type="int">
+                <constraints foreignKeyName="fk_credit_account_agent" references="t_agent(id)" />
+            </column>
+            <column name="disc" type="varchar(10)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <!-- 额度订单 -->
+        <createTable tableName="t_credit_order">
+            <column name="id" autoIncrement="true" type="int">
+                <constraints primaryKey="true" primaryKeyName="pk_credit_order_id" />
+            </column>
+            <column name="remanent_credit" type="int" defaultValue="0">
+                <constraints nullable="false" />
+            </column>
+            <column name="distributed_credit" type="int" defaultValue="0">
+                <constraints nullable="false" />
+            </column>
+            <column name="deadline" type="datetime">
+                <constraints nullable="false" />
+            </column>
+            <column name="status" type="varchar(20)" />
+            <column name="respondent_id" type="int">
+                <constraints foreignKeyName="fk_credit_order_respondent" references="t_agent(id)" />
+            </column>
+            <column name="group_id" type="int">
+                <constraints foreignKeyName="fk_credit_order_group" references="t_group(id)" />
+            </column>
+            <column name="agent_id" type="int">
+                <constraints foreignKeyName="fk_credit_order_agent" references="t_agent(id)" />
+            </column>
+            <column name="disc" type="varchar(20)">
+                <constraints nullable="false" />
+            </column>
+            <column name="created_at" type="datetime" />
+            <column name="updated_at" type="datetime" />
+        </createTable>
+        <createTable tableName="t_talkback_user">
+            <column name="id" type="varchar(64)">
+                <constraints primaryKey="true" primaryKeyName="pk_talback_user_id" />
+            </column>
+            <column name="name" type="varchar(50)" />
+            <column name="password" type="varchar(50)" />
+        </createTable>
+        <createTable tableName="t_talkback_group">
+            <column name="id" type="varchar(64)">
+                <constraints primaryKey="true" primaryKeyName="pk_talkback_group_id" />
+            </column>
+            <column name="name" type="varchar(50)" />
+            <column name="type" type="varchar(50)" />
+            <column name="priority" type="varchar(50)" />
+            <column name="department_id" type="int">
+                <constraints foreignKeyName="fk_talkback_group_department" references="t_department(id)" />
+            </column>
+            <column name="group_id" type="int">
+                <constraints foreignKeyName="fk_talkback_group_group" references="t_group(id)" />
+            </column>
+            <column name="description" type="varchar(255)" />
+        </createTable>
+        <createTable tableName="t_talkback_user_group">
+            <column name="talkback_user_id" type="varchar(64)">
+                <constraints primaryKey="true" primaryKeyName="pk_talkback_user" />
+            </column>
+            <column name="talkback_group_id" type="varchar(64)">
+                <constraints primaryKey="true" primaryKeyName="pk_talkback_group" />
+            </column>
+        </createTable>
+        <createTable tableName="t_segment_number">
+            <column name="id" type="varchar(64)">
+                <constraints primaryKey="true" primaryKeyName="pk_segment_number_id" />
+            </column>
+            <column name="number" type="varchar(12)">
+                <constraints nullable="false" />
+            </column>
+            <column name="talkback_user_id" type="varchar(64)">
+                <constraints foreignKeyName="fk_segement_number_talkback_user" references="t_talkback_user(id)" />
+            </column>
+            <column name="group_id" type="int">
+                <constraints foreignKeyName="fk_segement_number_group" references="t_group(id)" />
+            </column>
+            <column name="agent_id" type="int">
+                <constraints foreignKeyName="fk_segement_number_agent" references="t_agent(id)" />
+            </column>
+            <column name="disc" type="varchar(20)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <createTable tableName="t_log">
+            <column name="id" type="varchar(64)">
+                <constraints primaryKey="true" primaryKeyName="pk_log_id" />
+            </column>
+            <column name="message" type="text" />
+            <column name="operation" type="varchar(255)" />
+            <column name="resource" type="varchar(255)" />
+            <column name="url" type="varchar(255)" />
+            <column name="status" type="boolean" />
+            <column name="user_id" type="int">
+                <constraints foreignKeyName="fk_log_user" references="t_user(id)" />
+            </column>
+            <column name="created_at" type="datetime" />
+            <column name="updated_at" type="datetime" />
+        </createTable>
+        <createTable tableName="t_log_detail">
+            <column name="id" type="varchar(64)">
+                <constraints primaryKey="true" primaryKeyName="pk_log_detail_id" />
+            </column>
+            <column name="step" type="int" />
+            <column name="operation" type="varchar(255)" />
+            <column name="resource_id" type="varchar(255)" />
+            <column name="resource_name" type="varchar(255)" />
+            <column name="table_name" type="varchar(255)" />
+            <column name="description" type="varchar(255)" />
+            <column name="log_id" type="varchar(64)">
+                <constraints foreignKeyName="fk_log" references="t_log(id)" />
+            </column>
+            <column name="created_at" type="datetime" />
+            <column name="updated_at" type="datetime" />
+        </createTable>
+    </changeSet>
+    <changeSet id="alert-business-code-type" author="dzhang">
+        <renameColumn tableName="t_business" oldColumnName="code" newColumnName="code" columnDataType="varchar(50)" />
+    </changeSet>
+    <changeSet id="alert-credit-account-credit-type" author="dzhang">
+        <renameColumn tableName="t_credit_account" oldColumnName="credit" newColumnName="credit" columnDataType="bigint" />
+    </changeSet>
+    <changeSet id="alert-credit-order-credit-type" author="dzhang">
+        <renameColumn tableName="t_credit_order" oldColumnName="distributed_credit" newColumnName="distributed_credit" columnDataType="bigint" />
+        <renameColumn tableName="t_credit_order" oldColumnName="remanent_credit" newColumnName="remanent_credit" columnDataType="bigint" />
+    </changeSet>
+    <changeSet id="add-scale-to-group" author="dzhang">
+        <comment>增加集团规模字段 scale</comment>
+        <addColumn tableName="t_group">
+            <column name="scale" type="int">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="alert-log-status-type" author="dzhang">
+        <renameColumn tableName="t_log" oldColumnName="status" newColumnName="status" columnDataType="int" />
+    </changeSet>
+    <changeSet id="alert-talkback-group-priority-type" author="dzhang">
+        <comment>修改对讲组优先级字段类型为int</comment>
+        <renameColumn tableName="t_talkback_group" oldColumnName="priority" newColumnName="priority" columnDataType="int" />
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,223 @@
+<div class="content-div">
+	<div class="table-div">
+		<table >
+			<thead>
+				<tr>
+					<th width="15%" class="tb-title"><span translate="content.records.details"></span></th>
+					<th ></th>
+				</tr>
+			</thead>
+		</table>
+		<table>
+			<tr>
+				<th width="15%" nowrap="nowrap" style="text-align: left;"><span style="margin-left: 5%;" translate="content.records.details0"></span></th>
+			</tr>
+		</table>
+		<form class="departmentList-authority">
+			<div class="radio-div">
+				<label id="departments-table-form-div-title" style="padding-right: 0px"><span translate="content.groups.name"></span></label>
+				<label id="overLevelCallTypeLabel"><span>{{recordGroup.name}}</span></label>
+			</div>
+			<div class="radio-div">
+				<label id="departments-table-form-div-title" style="padding-right: 0px"><span translate="content.agents.attach_agent0"></span></label>			
+				<label id="overGroupEnabledLabel"><span>{{recordGroup.agent.name}}</span></label>
+			</div>
+			<div class="radio-div">
+				<label id="departments-table-form-div-title" style="padding-right: 0px"><span translate="content.records.status0"></span></label>			
+				<label id="overGroupEnabledLabel">
+					<span data-ng-if="recordGroup.status==false" translate="content.accounts.disabled0"></span>
+					<span data-ng-if="recordGroup.status==true" translate="content.accounts.enabled0"></span>
+				</label>
+			</div>
+		</form>
+		<form class="departmentList-authority">
+			<div class="radio-div">
+				<label id="departments-table-form-div-title" style="padding-right: 0px"><span></span></label>
+				<label style="margin-left: 10%;">
+					<span translate="content.records.total_space"></span>
+					<span style="margin-left: 5%">{{recordGroup.totalSpace}}</span>
+				</label>
+			</div>
+			<div class="radio-div">
+				<label id="departments-table-form-div-title" style="padding-right: 0px"><span translate="content.records.space"></span></label>			
+				<label style="margin-left: 10%;">
+					<span translate="content.records.used_space"></span>
+					<span style="margin-left: 5%">{{recordGroup.usedSpace}}</span>
+				</label>
+				<a class="btn btn-sm btn-blue" data-toggle="modal" data-ng-click="toUpdate(recordGroup)" data-target="#update" style="margin-right: 10%; float: right;"
+					data-ng-if="showbtn" translate="content.records.management_space"></a>
+					
+			</div>
+			<div class="radio-div">
+				<label id="departments-table-form-div-title" style="padding-right: 0px;float: left"><span></span></label>			
+				<label style="margin-left: 10.3%;float: left">
+					<span translate="content.records.residual_space"></span>
+				</label>
+				<input type="text" style="background-color: red; margin-left:-6em;height:1em;float:left;width:10%;margin-top: 0.8em;text-align: center;" 
+						data-ng-if="residual<10" disabled="disabled" value="{{residual}}%"/>
+				<input type="text" style="background-color: yellow; margin-left:-6em;height:1em;float:left;width:10%;margin-top: 0.8em;text-align: center;"
+				 		data-ng-if="residual<=25 && residual>=10" disabled="disabled" value="{{residual}}%"/>
+				<input type="text" style="background-color: #66FF00; margin-left:-6em;height:1em;float:left;width:10%;margin-top: 0.8em;text-align: center;"
+						data-ng-if="residual>25" disabled="disabled" value="{{residual}}%"/>
+			</div>
+		</form>
+		<form class="departmentList-authority">
+			<div class="radio-div">
+				<label id="departments-table-form-div-title" style="padding-right: 0px"><span translate="content.records.vedio"></span></label>
+				<label id="overLevelCallTypeLabel">
+					<input type="text" style="background-color: #66FF00;height:1em;width:40%;margin-top: 0.8em;text-align: center;" 
+							data-ng-if="space.vedioPer<10" disabled="disabled" value="{{space.vedioPer}}%"/>
+					<input type="text" style="background-color: yellow;height:1em;width:40%;margin-top: 0.8em;text-align: center;"
+					 		data-ng-if="space.vedioPer<=75 && space.vedioPer>=10" disabled="disabled" value="{{space.vedioPer}}%"/>
+					<input type="text" style="background-color: red;height:1em;width:40%;margin-top: 0.8em;text-align: center;"
+							data-ng-if="space.vedioPer>75" disabled="disabled" value="{{space.vedioPer}}%"/>
+				</label>
+				<a class="btn btn-sm btn-blue" style="margin-right: 10%; float: right;" data-ng-click="toShow(space.vedioList)"
+					data-ng-if="showbtn" translate="content.records.file_management"></a>
+			</div>
+			<div class="radio-div">
+				<label id="departments-table-form-div-title" style="padding-right: 0px"><span translate="content.records.intercom"></span></label>			
+				<label id="overLevelCallTypeLabel">
+					<input type="text" style="background-color: #66FF00;height:1em;width:40%;margin-top: 0.8em;text-align: center;" 
+							data-ng-if="space.intercomPer<10" disabled="disabled" value="{{space.intercomPer}}%"/>
+					<input type="text" style="background-color: yellow;height:1em;width:40%;margin-top: 0.8em;text-align: center;"
+					 		data-ng-if="space.intercomPer<=75 && space.intercomPer>=10" disabled="disabled" value="{{space.intercomPer}}%"/>
+					<input type="text" style="background-color: red;height:1em;width:40%;margin-top: 0.8em;text-align: center;"
+							data-ng-if="space.intercomPer>75" disabled="disabled" value="{{space.intercomPer}}%"/>
+				</label>
+				<a class="btn btn-sm btn-blue" style="margin-right: 10%; float: right;" data-ng-click="toShow(space.intercomList)"
+					data-ng-if="showbtn" translate="content.records.file_management"></a>
+			</div>
+			<div class="radio-div">
+				<label id="departments-table-form-div-title" style="padding-right: 0px"><span translate="content.records.voice"></span></label>
+				<label id="overLevelCallTypeLabel">
+					<input type="text" style="background-color: #66FF00;height:1em;width:40%;margin-top: 0.8em;text-align: center;" 
+							data-ng-if="space.voicePer<10" disabled="disabled" value="{{space.voicePer}}%"/>
+					<input type="text" style="background-color: yellow;height:1em;width:40%;margin-top: 0.8em;text-align: center;"
+					 		data-ng-if="space.voicePer<=75 && space.voicePer>=10" disabled="disabled" value="{{space.voicePer}}%"/>
+					<input type="text" style="background-color: red;height:1em;width:40%;margin-top: 0.8em;text-align: center;"
+							data-ng-if="space.voicePer>75" disabled="disabled" value="{{space.voicePer}}%"/>
+				</label>
+				<a class="btn btn-sm btn-blue" style="margin-right: 10%; float: right;" data-ng-click="toShow(space.voiceList)"
+					data-ng-if="showbtn" translate="content.records.file_management"></a>
+			</div>
+			<div class="radio-div">
+				<label id="departments-table-form-div-title" style="padding-right: 0px"><span translate="content.records.file"></span></label>			
+				<label id="overLevelCallTypeLabel">
+					<input type="text" style="background-color: #66FF00;height:1em;width:40%;margin-top: 0.8em;text-align: center;" 
+							data-ng-if="space.filePer<10" disabled="disabled" value="{{space.filePer}}%"/>
+					<input type="text" style="background-color: yellow;height:1em;width:40%;margin-top: 0.8em;text-align: center;"
+					 		data-ng-if="space.filePer<=75 && space.filePer>=10" disabled="disabled" value="{{space.filePer}}%"/>
+					<input type="text" style="background-color: red;height:1em;width:40%;margin-top: 0.8em;text-align: center;"
+							data-ng-if="space.filePer>75" disabled="disabled" value="{{space.filePer}}%"/>
+				</label>
+				<a class="btn btn-sm btn-blue" style="margin-right: 10%; float: right;" data-ng-click="toShow(space.fileList)"
+					data-ng-if="showbtn" translate="content.records.file_management"></a>
+			</div>
+		</form>
+		<table data-ng-show="loginUser.type==1 && showList.length>0" >
+			<thead>
+				<tr>
+					<th><span translate="content.departments.name"></span></th>
+					<th><span translate="content.records.size"></span></th>
+					<th><span translate="content.operations.operation"></span></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-ng-repeat="show in showList">
+					<th>{{show.name}}</th>
+					<td><span>{{show.size}}</span></td>
+					<td>
+						<span>
+							<a data-toggle="modal" data-target="#deleteModal" data-ng-click="deleteModal(show)"
+								class="btn btn-sm btn-blue" translate="content.operations.delete"></a>
+						</span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+<!-- 		<table data-ng-show="loginUser.type==1 && showList.length=0" > -->
+<!-- 			<thead> -->
+<!-- 				<tr> -->
+<!-- 					<th><span translate="content.departments.name"></span></th> -->
+<!-- 					<th><span translate="content.records.size"></span></th> -->
+<!-- 					<th><span translate="content.operations.operation"></span></th> -->
+<!-- 				</tr> -->
+<!-- 			</thead> -->
+<!-- 			<tbody> -->
+<!-- 				<tr data-ng-repeat="show in showList"> -->
+<!-- 					<th></th> -->
+<!-- 					<td></td> -->
+<!-- 					<td></td> -->
+<!-- 				</tr> -->
+<!-- 			</tbody> -->
+<!-- 		</table>		 -->
+	</div>
+	<div class="left-btn-group">
+		<button class="btn-sm btn-blue" data-ng-click="returnList()" translate="content.operations.return"></button>
+	</div>
+</div>
+<div class="modal fade" id="alertModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title" data-ng-bind="alert_title"></h4>
+			</div>
+			<div class="modal-body">
+				<span data-ng-bind="alert_message" style="margin-left: 6em;"></span>
+			</div>
+            <div class="modal-footer"></div>
+        </div>  
+    </div> 
+</div>
+<div class="modal fade" id="update" tabindex="-1">  
+    <div class="modal-dialog">  
+        <div class="modal-content">  
+        	<div class="modal-header">    
+            	<button type="button" class="close" data-dismiss="modal" data-ng-click="closePwd()">x</button>   
+                <h4 class="modal-title" id="myModalLabel"><span translate="content.records.update_space"></span></h4>  
+            </div>
+            <form name="updateForm" data-ng-submit="updateSpace(updateGroup)">  
+	            <div class="modal-body">
+                	<div>
+                		<label><span translate="content.records.total_space"></span></label>
+						<input type="number" data-ng-model="updateGroup.totalSpace" min="0" step="10" class="text-class" />
+					</div>
+					<div>
+						<label><span translate="content.records.used_space"></span></label>
+						<input type="number" data-ng-model="updateGroup.usedSpace"min="0" step="10"
+							data-ng-disabled="true" class="text-class" />
+				    </div>
+	            </div>
+	           	<div>
+					<div id="message" class="error-msg"></div>
+				</div>
+	            <div class="modal-footer">  
+	                <button type="submit" class="btn-sm btn-blue" translate="content.operations.ok"></button>  
+	                <button type="button" class="btn-sm btn-white" data-dismiss="modal" data-ng-click="closePwd()" translate="content.operations.close"></button>  
+	            </div>
+			</form>
+        </div>  
+    </div> 
+</div>
+<div class="modal fade" id="deleteModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title"><span translate="content.records.delete"></span></h4>
+			</div>
+			<div class="modal-body">
+				<span translate="content.records.delete"></span>
+				<span style="margin: 10px 10px;" data-ng-bind="removing_department.name"></span>
+				<span translate="content.modals.marks.mark1"></span>
+			</div>
+            <div class="modal-footer">
+            	<button type="button" class="btn btn-primary" data-ng-click="removeFile(removing_department)"
+            		translate="content.operations.ok"></button>  
+                <button type="button" class="btn btn-default" data-dismiss="modal" translate="content.operations.close"></button>  
+            </div>
+        </div>  
+    </div> 
+</div>

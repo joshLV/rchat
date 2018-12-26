@@ -1,0 +1,9 @@
+{
+	"head" : {
+		"title" : {
+			"rchat" : "Rchat",
+			"agent" : "Rchat_Agent",
+			"group" : "Rchat_Group"
+		}
+	}
+}

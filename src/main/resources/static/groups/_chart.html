@@ -1,0 +1,137 @@
+<div class="content-div">
+	<div class="table-title">
+		<h5>集团列表</h5>
+	</div>
+	<div class="table-div" style="overflow:scroll;">
+		<table id="table1">
+			<thead>
+				<tr style="white-space:nowrap;" >
+					<th nowrap="nowrap">序号</th>
+					<th nowrap="nowrap">集团名称</th>
+					<th nowrap="nowrap">用户总数</th>
+					<th nowrap="nowrap">未激活帐号</th>
+					<th nowrap="nowrap">已过期帐号</th>
+					<th nowrap="nowrap">即将过期帐号</th>
+					<th nowrap="nowrap">剩余额度</th>
+					<th nowrap="nowrap" >操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-ng-mouseover="over()"   data-ng-click="change()"   data-ng-mouseout="out()" data-ng-repeat="group in groups">
+					<td width="5%" data-ng-bind="$index+1+pageInfo.number*pageInfo.size">1</td>
+					<td width="15%">{{group.name}}</td>
+					<td width="10%"></td>
+					<td width="10%"></td>
+					<td width="10%"></td>
+					<td width="10%"></td>
+					<td width="10%"></td>
+					<td width="30%" style="white-space:nowrap; ">
+						<a  title="详情" data-ng-if="loginUser.type>1" data-ui-sref="groups.details({id:group.id})">详情</a>
+						<a  title="修改" data-ui-sref="groups.update({id:group.id})">修改</a>
+						<a  title="删除" data-toggle="modal" data-target="#deleteModal" data-ng-click="deleteModal1(group)">删除</a>
+						<a  title="业务配置" data-ng-if="loginUser.type>1" data-ui-sref="groups.business({id:group.id})">业务配置</a>
+						<!-- <a  title="发送帐号" data-ng-if="loginUser.type>1">发送帐号</a> -->
+						<a  title="重置密码" data-ng-if="loginUser.type>1" data-toggle="modal" data-target="#updatePwd" data-ng-click="getPassword(group)">重置密码</a>
+						<a  title="组织管理" data-ng-if="loginUser.type==1" href="#/departments/list/{{group.id}}">组织管理</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div align="right" style="margin: 0px 1%;">
+	    			<form data-ng-submit="searchList1(pageInfo.showPage,pageInfo)">
+	    				<span class="span-lt">总记录数：{{pageInfo.totalElements}}</span>
+	   					<span class="span-lt">总页数：{{pageInfo.totalPages}}</span>
+		    			<span class="span-lt">每页：<input type="number" step="1" data-ng-model="pageInfo.size" max="100" min="0"></span>
+		    			<span><a data-ng-click="searchList1(1,pageInfo)">首页</a></span>
+		    			<span>
+		    				<a data-ng-click="searchBeforList(pageInfo)" data-ng-if="(pageInfo.number>0)">上一页</a>
+		    				<a href="javascript:void(0);" data-ng-if="!(pageInfo.number>0)" style="color: grey">上一页</a>
+		    			</span>
+		    			<span>
+		    				<input type="number" step="1" data-ng-model="pageInfo.showPage" max="{{pageInfo.totalPages}}" min="1" data-ng-if="(pageInfo.totalPages>0)">
+		    				<input type="number" step="1" data-ng-model="pageInfo.showPage" max="1" min="1" data-ng-if="!(pageInfo.totalPages>0)">
+		    				<input type="submit" class="btn btn-sm btn-primary" value="GO">
+		    			</span>
+		    			<span>
+		    				<a data-ng-click="searchAfterList(pageInfo)" data-ng-if="(pageInfo.showPage<pageInfo.totalPages)">下一页</a>
+		    				<a href="javascript:void(0);" data-ng-if="!(pageInfo.showPage<pageInfo.totalPages)" style="color: grey">下一页</a>
+		    			</span>
+	    				<span><a data-ng-click="searchLastList(pageInfo)">尾页</a></span>
+	    			</form>
+	    		</div>
+		<!-- 修改密码模态框 -->
+				<div class="modal fade" id="updatePwd" tabindex="-1">  
+			    <div class="modal-dialog">  
+			        <div class="modal-content">  
+			            <div class="modal-header">    
+			                <button type="button" class="close" data-dismiss="modal" data-ng-click="closePwd()">  
+			                    ×  
+			                </button>   
+			                <h4 class="modal-title" id="myModalLabel">修改密码</h4>  
+			            </div>
+			            <form name="updatePwdForm" data-ng-submit="updatePwd(group)">  
+				            <div class="modal-body">
+				             <div>
+						        <label>旧密码</label>
+				           <input type="password" data-ng-model="group.administrator.oldPassword" id="oldPassword" name="oldPassword" required="required" data-ng-minlength="8" maxlength="50" autocomplete="off" pattern="[\w\d@_]*"
+									title="必填：8位以上，只能包含数字、字母或'@'、'_'！"  ><br/> 
+						    </div>
+						    <div>
+						        <label>登录密码</label>
+				            <input type="password" data-ng-model="group.administrator.newPassword" name="newPassword" 
+				                   id="newPassword" required="required" data-ng-minlength="8" maxlength="50" autocomplete="off" pattern="[\w\d@_]*"
+										title="必填：8位以上，只能包含数字、字母或'@'、'_'！"><br/>
+						    </div>
+						    <div>
+						        <label>确认密码</label>
+				            <input type="password" data-ng-model="group.administrator.rePassword" name="rePassword" 
+				                   id="rePassword"  required="required"  autocomplete="off" data-ng-blur="updatePwdForm.rePassword.error=true"
+									data-ng-focus="updatePwdForm.rePassword.error=false" >
+				            <span class="span" style="color: #ff3138" data-ng-show="updatePwdForm.rePassword.error"> 
+				          		 <span data-ng-show="group.administrator.newPassword != group.administrator.rePassword">重复密码有误或密码长度小于8</span>
+							</span> 
+						    </div>
+				            </div>  
+				            <div class="modal-footer">  
+				                <button type="submit" class="btn btn-primary">确定</button>  
+				                <button type="button" class="btn btn-default" data-dismiss="modal" data-ng-click="closePwd()">关闭</button>  
+				            </div>
+			            </form>  
+			        </div>  
+			    </div> 
+				</div> 			
+	</div>
+</div>
+
+<div class="modal fade" id="alertModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title" data-ng-bind="alert_title"></h4>
+			</div>
+			<div class="modal-body">
+				<span data-ng-bind="alert_message"></span>
+			</div>
+            <div class="modal-footer"></div>
+        </div>  
+    </div> 
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title">删除集团</h4>
+			</div>
+			<div class="modal-body">
+				确认删除集团<span style="margin: 10px 10px;" data-ng-bind="removing_group.name"></span>？
+			</div>
+            <div class="modal-footer">
+            	<button type="button" class="btn btn-primary" title="确定" data-ng-click="removeGroup(removing_group)">确定</button>  
+                <button type="button" class="btn btn-default" data-dismiss="modal" title="关闭">关闭</button>  
+            </div>
+        </div>  
+    </div> 
+</div>

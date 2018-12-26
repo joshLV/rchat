@@ -1,0 +1,222 @@
+<div class="content-div">
+	<div class="table-div">
+		<table>
+			<tr>
+				<th width="15%" nowrap="nowrap"><span translate="content.credits.buy_month"></span></th>
+				<td width="20%" nowrap="nowrap">
+					<span > {{creditSummary.creditMonthAccumulation}} </span>
+				</td>
+				<td width="15%" nowrap="nowrap">
+					<span> <a href="#" data-ng-click="getCreditByType(3)" translate="content.export"></a></span>
+				</td>
+				<th width="15%" nowrap="nowrap">
+					<span translate="content.credits.buy_season"></span>
+				</th>
+				<td width="20%" nowrap="nowrap">
+					<span >{{creditSummary.creditSeasonAccumulation}}</span>
+				</td>
+				<td width="15%" nowrap="nowrap">
+					<span> <a href="#" data-ng-click="getCreditByType(2)" translate="content.export"></a></span>
+				</td>
+			</tr>
+			<tr>
+				<th><span translate="content.credits.buy_year"></span></th>
+				<td>
+					<span >{{creditSummary.creditYearAccumulation}}</span>
+				</td>
+				<td>
+					<span> <a href="#" data-ng-click="getCreditByType(1)" translate="content.export"></a></span>
+				</td>
+				<th><span translate="content.credits.buy_total"></span></th>
+				<td>
+					<span >{{creditSummary.creditAccumulation}}</span>
+				</td>
+				<td>
+					<span> <a href="#" data-ng-click="getCreditByType(0)" translate="content.export"></a></span>
+				</td>
+			</tr>
+		</table>
+
+		<table>
+			<tr>
+				<th width="15%" nowrap="nowrap"><span translate="content.credits.reward_month"></span></th>
+				<td width="20%" nowrap="nowrap">
+					<span >0</span>
+				</td>
+				<td width="15%" nowrap="nowrap">
+					<span> <a href="#"  translate="content.export"></a></span>
+				</td>
+				<th width="15%" nowrap="nowrap"><span translate="content.credits.reward_season"></span></th>
+				<td width="20%" nowrap="nowrap">
+					<span >0</span>
+				</td>
+				<td width="15%" nowrap="nowrap">
+					<span> <a href="#"  translate="content.export"></a></span>
+				</td>
+			</tr>
+			<tr>
+				<th><span translate="content.credits.reward_year"></span></th>
+				<td>
+					<span >0</span>
+				</td>
+				<td><span> <a href="#"  translate="content.export"></a></span></td>
+				<th><span translate="content.credits.reward_total"></span></th>
+				<td>
+					<span >0</span>
+				</td>
+				<td><span> <a href="#"  translate="content.export"></a></span></td>
+			</tr>
+		</table>
+		
+		<table>
+			<tr>
+				<th width="15%" nowrap="nowrap"><span translate="content.credits.credit_month"></span></th>
+				<td width="20%" nowrap="nowrap">
+					<span>{{creditSummary.creditMonthConsumption}}</span>
+				</td>
+				<td width="15%" nowrap="nowrap">
+					<span> <a href="#" data-ng-click="getCreditByType(7)" translate="content.export"></a></span>
+				</td>
+				<th width="15%" nowrap="nowrap"><span translate="content.credits.credit_season"></span></th>
+				<td width="20%" nowrap="nowrap">
+					<span>{{creditSummary.creditSeasonConsumption}}</span>
+				</td>
+				<td width="15%" nowrap="nowrap">
+					<span> <a href="#" data-ng-click="getCreditByType(6)" translate="content.export"></a></span>
+				</td>
+			</tr>
+			<tr>
+				<th><span translate="content.credits.credit_year"></span></th>
+				<td>
+					<span>{{creditSummary.creditYearConsumption}}</span>
+				</td>
+				<td>
+					<span> <a href="#" data-ng-click="getCreditByType(5)" translate="content.export"></a></span>
+				</td>
+				<th><span translate="content.credits.credit_total"></span></th>
+				<td>
+					<span>{{creditSummary.creditConsumption}}</span>
+				</td>
+				<td>
+					<span> <a href="#" data-ng-click="getCreditByType(4)" translate="content.export"></a></span>
+				</td>
+			</tr>
+		</table>			
+	</div>
+</div>
+		
+<div class="content-div" style="margin-left: 2%;">
+	<ul class="nav nav-tabs" role="tablist" >
+   		<li role="presentation" class="active" >
+    		<a href="#accounts" aria-controls="account" role="tab" data-toggle="tab" data-ng-click="searchList(0,pageInfo,3)" translate="content.credits.buy_record"></a>
+    	</li>
+    	<li role="presentation" >
+	    	<a href="#unactivated" aria-controls="unactivated" role="tab" data-toggle="tab" data-ng-click="searchList(0,pageInfo,2)" translate="content.credits.credit_record"></a>
+    	</li>
+    	<li role="presentation" data-ng-if="false">
+	    	<a href="#unactivated" aria-controls="unactivated" role="tab" data-toggle="tab" translate="content.credits.reward_record"></a>
+    	</li>
+  	</ul>
+	<div class="tab-content" >
+		<div role="tabpanel" class="tab-pane active" id="account">
+			<div class="table-div">
+				<table>
+					<thead>
+						<tr >
+							<th><span translate="content.no"></span></th>
+							<th><span translate="content.credits.apply_group"></span></th>
+							<th data-ng-if ="(pageInfo.type!=4)"><span translate="content.credits.apply_agent"></span></th>
+							<th><span translate="content.agents.attach_agent"></span></th>
+							<th><span translate="content.credits.apply_number"></span></th>
+							<th><span translate="content.credits.latest_time"></span></th>
+							<th><span translate="content.credits.apply_time"></span></th>
+							<th><span translate="content.credits.order_status"></span></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr data-ng-repeat="credit in credits">
+							<td data-ng-bind="$index+1+pageInfo.number*pageInfo.size"></td>
+							<td data-ng-if="(credit.group.name)">{{credit.group.name}}</td>
+							<td data-ng-if="!(credit.group.name)">——</td>
+							<td data-ng-if="(credit.agent.name) && (pageInfo.type!=4)">{{credit.agent.name}}</td>
+							<td data-ng-if="!(credit.agent.name) && (pageInfo.type!=4)">——</td>
+							<td data-ng-if="(credit.respondent.name)">{{credit.respondent.name}}</td>
+							<td data-ng-if="!(credit.respondent.name)">{{credit.agent.name}}</td>
+							<td>{{credit.credit}}</td>
+							<td>{{credit.deadline}}</td>
+							<td>{{credit.createdAt}}</td>
+							<td data-ng-if="(credit.status == 2)"><span translate="content.credits.non_checked"></span></td>
+							<td data-ng-if="(credit.status == 1)"><span translate="content.credits.part"></span></td>
+							<td data-ng-if="(credit.status == 0)"><span translate="content.credits.all"></span></td>
+						</tr>
+						<tr data-ng-if="pageInfo.totalElements<1 || !pageInfo">
+							<td colspan="7" class="empty-td">
+								<span translate="content.table.nodata"></span>
+							</td>
+						</tr>				
+					</tbody>
+				</table>
+	 		</div>
+ 		</div>
+ 		
+ 		<div align="right" class="pageInfo" >
+			<form data-ng-submit="searchList(pageInfo.showPage-1,pageInfo)">
+				<span class="span-lt"><span translate="content.operations.results"></span>{{pageInfo.totalElements}}</span>
+				<span class="span-lt"><span translate="content.operations.pages"></span>{{pageInfo.totalPages}}</span>
+				<span class="span-lt"><span translate="content.operations.size"></span>
+					<select data-ng-model="pageInfo.size" data-ng-change="searchList(0, pageInfo)"
+							data-ng-options="x for x in [10,20,50,100]">
+					</select>
+				</span>
+	   			<span>
+	   				<button type="button" data-ng-click="searchList(0,pageInfo)" data-ng-if="!(pageInfo.number<0)"
+	   					class="btn-sm btn-white" translate="content.pageInfo.first"></button>
+	   			</span>
+	   			<span>
+	   				<button type="button" data-ng-click="searchList(pageInfo.number-1,pageInfo)" class="btn-sm btn-blue"
+	   					data-ng-if="(pageInfo.number>0)" translate="content.pageInfo.prev" ></button>
+					<button type="button" class="btn-sm btn-blue btn-disabled" data-ng-if="!(pageInfo.number>0)"
+						translate="content.pageInfo.prev" ></button>
+	   			</span>
+	   			<span class="pageInfo-number">
+	   				<a data-ng-click="searchList(0,pageInfo)" data-ng-if="(pageInfo.number>2)">1</a>
+	   				<a data-ng-click="searchList(1,pageInfo)" data-ng-if="(pageInfo.number>3)">2</a>
+	   				<a data-ng-if="(pageInfo.number>4)">......</a>
+	   				<a data-ng-click="searchList(pageInfo.number-2,pageInfo)"
+	   					data-ng-if="(pageInfo.number>1)">{{pageInfo.number-1}}</a>
+	   				<a data-ng-click="searchList(pageInfo.number-1,pageInfo)"
+	   					data-ng-if="(pageInfo.number>0)">{{pageInfo.number}}</a>
+	   				<a style="color: black;">{{pageInfo.number+1}}</a>
+	   				<a data-ng-click="searchList(pageInfo.number+1,pageInfo)"
+	   					data-ng-if="(pageInfo.number+1<pageInfo.totalPages)">{{pageInfo.number+2}}</a>
+	   				<a data-ng-click="searchList(pageInfo.number+2,pageInfo)"
+	   					data-ng-if="(pageInfo.number+2<pageInfo.totalPages)">{{pageInfo.number+3}}</a>
+	   				<a data-ng-if="(pageInfo.number+5<pageInfo.totalPages)">......</a>
+	   				<a data-ng-click="searchList(pageInfo.totalPages-2,pageInfo)"
+  					data-ng-if="(pageInfo.number+3<pageInfo.totalPages) && (pageInfo.number+4!=pageInfo.totalPages)">
+  					{{pageInfo.totalPages-1}}</a>
+  				<a data-ng-click="searchList(pageInfo.totalPages-1,pageInfo)"
+  					data-ng-if="(pageInfo.number+4<=pageInfo.totalPages)">{{pageInfo.totalPages}}</a>
+	   			</span>
+	   			<span>
+	   				<button type="button" data-ng-click="searchList(pageInfo.number+1,pageInfo)" class="btn-sm btn-blue"
+	   					data-ng-if="(pageInfo.number+1<pageInfo.totalPages)" translate="content.pageInfo.next"></button>
+					<button type="button" class="btn-sm btn-blue btn-disabled" data-ng-if="!(pageInfo.number+1<pageInfo.totalPages)"
+						translate="content.pageInfo.next"></button>
+	   			</span>
+	   			<span>
+					<button type="button" data-ng-click="searchList(pageInfo.totalPages-1,pageInfo)" data-ng-if="!(pageInfo.number<0)"
+						class="btn-sm btn-white" translate="content.pageInfo.last"></button>
+				</span>
+	   			<span>
+	   				<input type="number" step="1" data-ng-model="pageInfo.showPage" max="{{pageInfo.totalPages}}" required="required"
+	   						min="1" data-ng-if="(pageInfo.totalPages>0)" >
+	   				<input type="number" step="1" data-ng-model="pageInfo.showPage" max="1" min="1" readonly="readonly"
+	   						data-ng-if="!(pageInfo.totalPages>0)" >
+	   				<input type="submit" class="btn-sm btn-blue btn-go" value="GO">
+	   			</span>
+			</form>
+		</div>
+ 		
+	</div>
+</div>

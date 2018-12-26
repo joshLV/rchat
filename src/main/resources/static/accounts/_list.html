@@ -1,0 +1,451 @@
+<div class="content-div">
+	<div class="search-account">
+		<form data-ng-if="loginUser.type==1">
+			<div class="row" >
+				<label ><span translate="content.accounts.account"></span></label>
+				<input type="text" class="text-class" data-ng-model="account.fullValue" />
+				<label ><span translate="content.agents.attach_agent"></span></label>
+				<select class="text-class" data-ng-model="account.agent" data-ng-change="getGroupsByAgent(account.agent.id)"
+						data-ng-options="agt as agt.name for agt in agentsList">
+					<option value="" translate="content.operations.selection"></option>
+				</select>
+				<button class="btn-sm btn-blue" style="margin-left: 5%;" data-ng-click="getTalkBackUsers(account)"
+						data-ng-disabled="!((account.group) || (account.fullValue) || (account.createdStart) || (account.renewStart))"
+						translate="content.operations.search"></button>
+			</div>
+			<div class="row">
+				<label><span translate="content.departments.attach_group"></span></label>
+				<select class="text-class" data-ng-model="account.group" data-ng-options="grp as grp.name for grp in grpsList"
+						data-ng-change="getDepartmentsByGroup(account.group.id)">
+					<option value="" translate="content.operations.selection"></option>
+				</select>
+				<label><span translate="content.departments.attach_department"></span></label>
+				<select class="text-class" data-ng-model="account.department" data-ng-options="dpt as dpt.name for dpt in dptsList">
+					<option value="" translate="content.operations.selection"></option>
+				</select>
+			</div>
+			<div class="row">
+				<label ><span translate="content.accounts.time_create"></span></label>
+				<input id="createdStart" type="text" class="text-class" data-ng-model="account.createdStart" onClick="WdatePicker()" />
+				<label style="text-align: center;">——————</label>
+				<input id="createdEnd" type="text" class="text-class" data-ng-model="account.createdEnd" onClick="WdatePicker()"/>
+			</div>
+			<div class="row">
+				<label ><span translate="content.accounts.time_renew"></span></label>
+				<input id="renewStart" type="text" class="text-class" data-ng-model="account.renewStart" onClick="WdatePicker()"/>
+				<label style="text-align: center;">——————</label>
+				<input id="renewEnd" type="text" class="text-class" data-ng-model="account.renewEnd" onClick="WdatePicker()"/>
+			</div>
+			
+			<div class="row">
+				<label ><span translate="content.accounts.type"></span></label>
+				<select class="text-class" data-ng-model="account.roleValue" >
+					<option value="" translate="content.operations.selection"></option>
+					<option value="DISPATCHER" translate="content.accounts.user0"></option>
+					<option value="TALKBACK_USER" translate="content.accounts.user1"></option>
+				</select>
+				<label ><span translate="content.accounts.status"></span></label>
+				<select class="text-class" data-ng-model="account.activated" >
+					<option value="" translate="content.operations.selection"></option>
+					<option value="false" translate="content.accounts.unactivated1"></option>
+					<option value="true" translate="content.accounts.activated"></option>
+				</select>
+			</div>
+			<div class="row" >
+				<label ><span translate="content.departments.name_zh"></span></label>
+				<input type="text" class="text-class" data-ng-model="account.name" />
+				<label ><span translate="content.accounts.short_segment"></span></label>
+				<input type="text" class="text-class" data-ng-model="account.shortValue" />
+			</div>
+		</form>
+		<form data-ng-if="loginUser.type==4">
+			<div class="row">
+				<label ><span translate="content.accounts.account"></span></label>
+				<input type="text" class="text-class" data-ng-model="account.fullValue" />
+				<label><span translate="content.departments.attach_department"></span></label>
+				<select class="text-class" data-ng-model="account.department" data-ng-options="dpt as dpt.name for dpt in dptsList">
+					<option value="" translate="content.operations.selection"></option>
+				</select>
+				<button class="btn-sm btn-blue" style="margin-left: 5%;" data-ng-click="getTalkBackUsers(account)" 
+						translate="content.operations.search"></button>
+			</div>
+			<div class="row">
+				<label ><span translate="content.accounts.time_create"></span></label>
+				<input id="createdStart" type="text" class="text-class" data-ng-model="account.createdStart" onClick="WdatePicker()" />
+				<label style="text-align: center;">——————</label>
+				<input id="createdEnd" type="text" class="text-class" data-ng-model="account.createdEnd" onClick="WdatePicker()"/>
+			</div>
+			<div class="row">
+				<label ><span translate="content.accounts.time_renew"></span></label>
+				<input id="renewStart" type="text" class="text-class" data-ng-model="account.renewStart" onClick="WdatePicker()"/>
+				<label style="text-align: center;">——————</label>
+				<input id="renewEnd" type="text" class="text-class" data-ng-model="account.renewEnd" onClick="WdatePicker()"/>
+			</div>
+			
+			<div class="row">
+				<label ><span translate="content.accounts.type"></span></label>
+				<select class="text-class" data-ng-model="account.roleValue" >
+					<option value="" translate="content.operations.selection"></option>
+					<option value="DISPATCHER" translate="content.accounts.user0"></option>
+					<option value="TALKBACK_USER" translate="content.accounts.user1"></option>
+				</select>
+				<label ><span translate="content.accounts.status"></span></label>
+				<select class="text-class" data-ng-model="account.activated" >
+					<option value="" translate="content.operations.selection"></option>
+					<option value="false" translate="content.accounts.unactivated1"></option>
+					<option value="true" translate="content.accounts.activated"></option>
+				</select>
+			</div>
+			<div class="row" >
+				<label ><span translate="content.departments.name_zh"></span></label>
+				<input type="text" class="text-class" data-ng-model="account.name" />
+				<label ><span translate="content.accounts.short_segment"></span></label>
+				<input type="text" class="text-class" data-ng-model="account.shortValue" />
+			</div>
+		</form>
+		<form data-ng-if="loginUser.type>4">
+			<div class="row">
+				<label ><span translate="content.accounts.account"></span></label>
+				<input type="text" class="text-class" data-ng-model="account.fullValue" />
+				<label ><span translate="content.accounts.type"></span></label>
+				<select class="text-class" data-ng-model="account.roleValue" >
+					<option value="" translate="content.operations.selection"></option>
+					<option value="0" translate="content.accounts.user0"></option>
+					<option value="1" translate="content.accounts.user1"></option>
+				</select>
+				<button class="btn-sm btn-blue" style="margin-left: 5%;" data-ng-click="getTalkBackUsers(account)"
+					translate="content.operations.search"></button>
+			</div>
+			<div class="row">
+				<label ><span translate="content.accounts.time_create"></span></label>
+				<input id="createdStart" type="text" class="text-class" data-ng-model="account.createdStart" onClick="WdatePicker()" />
+				<label style="text-align: center;">——————</label>
+				<input id="createdEnd" type="text" class="text-class" data-ng-model="account.createdEnd" onClick="WdatePicker()"/>
+			</div>
+			<div class="row">
+				<label ><span translate="content.accounts.time_renew"></span></label>
+				<input id="renewStart" type="text" class="text-class" data-ng-model="account.renewStart" onClick="WdatePicker()"/>
+				<label style="text-align: center;">——————</label>
+				<input id="renewEnd" type="text" class="text-class" data-ng-model="account.renewEnd" onClick="WdatePicker()"/>
+			</div>
+			<div class="row" >
+				<label ><span translate="content.departments.name_zh"></span></label>
+				<input type="text" class="text-class" data-ng-model="account.name" />
+				<label ><span translate="content.accounts.short_segment"></span></label>
+				<input type="text" class="text-class" data-ng-model="account.shortValue" />
+			</div>
+			<div class="row">
+				<label ><span translate="content.accounts.status"></span></label>
+				<select class="text-class" data-ng-model="account.activated" >
+					<option value="" translate="content.operations.selection"></option>
+					<option value="false" translate="content.accounts.unactivated1"></option>
+					<option value="true" translate="content.accounts.activated"></option>
+				</select>
+			</div>
+		</form>
+	</div>
+<!-- 	不搜索就没有默认数据，因为帐号数据量大 -->
+   	<div class="table-div" >
+   		<table >
+			<thead>
+				<tr>
+					<th width="20%" class="tb-title"><span translate="content.accounts.all"></span></th>
+					<th ></th>
+				</tr>
+			</thead>
+		</table>
+   		<table>
+   			<thead>
+   				<tr>
+   					<th><input type="checkbox" data-ng-model="all"/><span translate="content.operations.all"></span></th>
+   					<th><span translate="content.no"></span></th>
+   					<th><span translate="content.accounts.account"></span></th>
+   					<th><span translate="content.accounts.short_segment"></span></th>
+   					<th><span translate="content.departments.name_zh"></span></th>
+					<th><span translate="content.accounts.equipment_type"></span></th>
+   					<th data-ng-if="loginUser.type<4"><span translate="content.agents.attach_agent"></span></th>
+   					<th data-ng-if="loginUser.type<4"><span translate="content.departments.attach_group"></span></th>
+   					<th><span translate="content.departments.attach_department"></span></th>
+<!-- 	    					<th>默认群组</th> -->
+					<th><span translate="content.accounts.status"></span></th>
+					<th><span translate="content.accounts.priority"></span></th>
+					<th><span translate="content.reports.deadline"></span></th>
+   					<th><span translate="content.operations.operation"></span></th>
+   				</tr>
+   			</thead>
+   			<tbody>
+   				<tr data-ng-if="!(acPageInfo) || (acPageInfo.totalElements<1)">
+   					<td colspan="8" class="empty-td">
+   						<span translate="content.table.nodata"></span>
+   					</td>
+   				</tr>
+   				<tr data-ng-if="(acPageInfo.totalElements>0)" data-ng-repeat="ac in accountsList ">
+   					<td><input name="user" type="checkbox" id="ac.id" data-ng-checked="all" data-ng-value="ac.id"/></td>
+   					<td data-ng-bind="$index+1+acPageInfo.index"></td>
+   					<td>{{ac.number.fullValue}}</td>
+   					<td>{{ac.number.shortValue}}</td>
+   					<td>{{ac.name}}</td>
+   					<td data-ng-if="(ac.type == 0)" translate="content.accounts.intercom"></td>
+   					<td data-ng-if="(ac.type == 1)" translate="content.accounts.vedio"></td>
+   					<td data-ng-if="(ac.type == 2)" translate="content.accounts.phone"></td>
+   					<td data-ng-if="(ac.type == 3)" translate="content.accounts.broadcast"></td>
+   					<td data-ng-if="(ac.type == 4)" translate="content.accounts.monitor"></td>
+   					<td data-ng-if="(ac.type == 5)" translate="content.accounts.others"></td>
+   					<td data-ng-if="loginUser.type<4">{{ac.group.agent.name}}</td>
+   					<td data-ng-if="loginUser.type<4">{{ac.group.name}}</td>
+   					<td>{{ac.department.name}}</td>
+   					<td data-ng-if="(ac.activated == false)" translate="content.accounts.unactivated1"></td>
+   					<td data-ng-if="(ac.activated == true)" translate="content.accounts.activated"></td>
+   					<td>{{ac.priority}}</td>
+   					<td>{{ac.deadline}}</td>
+   					<td>
+   						<a class="btn btn-sm btn-blue" data-ui-sref="accounts.details({id:ac.id})"
+   							translate="content.operations.edit"></a>
+   						<a class="btn btn-sm btn-blue" data-toggle="modal" data-target="#authorityModal"
+   							data-ng-click="restrictModal(ac)" translate="content.accounts.authority"></a>
+<!-- 	    						<a data-ui-sref="accounts.feeform">续费</a> -->
+   						<a class="btn btn-sm btn-blue" data-toggle="modal" data-target="#deleteModal"
+   							data-ng-click="deleteModal(ac)" translate="content.operations.delete"></a>
+   					</td>
+   				</tr>
+   			</tbody>
+   		</table>
+   	</div>
+   	
+	<div align="right" class="pageInfo" data-ng-if="(acPageInfo)">
+		<form data-ng-submit="searchList(acPageInfo.page-1,acPageInfo)">
+			<span class="span-lt"><span translate="content.operations.results"></span>{{acPageInfo.totalElements}}</span>
+			<span class="span-lt"><span translate="content.operations.pages"></span>{{acPageInfo.totalPages}}</span>
+			<span class="span-lt"><span translate="content.operations.size"></span>
+				<select data-ng-model="acPageInfo.size" data-ng-change="searchList(0, acPageInfo)"
+						data-ng-options="x for x in [10,20,50,100,200]">
+				</select>
+			</span>
+  			<span>
+  				<button type="button" data-ng-click="searchList(0,acPageInfo)" data-ng-if="!(acPageInfo.number<0)"
+  					class="btn-sm btn-white" translate="content.pageInfo.first"></button>
+  			</span>
+  			<span>
+  				<button type="button" data-ng-click="searchList(acPageInfo.number-1,acPageInfo)" class="btn-sm btn-blue"
+  					data-ng-if="(acPageInfo.number>0)" translate="content.pageInfo.prev" ></button>
+				<button type="button" class="btn-sm btn-blue btn-disabled" data-ng-if="!(acPageInfo.number>0)"
+					translate="content.pageInfo.prev" ></button>
+  			</span>
+  			<span class="pageInfo-number">
+  				<a data-ng-click="searchList(0,acPageInfo)" data-ng-if="(acPageInfo.number>2)">1</a>
+  				<a data-ng-click="searchList(1,acPageInfo)" data-ng-if="(acPageInfo.number>3)">2</a>
+  				<a data-ng-if="(acPageInfo.number>4)">......</a>
+  				<a data-ng-click="searchList(acPageInfo.number-2,acPageInfo)"
+  					data-ng-if="(acPageInfo.number>1)">{{acPageInfo.number-1}}</a>
+  				<a data-ng-click="searchList(acPageInfo.number-1,acPageInfo)"
+  					data-ng-if="(acPageInfo.number>0)">{{acPageInfo.number}}</a>
+  				<a style="color: black;">{{acPageInfo.number+1}}</a>
+  				<a data-ng-click="searchList(acPageInfo.number+1,acPageInfo)"
+  					data-ng-if="(acPageInfo.number+1<acPageInfo.totalPages)">{{acPageInfo.number+2}}</a>
+  				<a data-ng-click="searchList(acPageInfo.number+2,acPageInfo)"
+  					data-ng-if="(acPageInfo.number+2<acPageInfo.totalPages)">{{acPageInfo.number+3}}</a>
+  				<a data-ng-if="(acPageInfo.number+5<acPageInfo.totalPages)">......</a>
+  				<a data-ng-click="searchList(acPageInfo.totalPages-2,acPageInfo)"
+  					data-ng-if="(acPageInfo.number+3<acPageInfo.totalPages) && (acPageInfo.number+4!=acPageInfo.totalPages)">
+  					{{acPageInfo.totalPages-1}}</a>
+  				<a data-ng-click="searchList(acPageInfo.totalPages-1,acPageInfo)"
+  					data-ng-if="(acPageInfo.number+4<=acPageInfo.totalPages)">{{acPageInfo.totalPages}}</a>
+  			</span>
+  			<span>
+  				<button type="button" data-ng-click="searchList(acPageInfo.number+1,acPageInfo)" class="btn-sm btn-blue"
+  					data-ng-if="(acPageInfo.number+1<acPageInfo.totalPages)" translate="content.pageInfo.next"></button>
+				<button type="button" class="btn-sm btn-blue btn-disabled" data-ng-if="!(acPageInfo.number+1<acPageInfo.totalPages)"
+					translate="content.pageInfo.next"></button>
+  			</span>
+  			<span>
+				<button type="button" data-ng-click="searchList(acPageInfo.totalPages-1,acPageInfo)" data-ng-if="!(acPageInfo.number<0)"
+					class="btn-sm btn-white" translate="content.pageInfo.last"></button>
+			</span>
+  			<span>
+  				<input type="number" step="1" data-ng-model="acPageInfo.page" max="{{acPageInfo.totalPages}}" required="required"
+  						min="1" data-ng-if="(acPageInfo.totalPages>0)" >
+  				<input type="number" step="1" value="1" max="1" min="1" readonly="readonly" data-ng-if="!(acPageInfo.totalPages>0)" >
+  				<input type="submit" class="btn-sm btn-blue btn-go" value="GO">
+  			</span>
+		</form>
+	</div>
+	<div class="left-btn-group" data-ng-if="(acPageInfo)">
+		<button class="btn-sm btn-blue" data-ng-click="deleteAll()" translate="content.accounts.operations.deleteAll"></button>
+	   	<a class="btn btn-sm btn-blue" style="position: relative; top:3px; margin-left: 0;" data-toggle="modal" data-target="#changeModal" data-ng-if="searchGroup" data-ng-click="changeModal()" translate="content.accounts.operations.changeAll"></a>
+	   	<a class="btn btn-sm btn-blue" style="position: relative; top:3px; margin-left: 0;" data-toggle="modal" data-target="#excelModal" data-ng-if="searchGroup" data-ng-click="excelModal()" translate="content.data.import_accounts"></a>
+	</div>
+</div>
+
+<div class="modal fade" id="alertModal" tabindex="-1" style="z-index: 9999;">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title" data-ng-bind="alert_title"></h4>
+			</div>
+			<div class="modal-body">
+				<span data-ng-bind="alert_message"></span>
+			</div>
+            <div class="modal-footer"></div>
+        </div>  
+    </div> 
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title">
+					<span translate="content.accounts.operations.delete"></span>
+				</h4>
+			</div>
+			<div class="modal-body">
+				<span translate="content.accounts.operations.delete"></span>
+				<span style="margin: 10px 10px;color: red;" data-ng-bind="removing_account.number.fullValue"></span>
+				<span translate="content.modals.marks.mark1"></span>
+			</div>
+            <div class="modal-footer">
+            	<button type="button" class="btn-sm btn-blue" data-ng-click="removeAccount(removing_account,account)"
+            		translate="content.operations.ok"></button>  
+                <button type="button" class="btn-sm btn-white" data-dismiss="modal" translate="content.operations.cancel"></button>  
+            </div>
+        </div>  
+    </div> 
+</div>
+
+<div class="modal fade" id="authorityModal" tabindex="-1">
+	<div class="modal-dialog" style="width: 800px;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title">
+					<span translate="content.accounts.authority"></span>
+				</h4>
+			</div>
+			<div class="modal-body authority-div" >
+				<div class="row">
+				<label ><span translate="content.accounts.callOut"></span></label>
+					<label><input type="checkbox" id="callOutPermissions1" name="callOutPermissions" value="0"/>
+						<span translate="content.accounts.callOut1"></span>
+					</label>
+					<label><input type="checkbox" id="callOutPermissions2" name="callOutPermissions" value="1"/>
+						<span translate="content.accounts.callOut2"></span>
+					</label>
+					<label><input type="checkbox" id="callOutPermissions3" name="callOutPermissions" value="2"/>
+						<span translate="content.accounts.callOut3"></span>
+					</label>
+				</div>
+				<div class="row">
+					<label ><span translate="content.accounts.callIn"></span></label>
+					<label><input type="checkbox" id="callInPermissions1" name="callInPermissions" value="0"/>
+						<span translate="content.accounts.callIn1"></span>
+					</label>
+					<label><input type="checkbox" id="callInPermissions2" name="callInPermissions" value="1"/>
+						<span translate="content.accounts.callIn2"></span>
+					</label>
+					<label><input type="checkbox" id="callInPermissions3" name="callInPermissions" value="2"/>
+						<span translate="content.accounts.callIn3"></span>
+					</label>
+				</div>
+				<div class="row">
+					<label ><span translate="content.accounts.gps"></span></label>
+					<label ><span translate="content.accounts.gps0"></span></label>
+					<label >
+						<input type="radio" name="location" data-ng-model="restricting_account.permission.gpsPermission.enabled" value="1"/>
+							<span translate="content.operations.open"></span>
+					</label>
+					<label data-ng-if="false">
+						<input type="radio" name="location" data-ng-model="restricting_account.permission.gpsPermission.enabled" value="0"/>
+							<span translate="content.operations.close"></span>
+					</label>
+					<label >
+					</label>
+				</div>
+				<div class="row">
+					<label style="height: 0px;"></label>
+					<label ><span translate="content.accounts.gps0_time"></span></label>
+					<label style="width: 313px !important;">
+						<input type="number" data-ng-model="restricting_account.permission.gpsPermission.interval" max="3600" min="10"
+							step="1" data-ng-disabled="restricting_account.permission.gpsPermission.enabled==0" class="text-class">
+						<span translate="content.accounts.seconds"></span>
+					</label>
+				</div>
+				<div class="row">
+					<label style="margin-right: 500px"><span translate="content.groups.business_scope"></span></label>			
+					<div class="box-group" style="text-align: left;">
+						<label data-ng-repeat="business in businesses" style="margin-right: 12px">
+							<input name="business" type="checkbox" data-ng-checked="checkSel(business.id,restricting_account.businessRents)"
+								data-ng-value="business.id" data-ng-disabled="checkSel(business.id,restricting_account.businessRents)" />{{business.name}}
+						</label>
+					</div>
+				</div>
+			</div>
+            <div class="modal-footer">
+            	<button type="button" class="btn-sm btn-blue" data-ng-click="restrictAccount(restricting_account)"
+            		translate="content.operations.ok"></button>
+                <button type="button" class="btn-sm btn-white" data-dismiss="modal" translate="content.operations.cancel"></button>  
+            </div>
+        </div>  
+    </div> 
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<span data-ng-bind="alert_message" translate="content.modals.waitting"></span>
+			</div>
+    	</div>  
+	</div>
+</div>
+
+<div class="modal fade" id="changeModal" tabindex="-1">
+	<div class="modal-dialog" style="width: 800px;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title">
+					<span translate="content.accounts.operations.changeAll"></span>
+				</h4>
+			</div>
+			<div class="modal-body authority-div" >
+				<div class="row">
+					<label ><span translate="content.teams.defaultTeam"></span></label>
+					<label style="margin-left: -5%">
+						<select class="text-class" id="selectOptions" data-ng-model="team.id"
+							data-ng-options="team.id as team.name for team in teams" required="required">
+							<option value="" translate="content.operations.selection"></option>
+						</select>					
+					</label>
+				</div>
+			</div>
+            <div class="modal-footer">
+            	<button type="button" class="btn-sm btn-blue" data-ng-click="changeDefaultGruops(team.id)"
+            		translate="content.operations.ok"></button>
+                <button type="button" class="btn-sm btn-white" data-dismiss="modal" translate="content.operations.cancel"></button>  
+            </div>
+        </div>  
+    </div> 
+</div>
+
+<div class="modal fade" id="excelModal" tabindex="-1">
+	<div class="modal-dialog" style="width: 800px;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title">
+					<span translate="content.data.import_accounts"></span>
+				</h4>
+			</div>
+			<div class="modal-body authority-div" >
+				<div class="row">
+					<form enctype="multipartformdata">
+						<input type="file" id="sql" accept=".*" style="float: left;padding: 0;border: 1px solid #e0e0e0;margin-left: 8em;"/>
+						<a class="btn btn-sm btn-blue" translate="content.data.import_accounts" style="width: 100px; margin-left: -10em;" data-ng-click="importExcel()"></a>
+					</form>
+				</div>
+			</div>
+        </div>  
+    </div> 
+</div>

@@ -1,0 +1,81 @@
+<div class="content-div">
+	<div class="table-div">
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" class="tb-title"><span translate="content.businesses.title"></span></th>
+					<th ></th>
+				</tr>
+			</thead>
+		</table>
+		
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" style="border-right: none;"><span translate="content.businesses.form"></span></th>
+					<th style="border-left: none;"></th>
+				</tr>
+			</thead>
+		</table>
+		<form name="configForm" data-ng-submit="createOrUpdateConfig(business)" >
+			<div>
+				<label><span translate="content.businesses.code"></span></label>
+				<input type="text" class="text-class" data-ng-model="business.code" required="required" minlength="8" maxlength="16" name="code"
+					autocomplete="off" data-ng-if="!(business.id)" pattern="[a-zA-Z0-9]*[a-zA-Z][a-zA-Z0-9]*" title="由8-16位的数字、字母组成"/>
+				<input type="text" class="disabled-class" data-ng-model="business.code"
+					required="required" data-ng-if="business.id"  readonly="readonly" >	
+				<span style="color: #ff3138" data-ng-show="configForm.code.$invalid && !(business.id)">
+					<span data-ng-show="configForm.code.$error.required"><font color="red">*</font></span>
+					<span data-ng-show="configForm.code.$error.pattern" data-translate="content.errors.err9"></span>
+					<span data-ng-show="configForm.code.$error.minlength" data-translate="content.errors.err6"></span>
+				</span>
+			</div>		
+			<div>
+				<label><span translate="content.businesses.name"></span></label>
+				<input type="text" class="text-class" data-ng-model="business.name" required="required"  maxlength="16" name="name"
+					autocomplete="off" pattern="^[\u4e00-\u9fa5a-zA-Z0-9]+$" title="由不超过16位的数字、字母、汉字组成!"/>
+				<span style="color: #ff3138" data-ng-show="configForm.name.$invalid && !(business.id)">
+					<span data-ng-show="configForm.name.$error.required"><font color="red">*</font></span>
+					<span data-ng-show="configForm.name.$error.pattern" data-translate="content.errors.err5"></span>
+				</span>
+			</div>
+			<div>
+				<label><span translate="content.businesses.fee"></span></label>
+				<input type="text" class="text-class" data-ng-model="business.creditPerMonth" required="required"  maxlength="20"
+					autocomplete="off" pattern="[1-9]\d*" name="fee"/>
+				<span style="color: #ff3138" data-ng-show="configForm.name.$invalid && !(business.id)">
+					<span data-ng-show="configForm.fee.$error.required"><font color="red">*</font></span>
+					<span data-ng-show="configForm.fee.$error.pattern" data-translate="content.errors.err10"></span>
+				</span>
+			</div>
+			<div style="height: 100px;">
+				<label style="vertical-align:top" ><span translate="content.businesses.description"></span></label>
+				<textarea class="text-class" data-ng-model="business.description" maxlength="255" style="height: 100px;resize: none;"></textarea>		
+			</div>
+			<div>
+				<label></label>
+				<button type="submit" class="btn-sm btn-blue" translate="content.operations.submit"></button>
+				<button type="reset" class="btn-sm btn-white" data-ng-if="!(business.id)" translate="content.operations.reset"></button>
+<!-- 				<button type="button" class="btn-sm btn-blue" data-ng-if="business.id"  data-ng-click="resetForms()" -->
+<!-- 					translate="content.operations.reset"></button> -->
+				<a class="btn btn-sm btn-white" data-ng-if="business.id" translate="content.operations.return"
+					href="javascript:history.go(-1)" style="margin-left: 100px;width: 66px;"></a>
+			</div>
+			
+		</form>
+	</div>
+	<div class="modal fade" id="alertModal" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">×</button>
+					<h4 class="modal-title" data-ng-bind="alert_title"></h4>
+				</div>
+				<div class="modal-body">
+					<span data-ng-bind="alert_message"></span>
+				</div>
+	            <div class="modal-footer"></div>
+	        </div>  
+	    </div> 
+	</div>
+</div>

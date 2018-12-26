@@ -1,0 +1,22 @@
+<div class="menu-div">
+	<ul class="menu-ul">
+		<li>
+			<a href="javascript:void(0)" data-ng-click="toggleMenuLi('teamsMenu')" >
+				<span translate="menu.teams.head" style="vertical-align: middle;"></span>
+			</a>
+		</li>
+	</ul>
+	<ul class="menu-li" id="teamsMenu">
+		<li>
+			<a data-ui-sref-active="active" data-ui-sref="teams.list" translate="menu.teams.list"></a>
+		</li>
+		<hr style="margin-left: -10%;" />
+		<li >
+			<a data-ui-sref-active="active" data-ui-sref="teams.create" translate="menu.teams.create"></a>
+		</li>
+		<hr style="margin-left: -10%;" data-ng-if="loginUser.type==0"/>
+		<li data-ng-if="loginUser.type==0">
+			<a data-ui-sref-active="active" data-ui-sref="teams.priority" translate="menu.teams.priority"></a>
+		</li>
+	</ul>
+</div>

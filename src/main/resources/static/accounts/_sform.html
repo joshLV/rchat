@@ -1,0 +1,133 @@
+<div class="content-div">
+	<div class="table-div">
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" class="tb-title"><span translate="content.accounts.title"></span></th>
+					<th ></th>
+				</tr>
+			</thead>
+		</table>
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" style="border-right: none;" ><span translate="content.accounts.form_special"></span></th>
+					<th style="border-left: none;"></th>
+				</tr>
+			</thead>
+		</table>
+		<form name="accountForm" data-ng-submit="createSuperAccounts(talkback_user)">
+			<div>
+		        <label><span translate="content.accounts.account"></span></label>
+		        <input class="text-class" type="text"  data-ng-model="talkback_user.number.fullValue" name="fullValue"  
+		               maxlength="32" autocomplete="off" pattern="[\w\d]*" required="required"/>
+		        <span style="color: #ff3138" data-ng-show="accountForm.fullValue.$invalid">
+		        	<span data-ng-show="accountForm.fullValue.$error.required"><font color="red">*</font></span>
+					<span data-ng-show="accountForm.fullValue.$error.pattern" data-translate="content.errors.err9"></span>
+				</span>
+		  	</div>
+			<div>
+		        <label><span translate="content.accounts.password"></span></label>
+		        <input class="text-class" type="password"  data-ng-model="talkback_user.password" name="password" 
+                   maxlength="16" autocomplete="off" pattern="[\w\d]*" title="由不超过16位的数字和字母组成!" required="required">
+            	<span style="color: #ff3138" data-ng-show="accountForm.password.$invalid">
+            		<span data-ng-show="accountForm.password.$error.required"><font color="red">*</font></span>
+					<span data-ng-show="accountForm.password.$error.pattern" data-translate="content.errors.err9"></span>
+				</span>
+		  	</div>
+			<div>
+				<label><span translate="content.agents.attach_agent"></span></label>
+				<select class="text-class" data-ng-model="talkback_user.agent" data-ng-change="getGroups(talkback_user.agent)"
+						data-ng-options="agt.id as agt.name for agt in agentsList" required="required">
+						<option value="" translate="content.operations.selection"></option>
+				</select>
+				<font color="red">*</font>
+			</div>
+			<div>
+				<label><span translate="content.departments.attach_group"></span></label>
+				<select class="text-class" data-ng-model="talkback_user.group.id" data-ng-change="changeGroup(talkback_user.group.id)"
+						data-ng-options="grp.id as grp.name for grp in groupsList" required="required">
+						<option value="" translate="content.operations.selection"></option>
+				</select>
+				<font color="red">*</font>
+			</div>
+			<div>
+				<label><span translate="content.departments.attach_department"></span></label>
+				<select class="text-class" data-ng-model="talkback_user.department.id" 
+						data-ng-options="department.id as department.name for department in departments" required="required">
+						<option value="" translate="content.operations.selection"></option>
+				</select>
+				<font color="red">*</font>
+			</div>
+			<div>
+				<label><span translate="content.accounts.callOut"></span></label>
+				<label>
+					<input type="checkbox" name="callOutPermissions" value="0"/>
+					<span translate="content.accounts.callOut1"></span>
+				</label>
+				<label>
+					<input type="checkbox" name="callOutPermissions" value="1"/>
+					<span translate="content.accounts.callOut2"></span>
+				</label>
+				<label>
+					<input type="checkbox" name="callOutPermissions" value="2"/>
+					<span translate="content.accounts.callOut3"></span>
+				</label>
+			</div>
+			<div>
+				<label><span translate="content.accounts.callIn"></span></label>
+				<label>
+					<input type="checkbox" name="callInPermissions" value="0"/>
+					<span translate="content.accounts.callIn1"></span>
+				</label>
+				<label>
+					<input type="checkbox" name="callInPermissions" value="1"/>
+					<span translate="content.accounts.callIn2"></span>
+				</label>
+				<label>
+					<input type="checkbox" name="callInPermissions" value="2"/>
+					<span translate="content.accounts.callIn3"></span>
+				</label>
+			</div>
+			<div class="w-radio-div">
+				<label><span translate="content.accounts.gps0"></span></label>
+				<label>
+					<input type="radio" name="location" data-ng-model="talkback_user.gpsPermission.enabled" 
+						data-ng-checked="!(talkback_user.gpsPermission.enabled) || (talkback_user.gpsPermission.enabled!=0
+							&& talkback_user.gpsPermission.enabled!=false)" value="1" />
+					<span translate="content.operations.open"></span>
+				</label>
+				<label data-ng-if="false">
+					<input type="radio" name="location" data-ng-model="talkback_user.gpsPermission.enabled" value="0" />
+					<span translate="content.operations.close"></span>				
+				</label>			
+			</div>
+			<div>
+				<label><span translate="content.accounts.gps0_time"></span></label>
+				<input type="number" data-ng-model="talkback_user.gpsPermission.interval" max="3600" min="10" step="1"
+					data-ng-disabled="talkback_user.gpsPermission.enabled==0" class="text-class" />
+				<span translate="content.accounts.seconds"></span>
+			</div>
+			<div>
+				<label></label>
+				<button type="submit" class="btn-sm btn-blue" translate="content.operations.ok"></button>
+				<button type="reset" class="btn-sm btn-white" data-ng-click="resetForm()" translate="content.operations.clear"></button>
+			</div>
+		</form>
+	</div> 
+</div>
+
+<div class="modal fade" id="alertModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title" data-ng-bind="alert_title"></h4>
+			</div>
+			<div class="modal-body">
+				<span data-ng-bind="alert_message"></span>
+			</div>
+      		<div class="modal-footer"></div>
+     	</div>  
+	</div>
+</div>

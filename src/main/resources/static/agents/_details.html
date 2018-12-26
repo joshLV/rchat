@@ -1,0 +1,203 @@
+<div class="btn-group" >
+	<button class="btn-sm btn-blue" data-ui-sref="agents.create" translate="content.agents.operations.create" ></button>
+	<button class="btn-sm btn-blue" data-ui-sref="agents.update({id:agent.id})" translate="content.agents.operations.modify" data-ng-if="agent.isSon"></button>
+	<button class="btn-sm btn-blue" data-toggle="modal" data-target="#deleteModal" data-ng-click="deleteModal(agent)" 
+		translate="content.agents.operations.delete" data-ng-if="agent.isSon"></button>
+	<a data-toggle="modal" data-target="#petchCredit" data-ng-click="getCredit(agent.id)"
+		class="btn-sm btn-blue" translate="content.credits.push"></a>
+	<a class="btn-sm btn-blue" href="javascript:history.go(-1)" translate="content.operations.return"></a>
+</div>
+
+<div class="content-div" >
+	<div class="table-div">
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" class="tb-title"><span translate="content.agents.detail"></span></th>
+					<th ></th>
+				</tr>
+			</thead>
+		</table>
+		<table >
+			<tbody>
+				<tr>
+					<th width="20%"><span translate="content.agents.name"></span></th>
+					<td width="30%"><span >{{agentSummary.name}}</span></td>
+					<th width="20%"><span translate="content.agents.level"></span></th>
+					<td width="30%">
+						<span data-ng-if="agentSummary.level==0" translate="content.agents.level0"></span>
+						<span data-ng-if="agentSummary.level==1" translate="content.agents.level1"></span>
+						<span data-ng-if="agentSummary.level==2" translate="content.agents.level2"></span>
+						<span data-ng-if="agentSummary.level==3" translate="content.agents.level3"></span>
+						<span data-ng-if="agentSummary.level==4" translate="content.agents.level4"></span>
+						<span data-ng-if="agentSummary.level==5" translate="content.agents.level5"></span>
+					</td>
+				</tr>
+				<tr>
+					<th ><span translate="content.agents.region"></span></th>
+					<td ><span >{{agent.region}}</span></td>
+					<th ><span translate="content.agents.segment"></span></th>
+					<td ><span >{{agent.segment}}</span></td>
+				</tr>
+				<tr>
+					<th ><span translate="content.credits.total"></span></th>
+					<td ><span>{{agentSummary.creditAccumulation}}</span></td>
+					<th ><span translate="content.credits.rest"></span></th>
+					<td ><span>{{agentSummary.creditRemaint}}</span></td>
+				</tr>
+				<tr>
+					<th ><span translate="content.accounts.total"></span></th>
+					<td ><span>{{agentSummary.userAmount}}</span></td>
+					<th ><span translate="content.accounts.unactivated"></span></th>
+					<td ><span>{{agentSummary.nonactiveUserAmount}}</span></td>
+				</tr>
+				<tr>
+					<th ><span translate="content.accounts.expired"></span></th>
+					<td ><span>{{agentSummary.expiredUserAmount}}</span></td>
+					<th ><span translate="content.accounts.expiring"></span></th>
+					<td ><span>{{agentSummary.epxiringUserAmount}}</span></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<table data-ng-if="children.length">
+			<thead>
+				<tr>
+					<th ><span translate="content.agents.name"></span></th>
+					<th ><span translate="content.agents.region"></span></th>
+					<th ><span translate="content.credits.total"></span></th>
+					<th ><span translate="content.credits.rest"></span></th>
+					<th ><span translate="content.operations.operation"></span></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-ng-repeat="x in children">
+					<th >{{x.name}}</th>
+					<td >{{x.region}}</td>
+					<td ></td>
+					<td ></td>
+					<td >
+						<a class="btn btn-sm btn-blue" translate="content.operations.charge"></a>
+						<a class="btn btn-sm btn-blue" data-toggle="modal" data-target="#deleteModal" 
+							data-ng-click="deleteModal(x)" translate="content.operations.delete"></a>
+						<a class="btn btn-sm btn-blue" data-ui-sref="agents.update({id:x.id})" translate="content.operations.modify"></a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+		
+<!-- 		<div class="table-div" data-ng-if="loginUser.type!=1"> -->
+	<div class="table-div" data-ng-if="loginUser.type<1">
+		<table>
+			<tbody>
+				<tr>
+					<th width="30%"><span translate="content.agents.name"></span></th>
+					<td><span>{{agent.name}}</span></td>
+				</tr>
+				<tr>
+					<th><span translate="content.agents.segment"></span></th>
+					<td><span>{{agent.segment}}</span></td>
+				</tr>
+				<tr>
+					<th><span translate="content.agents.region"></span></th>
+					<td><span>{{agent.region}}</span></td>
+				</tr>
+				<tr>
+					<th><span translate="content.agents.admin.username"></span></th>
+					<td><span>{{agent.administrator.username}}</span></td>
+				</tr>
+				<tr>
+					<th><span translate="content.agents.admin.name"></span></th>
+					<td><span>{{agent.administrator.name}}</span></td>
+				</tr>
+				<tr>
+					<th><span translate="content.agents.price"></span></th>
+					<td><span>{{agent.creditUnitPrice}}</span></td>
+				</tr>
+				<tr>
+					<th><span translate="content.agents.linkman"></span></th>
+					<td><span>{{agent.linkman}}</span></td>
+				</tr>
+				<tr>
+					<th><span translate="content.agents.phone"></span></th>
+					<td><span>{{agent.phone}}</span></td>
+				</tr>
+				<tr>
+					<th><span translate="content.agents.email"></span></th>
+					<td><span>{{agent.email}}</span></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div class="modal fade" id="alertModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title" data-ng-bind="alert_title"></h4>
+			</div>
+			<div class="modal-body">
+				<span data-ng-bind="alert_message"></span>
+			</div>
+            <div class="modal-footer"></div>
+        </div>  
+    </div> 
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title"><span translate="content.agents.operations.delete"></span></h4>
+			</div>
+			<div class="modal-body">
+				<span translate="content.agents.operations.delete"></span>
+				<span style="margin: 10px 10px;color: red;" data-ng-bind="removing_agent.name"></span>
+				<span translate="content.modals.marks.mark1"></span>
+			</div>
+            <div class="modal-footer">
+            	<button type="button" class="btn-sm btn-blue" data-ng-click="removeAgent(removing_agent)" translate="content.operations.delete"></button>  
+                <button type="button" class="btn-sm btn-blue" data-dismiss="modal" translate="content.operations.cancel"></button>  
+            </div>
+        </div>  
+    </div> 
+</div>
+<!-- 下发额度模态框 -->
+<div class="modal fade" id="petchCredit" tabindex="-1">  
+   	<div class="modal-dialog">  
+       	<div class="modal-content">  
+           	<div class="modal-header">    
+               	<button type="button" class="close" data-dismiss="modal" data-ng-click="closeCredit()">  
+                   ×  
+               	</button>   
+               	<h4 class="modal-title" id="myModalLabel">
+					<span translate="content.credits.push"></span>				
+				</h4>  
+           </div>
+           <form name="petchCreditForm" data-ng-submit="updateCredit(credit)">  
+            	<div class="modal-body">
+				    <div data-ng-if ="(loginUser.type<4)">
+				        <label><span translate="content.credits.rest"></span></label>
+				        <input type="text" class="text-class disabled-class" data-ng-model="credit.credit" name="credit"
+							maxlength="20" readonly="readonly">
+						<span translate="content.credits.point"></span>
+				    </div>
+				    <div data-ng-if ="(loginUser.type<4)">
+				        <label><span translate="content.credits.push"></span></label>
+				        <input type="text" class="text-class disabled-class" data-ng-model="credit.sub" name="sub" maxlength="20" >
+			 			<span translate="content.credits.point"></span>
+				    </div>
+	            </div>  
+	            <div class="modal-footer">  
+	                <button type="submit" class="btn-sm btn-blue" translate="content.operations.push"></button>  
+	                <button type="button" class="btn-sm btn-white" data-dismiss="modal" data-ng-click="closeCredit()"
+	                	translate="content.operations.close"></button>  
+	            </div>
+           </form>  
+       </div>  
+   </div> 
+</div>

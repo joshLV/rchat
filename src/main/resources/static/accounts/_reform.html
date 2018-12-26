@@ -1,0 +1,170 @@
+<div class="normal-div" style="margin-top: 10px;margin-bottom: 10px;">
+	<table >
+		<tbody>
+			<tr>
+				<td >
+					<label>所属代理商</label>
+				</td>
+				<td >
+					<select class="text-class" data-ng-model="account.agent" data-ng-change="getGroupsByAgent(account.agent.id)"
+							data-ng-options="agt as agt.name for agt in agentsList">
+						<option value="">请选择</option>
+					</select>
+					<i class="iconfont icon-bitianxiang"></i>
+				</td>
+				<td >
+					<label>所属集团</label>
+				</td>
+				<td >
+					<select class="text-class" data-ng-model="account.group" data-ng-options="grp as grp.name for grp in grpsList"
+							data-ng-change="getDepartmentsByGroup(account.group.id)">
+						<option value="">请选择</option>
+					</select>
+					<i class="iconfont icon-bitianxiang"></i>
+				</td>
+			</tr>
+			<tr>
+				<td >
+					<label>所属部门</label>
+				</td>
+				<td >
+					<select class="text-class" data-ng-model="account.department" data-ng-options="dpt as dpt.name for dpt in dptsList">
+						<option value="">请选择</option>
+					</select>
+				</td>
+				<td>
+					<label>对讲帐号</label>
+				</td>
+				<td>
+					<input type="text" class="text-class" data-ng-model="account.fullValue" />
+				</td>
+			</tr>
+			<tr>
+				<td >
+					<label>开户时间段</label>
+				</td>
+				<td >
+					<input type="date" title="起始时间" data-ng-model="account.createdStart" />
+					<span>---</span>
+					<input type="date" title="结束时间" data-ng-model="account.createdEnd" />
+				</td>
+				<td >
+					<label>续费时间段</label>
+				</td>
+				<td >
+					<input type="date" title="起始时间" data-ng-model="account.renewStart" />
+					<span>---</span>
+					<input type="date" title="结束时间" data-ng-model="account.renewEnd" />
+				</td>
+			</tr>
+			<tr>
+				<td >
+					<label>帐号类型</label>
+				</td>
+				<td >
+					<select class="text-class" data-ng-model="account.roleValue" >
+						<option value="">请选择</option>
+						<option value="0">调度员</option>
+						<option value="1">对讲用户</option>
+					</select>
+				</td>
+				<td colspan="2" align="right">
+					<button class="btn btn-sm btn-primary" style="margin-right: 15%;" data-ng-click="getTalkBackUsers(account)"
+							data-ng-disabled="!(account.group)">查询</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<div class="tabs" >
+	  	<ul class="nav nav-tabs">
+	    	<li>
+	    		<h5>所有帐号</h5>
+	    	</li>
+	  	</ul>
+	  	<div class="tab-content">
+	    	<div role="tabpanel" class="tab-pane active" >
+	    		<table>
+	    			<thead>
+	    				<tr>
+	    					<th><input type="checkbox" data-ng-model="all"/>全选</th>
+	    					<th>序号</th>
+	    					<th>帐号</th>
+	    					<th>短号码</th>
+	    					<th>中文名</th>
+<!-- 	    					<th>短号码</th> -->
+<!-- 	    					<th>设备类型</th> -->
+	    					<th>所属代理商</th>
+	    					<th>所属集团</th>
+	    					<th>所属部门</th>
+<!-- 	    					<th>使用期限</th> -->
+	    					<th>操作</th>
+	    				</tr>
+	    			</thead>
+	    			<tbody>
+	    				<tr data-ng-if="!(acPageInfo)">
+	    					<td colspan="10" align="left" style="text-indent: 1em;">请手动查询</td>
+	    				</tr>
+	    				<tr data-ng-if="(acPageInfo.totalElements==0)">
+	    					<td colspan="10" align="left" style="text-indent: 1em;">没有数据</td>
+	    				</tr>
+	    				<tr data-ng-if="(acPageInfo.totalElements>0)" data-ng-repeat="ac in accountsList ">
+	    					<td><input type="checkbox" id="ac.id" data-ng-checked="all" data-ng-value="ac.id"/></td>
+	    					<td data-ng-bind="$index+1+acPageInfo.index"></td>
+	    					<td>{{ac.number.fullValue}}</td>
+	    					<td>{{ac.number.shortValue}}</td>
+	    					<td>{{ac.name}}</td>
+	    					<td>{{ac.number.groupSegment.agent.name}}</td>
+		   					<td>{{ac.group.name}}</td>
+		   					<td>{{ac.department.name}}</td>
+	    					<td>
+	    						<a data-ng-click="retrieveAccount(ac)" data-ng-if="ac.department">收回</a>
+	    					</td>
+	    				</tr>
+	    			</tbody>
+	    		</table>
+	    		
+	    		<div align="right" style="margin: 0px 1%;">
+		   			<form data-ng-submit="searchList(acPageInfo.page-1,acPageInfo)">
+		   				<span class="span-lt">总记录数：{{acPageInfo.totalElements}}</span>
+						<span class="span-lt">总页数：{{acPageInfo.totalPages}}</span>
+		    			<span class="span-lt" >每页：
+		    				<select data-ng-model="acPageInfo.size" data-ng-change="searchList(0, acPageInfo,0)"
+		    						data-ng-options="x for x in [10,20,50,100]">
+		    				</select>
+	<!-- 	    				<input type="number" step="5" data-ng-model="acPageInfo.size" max="100" min="5" title="每页显示的结果数"> -->
+		    			</span>
+		    			<span>
+		    				<a data-ng-click="searchList(0,acPageInfo)" data-ng-if="(acPageInfo.number>0)" title="跳转首页">首页</a>
+		    				<a data-ng-if="!(acPageInfo.number>0)" style="color: grey" title="不可用">首页</a>
+		    			</span>
+		    			<span>
+		    				<a data-ng-click="searchList(acPageInfo.number-1,acPageInfo)" data-ng-if="(acPageInfo.number>0)" title="上一页">上一页</a>
+		    				<a data-ng-if="!(acPageInfo.number>0)" style="color: grey" title="不可用">上一页</a>
+		    			</span>
+		    			<span>
+		    				<input type="number" step="1" data-ng-model="acPageInfo.page" max="{{acPageInfo.totalPages}}" required="required"
+		    						min="1" data-ng-if="(acPageInfo.totalPages>0)" title="请输入跳转页数">
+		    				<input type="number" step="1" data-ng-model="acPageInfo.page" max="1" min="1" readonly="readonly"
+		    						data-ng-if="!(acPageInfo.totalPages>0)" title="没有可跳转页数">
+		    				<input type="submit" class="btn btn-sm btn-primary" title="跳转" value="GO">
+		    			</span>
+		    			<span>
+		    				<a data-ng-click="searchList(acPageInfo.page,acPageInfo)" data-ng-if="(acPageInfo.page<acPageInfo.totalPages)" title="下一页">下一页</a>
+		    				<a href="javascript:void(0);" data-ng-if="!(acPageInfo.page<acPageInfo.totalPages)" style="color: grey" title="不可用">下一页</a>
+		    			</span>
+		   				<span>
+		   					<a data-ng-click="searchList(acPageInfo.totalPages-1,acPageInfo)" data-ng-if="(acPageInfo.page<acPageInfo.totalPages)" title="跳转尾页">尾页</a>
+		    				<a href="javascript:void(0);" data-ng-if="!(acPageInfo.page<acPageInfo.totalPages)" style="color: grey" title="不可用">尾页</a>
+		   				</span>
+		   			</form>
+		   		</div>
+		   		
+		   		<div class="left-btn-group">
+					<button class="btn btn-sm btn-primary" data-ng-click="retrieveAll()">批量收回</button>
+				</div>
+		   	</div>
+		</div>
+	</div>
+</div>
+

@@ -1,0 +1,345 @@
+<div class="tabs list-tabs">
+  	<ul class="nav nav-tabs" role="tablist" >
+    	<li role="presentation" class="active">
+    		<a href="#agentSegmentsList" aria-controls="agentSegmentsList" role="tab" data-toggle="tab" translate="content.agents.segment"></a>
+    	</li>
+    	<li role="presentation">
+	    	<a href="#agentDefaultSegmentsList" aria-controls="agentDefaultSegmentsList" role="tab" data-toggle="tab"
+	    		translate="content.agents.default_segment"></a>
+    	</li>
+  	</ul>
+
+  	<!-- Tab panes -->
+  	<div class="tab-content">
+    	<div role="tabpanel" class="tab-pane active" id="agentSegmentsList">
+    		<div class="table-div">
+	    		<table>
+	    			<thead>
+	    				<tr>
+	    					<th><span translate="content.no"></span></th>
+							<th><span translate="content.segments.segment"></span></th>
+							<th><span translate="content.agents.attach_agent"></span></th>
+							<th nowrap="nowrap"><span translate="content.operations.operation"></span></th>
+	    				</tr>
+	    			</thead>
+	    			<tbody>
+	    				<tr data-ng-repeat="segmt in agentSegmentsList">
+							<td data-ng-bind="$index+1+asPageInfo.index"></td>
+							<td>{{segmt.fullValue}}</td>
+							<td>{{segmt.agent.name}}</td>
+							<td>
+	<!-- 							<a title="修改">修改</a> -->
+								<a data-toggle="modal" data-target="#retrieveModal" data-ng-click="retrieveModal(segmt)"
+										data-ng-if="(segmt.agent) && !(segmt.hasUsers)" class="btn btn-sm btn-blue"
+										translate="content.operations.retrieve"></a>
+								<a data-ng-if="(segmt.agent) && (segmt.hasUsers)" class="btn btn-sm btn-blue btn-disabled"
+										translate="content.operations.retrieve"></a>
+									
+								<a data-toggle="modal" data-target="#arrangeModal" data-ng-click="arrangeModal(segmt,0)"
+										data-ng-if="!(segmt.agent) && !(segmt.hasUsers)" class="btn btn-sm btn-blue"
+										translate="content.operations.arrange"></a>
+								<a data-ng-if="!(segmt.agent) && (segmt.hasUsers)" class="btn btn-sm btn-blue btn-disabled"
+										translate="content.operations.arrange"></a>
+								
+								<a data-toggle="modal" data-target="#modifyModal" data-ng-click="modifyModal(segmt,0)"
+										data-ng-if="!(segmt.hasUsers)" class="btn btn-sm btn-blue" translate="content.operations.edit"></a>
+								<a data-ng-if="(segmt.hasUsers)" class="btn btn-sm btn-blue btn-disabled" translate="content.operations.edit"></a>
+								
+								<a data-toggle="modal" data-target="#deleteModal" data-ng-click="deleteModal(segmt)"
+										data-ng-if="!(segmt.hasUsers)" class="btn btn-sm btn-blue" translate="content.operations.delete"></a>
+								<a data-ng-if="(segmt.hasUsers)" class="btn btn-sm btn-blue btn-disabled" translate="content.operations.delete"></a>
+							</td>
+						</tr>
+						<tr data-ng-if="asPageInfo.totalElements < 1">
+							<td colspan="6" class="empty-td">
+								<span translate="content.table.nodata"></span>
+							</td>
+						</tr>
+						<tr data-ng-if="asPageInfo.totalPages < asPageInfo.number+1 && asPageInfo.totalElements > 0">
+							<td colspan="6" class="empty-td">
+								<span translate="content.table.nodata"></span>
+							</td>
+						</tr>
+	    			</tbody>
+	    		</table>
+    		</div>
+    		
+    		<div align="right" class="pageInfo" data-ng-if="(loginUser.type != 1) || (asPageInfo.size)">
+				<form data-ng-submit="searchList(asPageInfo.page-1,asPageInfo,0)">
+					<span class="span-lt"><span translate="content.operations.results"></span>{{asPageInfo.totalElements}}</span>
+					<span class="span-lt"><span translate="content.operations.pages"></span>{{asPageInfo.totalPages}}</span>
+					<span class="span-lt"><span translate="content.operations.size"></span>
+						<select data-ng-model="asPageInfo.size" data-ng-change="searchList(0,asPageInfo,0)"
+								data-ng-options="x for x in [10,20,50,100]">
+						</select>
+					</span>
+		  			<span>
+		  				<button type="button" data-ng-click="searchList(0,asPageInfo,0)" data-ng-if="!(asPageInfo.number<0)"
+		  					class="btn-sm btn-white" translate="content.pageInfo.first"></button>
+		  			</span>
+		  			<span>
+		  				<button type="button" data-ng-click="searchList(asPageInfo.number-1,asPageInfo,0)" class="btn-sm btn-blue"
+		  					data-ng-if="(asPageInfo.number>0)" translate="content.pageInfo.prev" ></button>
+	 					<button type="button" class="btn-sm btn-blue btn-disabled" data-ng-if="!(asPageInfo.number>0)"
+	 						translate="content.pageInfo.prev" ></button>
+		  			</span>
+		  			<span class="pageInfo-number">
+		  				<a data-ng-click="searchList(0,asPageInfo,0)" data-ng-if="(asPageInfo.number>2)">1</a>
+		  				<a data-ng-click="searchList(1,asPageInfo,0)" data-ng-if="(asPageInfo.number>3)">2</a>
+		  				<a data-ng-if="(asPageInfo.number>4)">......</a>
+		  				<a data-ng-click="searchList(asPageInfo.number-2,asPageInfo,0)"
+		  					data-ng-if="(asPageInfo.number>1)">{{asPageInfo.number-1}}</a>
+		  				<a data-ng-click="searchList(asPageInfo.number-1,asPageInfo,0)"
+		  					data-ng-if="(asPageInfo.number>0)">{{asPageInfo.number}}</a>
+		  				<a style="color: black;">{{asPageInfo.number+1}}</a>
+		  				<a data-ng-click="searchList(asPageInfo.number+1,asPageInfo,0)"
+		  					data-ng-if="(asPageInfo.number+1<asPageInfo.totalPages)">{{asPageInfo.number+2}}</a>
+		  				<a data-ng-click="searchList(asPageInfo.number+2,asPageInfo,0)"
+		  					data-ng-if="(asPageInfo.number+2<asPageInfo.totalPages)">{{asPageInfo.number+3}}</a>
+		  				<a data-ng-if="(asPageInfo.number+5<asPageInfo.totalPages)">......</a>
+		  				<a data-ng-click="searchList(asPageInfo.totalPages-2,asPageInfo)"
+		  					data-ng-if="(asPageInfo.number+3<asPageInfo.totalPages) && (asPageInfo.number+4!=asPageInfo.totalPages)">
+		  					{{asPageInfo.totalPages-1}}</a>
+		  				<a data-ng-click="searchList(asPageInfo.totalPages-1,asPageInfo)"
+		  					data-ng-if="(asPageInfo.number+4<=asPageInfo.totalPages)">{{asPageInfo.totalPages}}</a>
+		  			</span>
+		  			<span>
+		  				<button type="button" data-ng-click="searchList(asPageInfo.number+1,asPageInfo,0)" class="btn-sm btn-blue"
+		  					data-ng-if="(asPageInfo.number+1<asPageInfo.totalPages)" translate="content.pageInfo.next"></button>
+	 					<button type="button" class="btn-sm btn-blue btn-disabled" data-ng-if="!(asPageInfo.number+1<asPageInfo.totalPages)"
+	 						translate="content.pageInfo.next"></button>
+		  			</span>
+		  			<span>
+	 					<button type="button" data-ng-click="searchList(asPageInfo.totalPages-1,asPageInfo,0)" data-ng-if="!(asPageInfo.number<0)"
+	 						class="btn-sm btn-white" translate="content.pageInfo.last"></button>
+	 				</span>
+		  			<span>
+		  				<input type="number" step="1" data-ng-model="asPageInfo.page" max="{{asPageInfo.totalPages}}" required="required"
+		  						min="1" data-ng-if="(asPageInfo.totalPages>0)" >
+		  				<input type="number" step="1" data-ng-model="asPageInfo.page" max="1" min="1" readonly="readonly"
+		  						data-ng-if="!(asPageInfo.totalPages>0)" >
+		  				<input type="submit" class="btn-sm btn-blue btn-go" value="GO">
+		  			</span>
+				</form>
+			</div>
+    	</div>
+    	
+    	<div role="tabpanel" class="tab-pane" id="agentDefaultSegmentsList">
+    		<div class="table-div">
+				<table>
+	    			<thead>
+	    				<tr>
+	    					<th><span translate="content.no"></span></th>
+							<th><span translate="content.segments.default_segment"></span></th>
+							<th><span translate="content.agents.attach_agent"></span></th>
+	    				</tr>
+	    			</thead>
+	    			<tbody>
+	    				<tr data-ng-repeat="segmt in agentDefaultSegmentsList">
+							<td data-ng-bind="$index+1+adsPageInfo.index"></td>
+							<td>{{segmt.fullValue}}</td>
+							<td>{{segmt.agent.name}}</td>
+						</tr>
+						<tr data-ng-if="adsPageInfo.totalElements < 1">
+							<td colspan="6" class="empty-td">
+								<span translate="content.table.nodata"></span>
+							</td>
+						</tr>
+						<tr data-ng-if="adsPageInfo.totalPages < adsPageInfo.number+1 && adsPageInfo.totalElements > 0">
+							<td colspan="6" class="empty-td">
+								<span translate="content.table.nodata"></span>
+							</td>
+						</tr>
+	    			</tbody>
+	    		</table>
+    		</div>
+    		
+    		<div align="right" class="pageInfo" data-ng-if="(loginUser.type != 1) || (adsPageInfo.size)">
+				<form data-ng-submit="searchList(adsPageInfo.page-1,adsPageInfo,1)">
+					<span class="span-lt"><span translate="content.operations.results"></span>{{adsPageInfo.totalElements}}</span>
+					<span class="span-lt"><span translate="content.operations.pages"></span>{{adsPageInfo.totalPages}}</span>
+					<span class="span-lt"><span translate="content.operations.size"></span>
+						<select data-ng-model="adsPageInfo.size" data-ng-change="searchList(0,adsPageInfo,1)"
+								data-ng-options="x for x in [10,20,50,100]">
+						</select>
+					</span>
+		   			<span>
+		   				<button type="button" data-ng-click="searchList(0,adsPageInfo,1)" data-ng-if="!(adsPageInfo.number<0)"
+		   					class="btn-sm btn-white" translate="content.pageInfo.first"></button>
+		   			</span>
+		   			<span>
+		   				<button type="button" data-ng-click="searchList(adsPageInfo.number-1,adsPageInfo,1)" class="btn-sm btn-blue"
+		   					data-ng-if="(adsPageInfo.number>0)" translate="content.pageInfo.prev" ></button>
+						<button type="button" class="btn-sm btn-blue btn-disabled" data-ng-if="!(adsPageInfo.number>0)"
+							translate="content.pageInfo.prev" ></button>
+		   			</span>
+		   			<span class="pageInfo-number">
+		   				<a data-ng-click="searchList(0,adsPageInfo,1)" data-ng-if="(adsPageInfo.number>2)">1</a>
+		   				<a data-ng-click="searchList(1,adsPageInfo,1)" data-ng-if="(adsPageInfo.number>3)">2</a>
+		   				<a data-ng-if="(adsPageInfo.number>4)">......</a>
+		   				<a data-ng-click="searchList(adsPageInfo.number-2,adsPageInfo,1)"
+		   					data-ng-if="(adsPageInfo.number>1)">{{adsPageInfo.number-1}}</a>
+		   				<a data-ng-click="searchList(adsPageInfo.number-1,adsPageInfo,1)"
+		   					data-ng-if="(adsPageInfo.number>0)">{{adsPageInfo.number}}</a>
+		   				<a style="color: black;">{{adsPageInfo.number+1}}</a>
+		   				<a data-ng-click="searchList(adsPageInfo.number+1,adsPageInfo,1)"
+		   					data-ng-if="(adsPageInfo.number+1<adsPageInfo.totalPages)">{{adsPageInfo.number+2}}</a>
+		   				<a data-ng-click="searchList(adsPageInfo.number+2,adsPageInfo,1)"
+		   					data-ng-if="(adsPageInfo.number+2<adsPageInfo.totalPages)">{{adsPageInfo.number+3}}</a>
+		   				<a data-ng-if="(adsPageInfo.number+5<adsPageInfo.totalPages)">......</a>
+		   				<a data-ng-click="searchList(adsPageInfo.totalPages-2,adsPageInfo)"
+		 					data-ng-if="(adsPageInfo.number+3<adsPageInfo.totalPages) && (adsPageInfo.number+4!=adsPageInfo.totalPages)">
+		 					{{adsPageInfo.totalPages-1}}</a>
+		 				<a data-ng-click="searchList(adsPageInfo.totalPages-1,adsPageInfo)"
+		 					data-ng-if="(adsPageInfo.number+4<=adsPageInfo.totalPages)">{{adsPageInfo.totalPages}}</a>
+		   			</span>
+		   			<span>
+		   				<button type="button" data-ng-click="searchList(adsPageInfo.number+1,adsPageInfo,1)" class="btn-sm btn-blue"
+		   					data-ng-if="(adsPageInfo.number+1<adsPageInfo.totalPages)" translate="content.pageInfo.next"></button>
+						<button type="button" class="btn-sm btn-blue btn-disabled" data-ng-if="!(adsPageInfo.number+1<adsPageInfo.totalPages)"
+							translate="content.pageInfo.next"></button>
+		   			</span>
+		   			<span>
+						<button type="button" data-ng-click="searchList(adsPageInfo.totalPages-1,adsPageInfo,1)" data-ng-if="!(adsPageInfo.number<0)"
+							class="btn-sm btn-white" translate="content.pageInfo.last"></button>
+		  				</span>
+		   			<span>
+		   				<input type="number" step="1" data-ng-model="adsPageInfo.page" max="{{adsPageInfo.totalPages}}" required="required"
+		   						min="1" data-ng-if="(adsPageInfo.totalPages>0)" >
+		   				<input type="number" step="1" data-ng-model="adsPageInfo.page" max="1" min="1" readonly="readonly"
+		   						data-ng-if="!(adsPageInfo.totalPages>0)" >
+		   				<input type="submit" class="btn-sm btn-blue btn-go" value="GO">
+		   			</span>
+				</form>
+			</div>
+	   		
+		</div>
+  	</div>
+</div>
+
+<div class="modal fade" id="alertModal" tabindex="-1" style="z-index: 9999;">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title" data-ng-bind="alert_title"></h4>
+			</div>
+			<div class="modal-body">
+				<span data-ng-bind="alert_message"></span>
+			</div>
+            <div class="modal-footer"></div>
+        </div>  
+    </div> 
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title"><span translate="content.segments.operations.delete"></span></h4>
+			</div>
+			<div class="modal-body">
+				<span translate="content.segments.operations.delete"></span>
+				<span style="margin: 10px 10px;color: red;" data-ng-bind="removing_segment.fullValue"></span>
+				<span translate="content.modals.marks.mark1"></span>
+			</div>
+            <div class="modal-footer">
+            	<button type="button" class="btn-sm btn-blue" data-ng-click="removeSegment(removing_segment,0)" translate="content.operations.ok"></button>  
+                <button type="button" class="btn-sm btn-white" data-dismiss="modal" translate="content.operations.close"></button>  
+            </div>
+        </div>  
+    </div> 
+</div>
+
+<div class="modal fade" id="retrieveModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title"><span translate="content.segments.operations.retrieve"></span></h4>
+			</div>
+			<div class="modal-body">
+				<span translate="content.segments.operations.retrieve"></span>
+				<span style="margin: 10px 10px;color: red;" data-ng-bind="retrieving_segment.fullValue"></span>？
+			</div>
+            <div class="modal-footer">
+            	<button type="button" class="btn-sm btn-blue" data-ng-click="retrieveSegment(retrieving_segment,0)"
+            			translate="content.operations.ok"></button>  
+                <button type="button" class="btn-sm btn-white" data-dismiss="modal" translate="content.operations.close"></button>  
+            </div>
+        </div>  
+    </div> 
+</div>
+
+<div class="modal fade" id="arrangeModal" tabindex="-1" style="z-index: 1099;">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title"><span translate="content.segments.operations.arrange_agentSegment"></span></h4>
+			</div>
+			<div class="modal-body table-div">
+				<table>
+					<tr>
+						<th><span translate="content.segments.arranging_segment"></span></th>
+						<th data-ng-bind="arranging_segment.fullValue"></th>
+					</tr>
+					<tr>
+						<th><span translate="content.agents.agent"></span></th>
+						<td>
+							<select class="text-class" data-ng-model="arranging_segment.agt" data-ng-options="agt.id as agt.name for agt in agentsList">
+							</select>
+						</td>
+					</tr>
+				</table>
+			</div>
+            <div class="modal-footer">
+            	<button type="button" class="btn-sm btn-blue" data-ng-click="arrangeSegment(arranging_segment,0)" translate="content.operations.ok"></button>  
+                <button type="button" class="btn-sm btn-white" data-dismiss="modal" translate="content.operations.close"></button>  
+            </div>
+        </div>  
+    </div> 
+</div>
+
+<div class="modal fade" id="modifyModal" tabindex="-1" style="z-index: 1099;">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title"><span translate="content.segments.edit"></span></h4>
+			</div>
+			<div class="modal-body table-div no-border" >
+				<table style="border-collapse: separate;">
+					<tr>
+						<th><span translate="content.segments.segment"></span></th>
+						<td data-ng-bind="modifying_segment.fullValue"></td>
+					</tr>
+					<tr>
+						<th><span translate="content.agents.attach_agent"></span></th>
+						<td data-ng-bind="modifying_segment.agent.name"></td>
+					</tr>
+					<tr>
+						<th><span translate="content.agents.target_agent"></span></th>
+						<td>
+							<select class="text-class" data-ng-model="modifying_segment.agt" data-ng-options="agt.id as agt.name for agt in agentsList">
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th><span translate="content.segments.new_segment"></span></th>
+						<td>
+							<input type="text" class="text-class" data-ng-model="modifying_segment.val" required="required"
+									maxlength="4" pattern="[\d]*" >
+						</td>
+					</tr>
+				</table>
+			</div>
+            <div class="modal-footer">
+            	<button type="button" class="btn-sm btn-blue" data-ng-click="modifySegment(modifying_segment,0)"
+            			data-ng-disabled="!(modifying_segment.val)" translate="content.operations.ok"></button>  
+                <button type="button" class="btn-sm btn-white" data-dismiss="modal" translate="content.operations.close"></button>  
+            </div>
+        </div>  
+    </div> 
+</div>

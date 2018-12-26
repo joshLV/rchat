@@ -1,0 +1,43 @@
+<div class="content-div">
+	<div class="table-title">
+		<h5>合并集团</h5>
+	</div>
+	<div class="form-div">
+		<form class="group-business">
+			<div>
+				<label>合并目标集团：</label>
+				<input type="text" class="text-class" data-ng-model="group.name"/>
+			</div>
+			<div>
+				<label>所属代理商：</label>
+				<input type="text" class="text-class" data-ng-model="group.agent.name"/>
+			</div>
+			<div>
+				<label>管理员帐号：</label>
+				<input type="text" class="text-class" data-ng-model="group.administrator.username"/>
+			</div>
+			<div >
+				<label >待合并集团：</label>
+				<select class="text-class" id="unselected" data-ng-model="unselected" multiple="multiple" size="8" >
+					<option disabled="disabled">全部集团</option>
+					<option data-ng-repeat="option in ['option-A','option-B','option-C','option-D']">{{option}}</option>
+				</select>
+				<div class="btn-group-vertical">
+					<button class="btn btn-sm btn-primary" data-ng-click="addSelected()">
+						添加<span class="glyphicon glyphicon-chevron-right"></span>
+					</button>
+					<button class="btn btn-sm btn-primary" data-ng-click="removeSelected()">
+						<span class="glyphicon glyphicon-chevron-left"></span>移除
+					</button>
+				</div>
+				<select class="text-class" id="selected" data-ng-model="selected" multiple="multiple" size="8" >
+					<option disabled="disabled" class="default-option" >已选集团</option>
+				</select>
+			</div>
+			<div>
+				<input type="submit" class="btn btn-sm btn-primary"  value="合并">
+				<input type="reset" class="btn btn-sm btn-primary" value="取消">
+			</div>
+		</form>
+	</div>
+</div>

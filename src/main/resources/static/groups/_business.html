@@ -1,0 +1,47 @@
+<div class="content-div">
+	<div class="table-div">
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" class="tb-title"><span translate="content.groups.title"></span></th>
+					<th ></th>
+				</tr>
+			</thead>
+		</table>
+		
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" style="border-right: none;"><span translate="content.groups.business"></span></th>
+					<th style="border-left: none;"></th>
+				</tr>
+			</thead>
+		</table>
+		<form name="groupForm" data-ng-submit="createOrUpdateGroup(group)">
+			<div  data-ng-if="loginUser.type==1">
+				<label><span translate="content.agents.attach_agent"></span></label>
+				<input type="text" class="disabled-class" data-ng-model="group.agent.name" id="agentsOptions" readonly="readonly" />
+			</div>
+			<div>
+				<label><span translate="content.groups.name"></span></label>
+				<input type="text" readonly="readonly"
+					class="disabled-class" data-ng-model="group.name" required="required" maxlength="100" pattern="[\w\d\u4e00-\u9fa5]*"/>		
+			</div>
+			<div>
+				<label><span translate="content.groups.businesses"></span></label>
+				<div class="box-group">			
+					<label data-ng-if="group.id && business.enabled" data-ng-repeat="business in businesses">
+						<input data-ng-if="group.id" name="business" type="checkbox" data-ng-checked="checkSel(business)"
+							data-ng-value="business.id" data-ng-disabled="business.internal" />{{business.name}}
+					</label>
+				</div>
+			</div>
+			<div style="margin-top: 65px;">
+				<label></label>
+				<button type="submit" class="btn-sm btn-blue" translate="content.operations.submit"></button>
+				<button type="reset" class="btn-sm btn-white" onclick="javascript:history.go(-1);" translate="content.operations.return"></button>
+			</div>
+		</form>
+	</div>
+</div>
+	

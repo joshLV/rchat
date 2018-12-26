@@ -1,0 +1,99 @@
+<div class="content-div">
+	<div class="table-div">
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" class="tb-title"><span translate="content.groups.detail"></span></th>
+					<th ></th>
+				</tr>
+			</thead>
+		</table>
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" style="border-right: none;"><span translate="content.groups.form"></span></th>
+					<th style="border-left: none;"></th>
+				</tr>
+			</thead>
+		</table>
+		<form name="groupForm" data-ng-submit="createOrUpdateGroup(group)" >
+			<div data-ng-if="loginUser.type==1">
+				<label><span translate="content.agents.attach_agent"></span></label>
+				<input type="text" class="disabled-class" data-ng-model="group.agent.name" id="agentsOptions" readonly="readonly" />
+			</div>
+			<div>
+				<label><span translate="content.groups.name"></span></label>
+				<input type="text" readonly="readonly"
+					class="disabled-class" data-ng-model="group.name" required="required" maxlength="100" pattern="[\w\d\u4e00-\u9fa5]*"/>
+			</div>
+			<div>
+				<label><span translate="content.groups.admin.name"></span></label>
+				<input type="text" readonly="readonly" class="disabled-class" data-ng-model="group.administrator.name" 
+				    required="required" pattern="[\w\d\u4e00-\u9fa5]*" maxlength="10"/>
+				 
+			</div>
+			<div>
+				<label><span translate="content.groups.admin.username"></span></label>
+				<input type="text" class="disabled-class" data-ng-model="group.administrator.username" name="username" required="required"
+					  data-ng-if="!(group.id)" data-ng-minlength="1" maxlength="100" autocomplete="off" pattern="[\w\d@_]*"/>				
+				<input type="text" id="administrator_username" class="disabled-class" data-ng-model="group.administrator.username"
+					  required="required" data-ng-if="group.id" readonly="readonly" name="username"/>		
+			</div>
+			<div>
+				<label><span translate="content.agents.price"></span></label>
+				<input readonly="readonly" type="number" class="disabled-class" data-ng-model="group.creditUnitPrice" step="0.01"/>
+			</div>
+			<div>
+				<label><span translate="content.agents.linkman"></span></label>
+				<input readonly="readonly" type="text" class="disabled-class" data-ng-model="group.linkman"/>
+			</div>
+			<div>
+				<label><span translate="content.agents.phone"></span></label>
+				<input readonly="readonly" type="tel" class="disabled-class" data-ng-model="group.phone"/>
+			</div>
+			<div>
+				<label><span translate="content.agents.email"></span></label>
+				<input readonly="readonly" type="email" class="disabled-class" data-ng-model="group.email"/>
+			</div>
+			<div >
+				<label ><span translate="content.groups.scale"></span></label>
+				<input disabled="disabled" type="radio" name="GroupScale" data-ng-model="group.scale" value="0" />0-100
+				<input disabled="disabled" type="radio" name="GroupScale" data-ng-model="group.scale" value="1"/>101-500
+				<input disabled="disabled" type="radio" name="GroupScale" data-ng-model="group.scale" value="2"/>501-1000
+				<input disabled="disabled" type="radio" name="GroupScale" data-ng-model="group.scale" value="3"/>1001+
+			</div>
+			<div >
+				<label><span translate="content.groups.businesses_active"></span></label>
+				<div class="box-group" >
+					<label data-ng-repeat="business in businesses" data-ng-if="business.enabled">
+					<input disabled="disabled" name="business" type="checkbox" checked="checked" data-ng-value="business.id" />
+					{{business.name}} </label>
+				</div>
+			</div>
+			<div style="margin-top: 65px;">
+				<label></label>
+				<a href="javascript:history.go(-1)" class="btn btn-sm btn-white" translate="content.operations.return"
+					style="width: 66px;"></a>
+			</div>
+		</form>
+	</div>
+</div>
+<div class="modal fade" id="deleteModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title"><span translate="content.groups.operations.delete"></span></h4>
+			</div>
+			<div class="modal-body">
+				<span translate="content.groups.operations.delete"></span>
+				<span style="margin: 10px 10px;color: red;" data-ng-bind="removing_group.name"></span>
+				<span translate="content.modals.marks.mark1"></span>
+			</div>
+            <div class="modal-footer">
+            	<button type="button" class="btn btn-primary" data-ng-click="removeGroup(removing_group)" translate="content.operations.delete"></button>  
+                <button type="button" class="btn btn-default" data-dismiss="modal" translate="content.operations.cancel"></button>  
+            </div>
+        </div>  
+    </div> 
+</div>

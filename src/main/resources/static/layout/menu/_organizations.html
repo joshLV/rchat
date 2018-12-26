@@ -1,0 +1,26 @@
+<div class="menu-div">
+	<ul class="menu-ul">
+		<li>
+			<a href="javascript:void(0)" data-ng-click="toggleMenuLi('groupsMenu')" >
+				<span translate="menu.groups.head" style="vertical-align: middle;"></span>
+			</a>
+		</li>
+	</ul>
+	<ul class="menu-li" id="groupsMenu">
+		<li data-ng-if="loginUser.type<4">
+			<a data-ui-sref-active="active" data-ui-sref="groups.list" translate="menu.groups.list"></a>
+		</li>
+		<hr style="margin-left: -10%;" data-ng-if="loginUser.type<4"/>
+		<li data-ng-if="loginUser.type<4">
+			<a data-ui-sref-active="active" data-ui-sref="groups.create" translate="menu.groups.create"></a>
+		</li>
+		<hr style="margin-left: -10%;" data-ng-if="loginUser.type!=2 && loginUser.type!=3"/>
+		<li data-ng-if="loginUser.type!=2 && loginUser.type!=3">
+			<a data-ui-sref-active="active" data-ui-sref="departments.list" translate="menu.departments.list"></a>
+		</li>
+		<hr style="margin-left: -10%;" data-ng-if="loginUser.type!=2 && loginUser.type!=3"/>
+		<li data-ng-if="loginUser.type!=2 && loginUser.type!=3">
+			<a data-ui-sref-active="active" data-ui-sref="departments.create" translate="menu.departments.create"></a>
+		</li>
+	</ul>
+</div>

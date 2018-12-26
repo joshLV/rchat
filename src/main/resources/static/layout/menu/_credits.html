@@ -1,0 +1,30 @@
+<div class="menu-div" data-ng-if="loginUser.type<5">
+	<ul class="menu-ul">
+		<li>
+			<a href="javascript:void(0)" data-ng-click="toggleMenuLi('creditsMenu')" >
+				<span translate="menu.credits.head" style="vertical-align: middle;"></span>
+			</a>
+		</li>
+	</ul>
+	<ul class="menu-li" id="creditsMenu">
+		<li>
+			<a data-ui-sref-active="active" data-ui-sref="credits.list" translate="menu.credits.list"></a>
+		</li>
+		<hr style="margin-left: -10%;" data-ng-if="loginUser.type==1 || loginUser.type==2 || loginUser.type==3 || loginUser.type==4"/>
+		<li data-ng-if="loginUser.type<4">
+			<a data-ui-sref-active="active" data-ui-sref="credits.backlist" translate="menu.credits.backlist"></a>
+		</li>
+		<hr style="margin-left: -10%;" data-ng-if="loginUser.type==2 || loginUser.type==3 || loginUser.type==4"/>
+		<li data-ng-if="loginUser.type==2 || loginUser.type==3 || loginUser.type==4">
+			<a data-ui-sref-active="active" data-ui-sref="credits.give" translate="menu.credits.give"></a>
+		</li>
+		<hr style="margin-left: -10%;" data-ng-if="loginUser.type==2 || loginUser.type==3"/>
+		<li data-ng-if="loginUser.type==2 || loginUser.type==3">
+			<a data-ui-sref-active="active" data-ui-sref="credits.back" translate="menu.credits.back"></a>
+		</li>
+		<hr style="margin-left: -10%;" data-ng-if="loginUser.type==2 || loginUser.type==3"/>
+		<li data-ng-if="loginUser.type==2 || loginUser.type==3">
+			<a data-ui-sref-active="active" data-ui-sref="credits.detail" translate="menu.credits.detail"></a>
+		</li>
+	</ul>
+</div>

@@ -1,0 +1,199 @@
+<div class="search-div">
+	<form data-ng-submit="searchRenews(agentId,groupId,start,end,fullValue,pageInfo,showPage)" data-ng-if="loginUser.type==1" >
+		<div class="row">
+			<div class="col-sm-4" style="width:30%">
+				<label><span translate="content.agents.attach_agent"></span></label> 
+				<select class="text-class" id="selectOptions" data-ng-model="agentId" data-ng-change="getGroups(agentId)" style="width:60%">
+				</select>
+			</div>
+			<div class="col-sm-4" style="width:30%">
+				<label><span translate="content.departments.attach_group"></span></label> 
+				<select class="text-class" data-ng-model="groupId" style="width:60%"
+					data-ng-options="group.id as group.name for group in groups.content  | orderBy:'-name'" >
+					<option value="" translate="content.operations.selection"></option>
+				</select>
+			</div>
+			<div class="col-sm-4" style="width:30%">
+				<button class="btn-sm btn-blue" type="submit" translate="content.operations.search"></button>
+				<button class="btn-sm btn-blue" type="button" translate="content.exports" data-ng-click="exportLogs(agentId,groupId,start,end,fullValue)"></button>
+				<button class="btn-sm btn-blue" type="button" translate="content.operations.showAll" data-ng-click="searchAllRenews(pageInfo)"/></button>
+			</div>
+  		</div>
+  		<br/>
+		<div class="row">
+			<div class="col-sm-4" style="width:30%">
+				<label ><span translate="content.operations.start_time"></span>&nbsp&nbsp&nbsp</label>
+				<input type="text" id="start" class="text-class" data-ng-model="start" style="width:60%" onClick="WdatePicker()"/>
+			</div>
+			<div class="col-sm-4" style="width:30%">
+				<label ><span translate="content.operations.end_time"></span></label>
+				<input type="text" id="end" class="text-class" data-ng-model="end" style="width:60%" onClick="WdatePicker()"/>
+			</div>
+			<div class="col-sm-4" style="width:30%">
+				<label ><span translate="content.accounts.account"></span></label>
+				<input type="text" id="fullValue" class="text-class" data-ng-model="fullValue" style="width:60%"/>
+			</div>
+		</div>
+	</form>
+	<form data-ng-submit="searchRenews(null,null,start,end,fullValue,pageInfo,showPage)" data-ng-if="loginUser.type!=1" >
+		<div class="row">
+			<div class="col-sm-3" style="width:25%">
+				<label ><span translate="content.operations.start_time"></span></label>
+				<input type="text" id="start" class="text-class" data-ng-model="start" style="width:60%" onClick="WdatePicker()"/>
+			</div>
+			<div class="col-sm-3" style="width:25%">
+				<label ><span translate="content.operations.end_time"></span></label>
+				<input type="text" id="end" class="text-class" data-ng-model="end" style="width:60%" onClick="WdatePicker()"/>
+			</div>
+			<div class="col-sm-3" style="width:25%">
+				<label ><span translate="content.accounts.account"></span></label>
+				<input type="text" id="fullValue" class="text-class" data-ng-model="fullValue" style="width:60%"/>
+			</div>
+			<div class="col-sm-3" style="width:24%">
+				<button class="btn-sm btn-blue" type="submit" translate="content.operations.search"></button>
+				<button class="btn-sm btn-blue" type="button" translate="content.exports" data-ng-click="exportLogs(null,null,start,end,fullValue)"></button>
+				<button class="btn-sm btn-blue" type="button" translate="content.operations.showAll" data-ng-click="searchAllRenews(pageInfo)"/></button>
+			</div>
+		</div>
+	</form>
+</div>
+<div class="content-div">
+	<div class="table-div">
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" class="tb-title"><span translate="content.reports.records"></span></th>
+					<th ></th>
+				</tr>
+			</thead>
+		</table>			
+		<table>
+			<thead>
+				<tr>
+					<td nowrap="nowrap"><span translate="content.teams.no"></span></td>
+					<td nowrap="nowrap"><span translate="content.accounts.account"></span></td>
+<!-- 					<td nowrap="nowrap"><span translate="content.reports.renew_model"></span></td> -->
+					<td nowrap="nowrap"><span translate="content.reports.renew_time"></span></td>
+					<td nowrap="nowrap"><span translate="content.agents.attach_agent"></span></td>
+					<td nowrap="nowrap"><span translate="content.departments.attach_group"></span></td>
+					<td nowrap="nowrap"><span translate="content.accounts.useful_life"></span></td>
+					<td nowrap="nowrap"><span translate="content.reports.basic_credit"></span></td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-ng-repeat="report in reports">
+					<td data-ng-bind="$index+1+pageInfo.number*pageInfo.usize"></td>
+					<td><span>{{report.number}}</span></td>
+<!-- 					<td><span></span></td> -->
+					<td><span>{{report.renewAt}}</span></td>
+					<td><span>{{report.agent}}</span></td>
+					<td><span>{{report.group}}</span></td>
+					<td><span>{{report.deadline}}</span></td>
+					<td><span>{{report.basicCredit}}</span></td>
+				</tr>
+				<tr data-ng-if="pageInfo.totalElements<1">
+					<td colspan="10" class="empty-td">
+   						<span translate="content.table.nodata"></span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+		
+  	<div align="right" class="pageInfo" >
+		<form data-ng-submit="searchList(pageInfo.showPage-1,pageInfo)">
+			<span class="span-lt"><span translate="content.operations.results"></span>{{pageInfo.totalElements}}</span>
+			<span class="span-lt"><span translate="content.operations.pages"></span>{{pageInfo.totalPages}}</span>
+			<span class="span-lt"><span translate="content.operations.size"></span>
+				<select data-ng-model="pageInfo.size" data-ng-change="searchList(0, pageInfo)"
+						data-ng-options="x for x in [10,20,50,100]">
+				</select>
+			</span>
+   			<span>
+   				<button type="button" data-ng-click="searchList(0,pageInfo)" data-ng-if="!(pageInfo.number<0)"
+   					class="btn-sm btn-white" translate="content.pageInfo.first"></button>
+   			</span>
+   			<span>
+   				<button type="button" data-ng-click="searchList(pageInfo.number-1,pageInfo)" class="btn-sm btn-blue"
+   					data-ng-if="(pageInfo.number>0)" translate="content.pageInfo.prev" ></button>
+				<button type="button" class="btn-sm btn-blue btn-disabled" data-ng-if="!(pageInfo.number>0)"
+					translate="content.pageInfo.prev" ></button>
+   			</span>
+   			<span class="pageInfo-number">
+   				<a data-ng-click="searchList(0,pageInfo)" data-ng-if="(pageInfo.number>2)">1</a>
+   				<a data-ng-click="searchList(1,pageInfo)" data-ng-if="(pageInfo.number>3)">2</a>
+   				<a data-ng-if="(pageInfo.number>4)">......</a>
+   				<a data-ng-click="searchList(pageInfo.number-2,pageInfo)"
+   					data-ng-if="(pageInfo.number>1)">{{pageInfo.number-1}}</a>
+   				<a data-ng-click="searchList(pageInfo.number-1,pageInfo)"
+   					data-ng-if="(pageInfo.number>0)">{{pageInfo.number}}</a>
+   				<a style="color: black;">{{pageInfo.number+1}}</a>
+   				<a data-ng-click="searchList(pageInfo.number+1,pageInfo)"
+   					data-ng-if="(pageInfo.number+1<pageInfo.totalPages)">{{pageInfo.number+2}}</a>
+   				<a data-ng-click="searchList(pageInfo.number+2,pageInfo)"
+   					data-ng-if="(pageInfo.number+2<pageInfo.totalPages)">{{pageInfo.number+3}}</a>
+   				<a data-ng-if="(pageInfo.number+5<pageInfo.totalPages)">......</a>
+   				<a data-ng-click="searchList(pageInfo.totalPages-2,pageInfo)"
+  					data-ng-if="(pageInfo.number+3<pageInfo.totalPages) && (pageInfo.number+4!=pageInfo.totalPages)">
+  					{{pageInfo.totalPages-1}}</a>
+  				<a data-ng-click="searchList(pageInfo.totalPages-1,pageInfo)"
+  					data-ng-if="(pageInfo.number+4<=pageInfo.totalPages)">{{pageInfo.totalPages}}</a>
+   			</span>
+   			<span>
+   				<button type="button" data-ng-click="searchList(pageInfo.number+1,pageInfo)" class="btn-sm btn-blue"
+   					data-ng-if="(pageInfo.number+1<pageInfo.totalPages)" translate="content.pageInfo.next"></button>
+				<button type="button" class="btn-sm btn-blue btn-disabled" data-ng-if="!(pageInfo.number+1<pageInfo.totalPages)"
+					translate="content.pageInfo.next"></button>
+   			</span>
+   			<span>
+				<button type="button" data-ng-click="searchList(pageInfo.totalPages-1,pageInfo)" data-ng-if="!(pageInfo.number<0)"
+					class="btn-sm btn-white" translate="content.pageInfo.last"></button>
+			</span>
+   			<span>
+   				<input type="number" step="1" data-ng-model="pageInfo.showPage" max="{{pageInfo.totalPages}}" required="required"
+   						min="1" data-ng-if="(pageInfo.totalPages>0)" >
+   				<input type="number" step="1" data-ng-model="pageInfo.showPage" max="1" min="1" readonly="readonly"
+   						data-ng-if="!(pageInfo.totalPages>0)" >
+   				<input type="submit" class="btn-sm btn-blue btn-go" value="GO">
+   			</span>
+		</form>
+	</div>
+  		
+   	<div class="modal fade" id="alertModal" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">×</button>
+					<h4 class="modal-title" data-ng-bind="alert_title"></h4>
+				</div>
+				<div class="modal-body">
+					<span data-ng-bind="alert_message" style="margin-left: 6em;"></span>
+				</div>
+	            <div class="modal-footer"></div>
+	        </div>  
+	    </div> 
+	</div>
+
+	<div class="modal fade" id="deleteModal" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">×</button>
+					<h4 class="modal-title">
+						<span translate="content.teams.operations.delete"></span>
+					</h4>
+				</div>
+				<div class="modal-body">
+					<span translate="content.teams.operations.delete"></span>
+					<span style="margin: 10px 10px;color: red;" data-ng-bind="removing_team.name"></span>
+					<span translate="content.modals.marks.mark1"></span>
+				</div>
+	            <div class="modal-footer">
+	            	<button type="button" class="btn-sm btn-blue" data-ng-click="removeTeam(removing_team)"
+	            		translate="content.operations.ok"></button>  
+	                <button type="button"class="btn-sm btn-white" data-dismiss="modal" translate="content.operations.cancel"></button>  
+	            </div>
+	        </div>  
+	    </div> 
+	</div>
+</div>

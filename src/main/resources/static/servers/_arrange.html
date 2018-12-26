@@ -1,0 +1,279 @@
+<div class="search-div" style="margin-top: 20px;margin-bottom: 20px;">
+	<label><span translate="content.agents.attach_agent"></span></label>
+  	<select class="text-class" data-ng-model="agentId" data-ng-options="agt.id as agt.name for agt in agtsList">
+		<option value="" translate="content.operations.selection"></option>
+	</select>
+	<label style="margin-left: 20px;"><span translate="content.groups.name"></span></label>
+	<input type="text" data-ng-model="groupName" class="text-class"/>
+	<a class="btn btn-sm btn-blue" data-ng-click="searchGroups(agentId, groupName)" translate="content.operations.search"
+		style="margin-left: 20px;"></a>
+	<a class="btn btn-sm btn-blue" translate="content.servers.operations.arrange"
+		style="float: right;margin-right: 2%;width: 100px;" data-ng-click="showServers();"></a>
+</div>
+
+<div class="content-div">
+	<div class="table-div">
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" class="tb-title"><span translate="content.servers.list"></span></th>
+					<th ></th>
+				</tr>
+			</thead>
+		</table>			
+		<table>
+			<thead>
+				<tr>
+					<td nowrap="nowrap"><input type="checkbox" data-ng-model="all" value="-1"/><span translate="content.operations.all"></span></td>
+					<td nowrap="nowrap"><span translate="content.no"></span></td>
+					<td nowrap="nowrap"><span translate="content.agents.agent"></span></td>
+					<td nowrap="nowrap"><span translate="content.groups.name"></span></td>
+					<td nowrap="nowrap"><span translate="content.accounts.count"></span></td>
+					<td nowrap="nowrap"><span translate="content.servers.attach_server"></span></td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-ng-repeat="group in groupsList">
+					<td><input type="checkbox" id="group.id" data-ng-checked="all" data-ng-value="$index"/></td>
+					<td data-ng-bind="$index+1+grpsPageInfo.number*grpsPageInfo.size"></td>
+					<td><span>{{group.agentName}}</span></td>
+					<td><span>{{group.name}}</span></td>
+					<td><span>{{group.talkbackUserCount}}</span></td>
+					<td><span>{{group.server.name}}</span></td>
+				</tr>
+				<tr data-ng-if="grpsPageInfo.totalElements<1">
+					<td colspan="6" class="empty-td">
+   						<span translate="content.table.nodata"></span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+		
+  	<div align="right" class="pageInfo" >
+		<form data-ng-submit="searchGroupsList(grpsPageInfo.showPage-1,grpsPageInfo)">
+			<span class="span-lt"><span translate="content.operations.results"></span>{{grpsPageInfo.totalElements}}</span>
+			<span class="span-lt"><span translate="content.operations.pages"></span>{{grpsPageInfo.totalPages}}</span>
+			<span class="span-lt"><span translate="content.operations.size"></span>
+				<select data-ng-model="grpsPageInfo.size" data-ng-change="searchGroupsList(0,grpsPageInfo)"
+						data-ng-options="x for x in [10,20,50,100]">
+				</select>
+			</span>
+   			<span>
+   				<button type="button" data-ng-click="searchGroupsList(0,grpsPageInfo)" data-ng-if="!(grpsPageInfo.number<0)"
+   					class="btn-sm btn-white" translate="content.pageInfo.first"></button>
+   			</span>
+   			<span>
+   				<button type="button" data-ng-click="searchGroupsList(grpsPageInfo.number-1,grpsPageInfo)" class="btn-sm btn-blue"
+   					data-ng-if="(grpsPageInfo.number>0)" translate="content.pageInfo.prev" ></button>
+				<button type="button" class="btn-sm btn-blue btn-disabled" data-ng-if="!(grpsPageInfo.number>0)"
+					translate="content.pageInfo.prev" ></button>
+   			</span>
+   			<span class="pageInfo-number">
+   				<a data-ng-click="searchGroupsList(0,grpsPageInfo)" data-ng-if="(grpsPageInfo.number>2)">1</a>
+   				<a data-ng-click="searchGroupsList(1,grpsPageInfo)" data-ng-if="(grpsPageInfo.number>3)">2</a>
+   				<a data-ng-if="(grpsPageInfo.number>4)">......</a>
+   				<a data-ng-click="searchGroupsList(grpsPageInfo.number-2,grpsPageInfo)"
+   					data-ng-if="(grpsPageInfo.number>1)">{{grpsPageInfo.number-1}}</a>
+   				<a data-ng-click="searchGroupsList(grpsPageInfo.number-1,grpsPageInfo)"
+   					data-ng-if="(grpsPageInfo.number>0)">{{grpsPageInfo.number}}</a>
+   				<a style="color: black;">{{grpsPageInfo.number+1}}</a>
+   				<a data-ng-click="searchGroupsList(grpsPageInfo.number+1,grpsPageInfo)"
+   					data-ng-if="(grpsPageInfo.number+1<grpsPageInfo.totalPages)">{{grpsPageInfo.number+2}}</a>
+   				<a data-ng-click="searchGroupsList(grpsPageInfo.number+2,grpsPageInfo)"
+   					data-ng-if="(grpsPageInfo.number+2<grpsPageInfo.totalPages)">{{grpsPageInfo.number+3}}</a>
+   				<a data-ng-if="(grpsPageInfo.number+5<grpsPageInfo.totalPages)">......</a>
+   				<a data-ng-click="searchGroupsList(grpsPageInfo.totalPages-2,grpsPageInfo)"
+  					data-ng-if="(grpsPageInfo.number+3<grpsPageInfo.totalPages) && (grpsPageInfo.number+4!=grpsPageInfo.totalPages)">
+  					{{grpsPageInfo.totalPages-1}}</a>
+  				<a data-ng-click="searchGroupsList(grpsPageInfo.totalPages-1,grpsPageInfo)"
+  					data-ng-if="(grpsPageInfo.number+4<=grpsPageInfo.totalPages)">{{grpsPageInfo.totalPages}}</a>
+   			</span>
+   			<span>
+   				<button type="button" data-ng-click="searchGroupsList(grpsPageInfo.number+1,grpsPageInfo)" class="btn-sm btn-blue"
+   					data-ng-if="(grpsPageInfo.number+1<grpsPageInfo.totalPages)" translate="content.pageInfo.next"></button>
+				<button type="button" class="btn-sm btn-blue btn-disabled" data-ng-if="!(grpsPageInfo.number+1<grpsPageInfo.totalPages)"
+					translate="content.pageInfo.next"></button>
+   			</span>
+   			<span>
+				<button type="button" data-ng-click="searchGroupsList(grpsPageInfo.totalPages-1,grpsPageInfo)" data-ng-if="!(grpsPageInfo.number<0)"
+					class="btn-sm btn-white" translate="content.pageInfo.last"></button>
+			</span>
+   			<span>
+   				<input type="number" step="1" data-ng-model="grpsPageInfo.showPage" max="{{grpsPageInfo.totalPages}}" required="required"
+   						min="1" data-ng-if="(grpsPageInfo.totalPages>0)" >
+   				<input type="number" step="1" data-ng-model="grpsPageInfo.showPage" max="1" min="1" readonly="readonly"
+   						data-ng-if="!(grpsPageInfo.totalPages>0)" >
+   				<input type="submit" class="btn-sm btn-blue btn-go" value="GO">
+   			</span>
+		</form>
+	</div>
+  		
+   	<div class="modal fade" id="alertModal" tabindex="-1" style="z-index: 1099;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">×</button>
+					<h4 class="modal-title" data-ng-bind="alert_title"></h4>
+				</div>
+				<div class="modal-body">
+					<span data-ng-bind="alert_message" style="color: red;"></span>
+				</div>
+	            <div class="modal-footer"></div>
+	        </div>  
+	    </div> 
+	</div>
+
+	<div class="modal fade" id="serversModal" tabindex="-1">
+		<div class="modal-dialog" style="width: 80%;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">×</button>
+					<h4 class="modal-title">
+						<span translate="content.servers.list"></span>
+					</h4>
+				</div>
+				<div class="modal-body table-div" style="border: none;padding: 0px 0px;">
+					<table>
+						<thead>
+							<tr>
+								<td nowrap="nowrap"><span translate="content.no"></span></td>
+								<td nowrap="nowrap"><span translate="content.servers.name"></span></td>
+								<td nowrap="nowrap"><span translate="content.servers.status"></span></td>
+								<td nowrap="nowrap"><span translate="content.servers.ipAddress"></span></td>
+								<td nowrap="nowrap"><span translate="content.servers.max"></span></td>
+								<td nowrap="nowrap"><span translate="content.servers.rest"></span></td>
+								<td nowrap="nowrap"><span translate="content.operations.operation"></span></td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr data-ng-repeat="server in serversList">
+								<td data-ng-bind="$index+1+pageInfo.number*pageInfo.size" data-ng-if="server.remanentCapacity>0"></td>
+								<td data-ng-bind="$index+1+pageInfo.number*pageInfo.size" data-ng-if="!(server.remanentCapacity>0)"
+									style="background-color: #fcf8e3;"></td>
+								<td data-ng-if="server.remanentCapacity>0"><span>{{server.name}}</span></td>
+								<td	data-ng-if="!(server.remanentCapacity>0)" style="background-color: #fcf8e3;"><span>{{server.name}}</span></td>
+								<td data-ng-if="server.remanentCapacity>0">
+									<span data-ng-if="server.status==0 || !(server.status)" translate="content.servers.status1"></span>
+									<span data-ng-if="server.status==1" translate="content.servers.status0"></span>
+								</td>
+								<td data-ng-if="!(server.remanentCapacity>0)" style="background-color: #fcf8e3;">
+									<span data-ng-if="server.status==0 || !(server.status)" translate="content.servers.status1"></span>
+									<span data-ng-if="server.status==1" translate="content.servers.status0"></span>
+								</td>
+								<td data-ng-if="server.remanentCapacity>0">
+									<span>{{server.ipAddress}}</span>
+									<span data-ng-if="server.ipAddress && server.domain">/</span>
+									<span>{{server.domain}}</span>
+								</td>
+								<td data-ng-if="!(server.remanentCapacity>0)" style="background-color: #fcf8e3;">
+									<span>{{server.ipAddress}}</span>
+									<span data-ng-if="server.ipAddress && server.domain">/</span>
+									<span>{{server.domain}}</span>
+								</td>
+								<td data-ng-if="server.remanentCapacity>0"><span>{{server.maxCapacity}}</span></td>
+								<td data-ng-if="!(server.remanentCapacity>0)" style="background-color: #fcf8e3;">
+									<span>{{server.maxCapacity}}</span>
+								</td>
+								<td data-ng-if="server.remanentCapacity>0"><span>{{server.remanentCapacity}}</span></td>
+								<td data-ng-if="!(server.remanentCapacity>0)" style="background-color: #fcf8e3;">
+									<span>{{server.remanentCapacity}}</span>
+								</td>
+								<td data-ng-if="server.remanentCapacity>0">
+									<button data-ng-click="arrangeToServer(server)" class="btn-sm btn-blue" style="width: 100px !important;"
+										translate="content.servers.operations.arrange" data-ng-disabled="!(server.status==0)"></button>
+								</td>
+								<td data-ng-if="!(server.remanentCapacity>0)" style="background-color: #fcf8e3;">
+									<button data-ng-click="arrangeToServer(server)" class="btn-sm btn-blue" style="width: 100px !important;"
+										translate="content.servers.operations.arrange" data-ng-disabled="!(server.status==0)"></button>
+								</td>
+							</tr>
+							<tr data-ng-if="pageInfo.totalElements<1">
+								<td colspan="7" class="empty-td">
+			   						<span translate="content.table.nodata"></span>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<div align="right" class="pageInfo" >
+						<span style="color: red;float: left;" id="err_msg">{{err_arrange}}</span>
+						<form data-ng-submit="searchList(pageInfo.showPage-1,pageInfo)">
+				   			<span>
+				   				<button type="button" data-ng-click="searchList(0,pageInfo)" data-ng-if="!(pageInfo.number<0)"
+				   					class="btn-sm btn-white" translate="content.pageInfo.first"></button>
+				   			</span>
+				   			<span>
+				   				<button type="button" data-ng-click="searchList(pageInfo.number-1,pageInfo)" class="btn-sm btn-blue"
+				   					data-ng-if="(pageInfo.number>0)" translate="content.pageInfo.prev" ></button>
+								<button type="button" class="btn-sm btn-blue btn-disabled" data-ng-if="!(pageInfo.number>0)"
+									translate="content.pageInfo.prev" ></button>
+				   			</span>
+				   			<span class="pageInfo-number">
+				   				<a data-ng-click="searchList(0,pageInfo)" data-ng-if="(pageInfo.number>2)">1</a>
+				   				<a data-ng-click="searchList(1,pageInfo)" data-ng-if="(pageInfo.number>3)">2</a>
+				   				<a data-ng-if="(pageInfo.number>4)">......</a>
+				   				<a data-ng-click="searchList(pageInfo.number-2,pageInfo)"
+				   					data-ng-if="(pageInfo.number>1)">{{pageInfo.number-1}}</a>
+				   				<a data-ng-click="searchList(pageInfo.number-1,pageInfo)"
+				   					data-ng-if="(pageInfo.number>0)">{{pageInfo.number}}</a>
+				   				<a style="color: black;">{{pageInfo.number+1}}</a>
+				   				<a data-ng-click="searchList(pageInfo.number+1,pageInfo)"
+				   					data-ng-if="(pageInfo.number+1<pageInfo.totalPages)">{{pageInfo.number+2}}</a>
+				   				<a data-ng-click="searchList(pageInfo.number+2,pageInfo)"
+				   					data-ng-if="(pageInfo.number+2<pageInfo.totalPages)">{{pageInfo.number+3}}</a>
+				   				<a data-ng-if="(pageInfo.number+5<pageInfo.totalPages)">......</a>
+				   				<a data-ng-click="searchList(pageInfo.totalPages-2,pageInfo)"
+				  					data-ng-if="(pageInfo.number+3<pageInfo.totalPages) && (pageInfo.number+4!=pageInfo.totalPages)">
+				  					{{pageInfo.totalPages-1}}</a>
+				  				<a data-ng-click="searchList(pageInfo.totalPages-1,pageInfo)"
+				  					data-ng-if="(pageInfo.number+4<=pageInfo.totalPages)">{{pageInfo.totalPages}}</a>
+				   			</span>
+				   			<span>
+				   				<button type="button" data-ng-click="searchList(pageInfo.number+1,pageInfo)" class="btn-sm btn-blue"
+				   					data-ng-if="(pageInfo.number+1<pageInfo.totalPages)" translate="content.pageInfo.next"></button>
+								<button type="button" class="btn-sm btn-blue btn-disabled" data-ng-if="!(pageInfo.number+1<pageInfo.totalPages)"
+									translate="content.pageInfo.next"></button>
+				   			</span>
+				   			<span>
+								<button type="button" data-ng-click="searchList(pageInfo.totalPages-1,pageInfo)" data-ng-if="!(pageInfo.number<0)"
+									class="btn-sm btn-white" translate="content.pageInfo.last"></button>
+							</span>
+				   			<span>
+				   				<input type="number" step="1" data-ng-model="pageInfo.showPage" max="{{pageInfo.totalPages}}" required="required"
+				   						min="1" data-ng-if="(pageInfo.totalPages>0)" style="border: solid 1px #999;"/>
+				   				<input type="number" step="1" data-ng-model="pageInfo.showPage" max="1" min="1" readonly="readonly"
+				   						data-ng-if="!(pageInfo.totalPages>0)" style="border: solid 1px #999;"/>
+				   				<input type="submit" class="btn-sm btn-blue btn-go" value="GO">
+				   			</span>
+						</form>
+					</div>
+				</div>
+	            <div class="modal-footer">
+	            </div>
+	        </div>  
+	    </div> 
+	</div>
+</div>
+
+<div class="modal fade" id="confirmModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title">
+					<span translate="content.servers.operations.arrange"></span>
+				</h4>
+			</div>
+			<div class="modal-body">
+				<span translate="content.servers.arrange_msg0"></span>
+				<span style="margin: 10px 10px;color: red;" data-ng-bind="server.name"></span>
+				<span translate="content.servers.arrange_msg1"></span>
+			</div>
+            <div class="modal-footer">
+            	<button type="button" class="btn-sm btn-blue" data-ng-click="arrangeServer(server)"
+            		translate="content.operations.ok"></button>  
+                <button type="button"class="btn-sm btn-white" data-dismiss="modal" translate="content.operations.cancel"></button>  
+            </div>
+        </div>  
+    </div> 
+</div>

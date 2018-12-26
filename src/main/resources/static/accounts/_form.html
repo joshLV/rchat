@@ -1,0 +1,189 @@
+<div class="content-div">
+	<div class="table-div">
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" class="tb-title"><span translate="content.accounts.title"></span></th>
+					<th ></th>
+				</tr>
+			</thead>
+		</table>
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" style="border-right: none;" ><span translate="content.accounts.form"></span></th>
+					<th style="border-left: none;"></th>
+				</tr>
+			</thead>
+		</table>
+		<form name="accountForm" data-ng-submit="createAccounts(talkback_user)">
+			<div>
+				<label><span translate="content.accounts.count"></span></label>
+				<input class="text-class" type="number" data-ng-model="talkback_user.count" step="1" min="1" max="9999"/>
+				<font color="red">*</font>
+			</div>
+			<div class="radio-div">
+				<label><span translate="content.accounts.rule"></span></label>
+				<label>
+					<input type="radio" data-ng-model="talkback_user.strategy"  data-ng-checked="!(talkback_user.strategy) || talkback_user.strategy!=0"
+						 value="1" />
+					<span translate="content.accounts.rule1"></span>
+				</label>
+				<label>
+					<input type="radio" data-ng-model="talkback_user.strategy" value="0" />
+					<span translate="content.accounts.rule0"></span>
+				</label>
+			</div>
+			<div>
+		        <label><span translate="content.accounts.password"></span></label>		               
+		        <input class="text-class" type="password"  data-ng-model="talkback_user.password" name="password" 
+                   maxlength="16" autocomplete="off" pattern="[\w\d]*" title="由不超过16位的数字和字母组成!">
+            	<span style="color: #ff3138" data-ng-show="accountForm.password.$invalid">
+					<span data-ng-show="accountForm.password.$error.pattern" data-translate="content.errors.err9"></span>
+				</span>
+		  	</div>
+		  	<div>
+				<label><span translate="content.accounts.length"></span></label>
+				<select class="text-class" data-ng-model="talkback_user.shortValueLength">
+						<option value="" translate="content.operations.selection"></option>
+						<option value="{{x}}" data-ng-repeat="x in ['4']">{{x}}</option>
+				</select>
+			</div>
+			<div data-ng-if="loginUser.type < 2">
+				<label><span translate="content.agents.attach_agent"></span></label>
+				<select class="text-class" data-ng-model="talkback_user.agent" data-ng-change="changeAgent(talkback_user.agent)"
+						data-ng-options="agt.id as agt.name for agt in agentsList" required="required">
+						<option value="" translate="content.operations.selection"></option>
+				</select>
+				<font color="red">*</font>
+			</div>
+			<div data-ng-if="loginUser.type < 2">
+				<label><span translate="content.groups.attach_agentSegment"></span></label>
+				<select class="text-class" data-ng-model="talkback_user.agentSegment" data-ng-change="changeAgentSegment(talkback_user.agentSegment)"
+						data-ng-options="agt.id as agt.fullValue for agt in agentSegmentsList" required="required">
+						<option value="" translate="content.operations.selection"></option>
+				</select>
+				<font color="red">*</font>
+			</div>
+			<div data-ng-if="loginUser.type < 2">
+				<label><span translate="content.departments.attach_group"></span></label>
+				<select class="text-class" data-ng-model="talkback_user.group.id" data-ng-change="changeGroup(talkback_user.group.id)"
+						data-ng-options="grp.group.id as grp.group.name for grp in groupsList" required="required">
+						<option value="" translate="content.operations.selection"></option>
+				</select>
+				<font color="red">*</font>
+			</div>
+			<div data-ng-if="loginUser.type > 2">
+				<label><span translate="content.departments.attach_group"></span></label>
+				<select class="text-class" data-ng-model="talkback_user.group.id" >
+						<option value="{{defaultGroup.id}}" >{{defaultGroup.name}}</option>
+				</select>
+				<font color="red">*</font>
+			</div>
+			<div>
+				<label><span translate="content.accounts.attach_groupSegment"></span></label>
+				<select class="text-class" data-ng-model="talkback_user.groupSegment.id"
+						data-ng-options="gs.id as gs.fullValue for gs in groupSegmentsList" required="required">
+						<option value="" translate="content.operations.selection"></option>
+				</select>
+				<font color="red">*</font>
+			</div>
+			<div>
+				<label><span translate="content.departments.attach_department"></span></label>
+				<select class="text-class" data-ng-model="talkback_user.department.id" 
+						data-ng-options="department.id as department.name for department in departments" required="required">
+						<option value="" translate="content.operations.selection"></option>
+				</select>
+				<font color="red">*</font>
+			</div>
+			<div>
+				<label><span translate="content.accounts.callOut"></span></label>
+				<label>
+					<input type="checkbox" name="callOutPermissions" value="0"/>
+					<span translate="content.accounts.callOut1"></span>
+				</label>
+				<label>
+					<input type="checkbox" name="callOutPermissions" value="1"/>
+					<span translate="content.accounts.callOut2"></span>
+				</label>
+				<label>
+					<input type="checkbox" name="callOutPermissions" value="2"/>
+					<span translate="content.accounts.callOut3"></span>
+				</label>
+			</div>
+			<div>
+				<label><span translate="content.accounts.callIn"></span></label>
+				<label>
+					<input type="checkbox" name="callInPermissions" value="0"/>
+					<span translate="content.accounts.callIn1"></span>
+				</label>
+				<label>
+					<input type="checkbox" name="callInPermissions" value="1"/>
+					<span translate="content.accounts.callIn2"></span>
+				</label>
+				<label>
+					<input type="checkbox" name="callInPermissions" value="2"/>
+					<span translate="content.accounts.callIn3"></span>
+				</label>
+			</div>
+			<div class="w-radio-div">
+				<label><span translate="content.accounts.gps0"></span></label>
+				<label>
+					<input type="radio" name="location" data-ng-model="talkback_user.gpsPermission.enabled"
+						data-ng-checked="!(talkback_user.gpsPermission.enabled) || (talkback_user.gpsPermission.enabled!=0
+							&& talkback_user.gpsPermission.enabled!=false)" value="1" />
+					<span translate="content.operations.open"></span>
+				</label>
+				<label data-ng-if="false">
+					<input type="radio" name="location" data-ng-model="talkback_user.gpsPermission.enabled" value="0" />
+					<span translate="content.operations.close"></span>
+				</label>
+			</div>
+			<div class="row">
+				<label><span translate="content.groups.business_scope"></span></label>			
+				<div class="box-group" style="margin-left: 25.7%">
+					<label data-ng-repeat="business in busy" style="margin-right: 12px">
+						<input name="business" type="checkbox" data-ng-checked="business.internal"
+							data-ng-value="business.id" data-ng-disabled="business.internal" />{{business.name}}
+					</label>
+				</div>
+			</div>
+			<div style="margin-top: 4em">
+				<label><span translate="content.accounts.gps0_time"></span></label>
+				<input type="number" data-ng-model="talkback_user.gpsPermission.interval" max="3600" min="10" step="1" data-ng-init="10"
+					data-ng-disabled="talkback_user.gpsPermission.enabled==0" class="text-class" />
+				<span translate="content.accounts.seconds"></span>
+			</div>
+			<div>
+				<label></label>
+				<button type="submit" class="btn-sm btn-blue" translate="content.operations.ok"></button>
+				<button type="reset" class="btn-sm btn-white" data-ng-click="resetForm()" translate="content.operations.clear"></button>
+			</div>
+		</form>
+    </div> 
+</div>
+
+<div class="modal fade" id="alertModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4 class="modal-title" data-ng-bind="alert_title"></h4>
+			</div>
+			<div class="modal-body">
+				<span data-ng-bind="alert_message"></span>
+			</div>
+      		<div class="modal-footer"></div>
+    	</div>  
+	</div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<span data-ng-bind="alert_message" translate="content.modals.waitting"></span>
+			</div>
+    	</div>  
+	</div>
+</div>

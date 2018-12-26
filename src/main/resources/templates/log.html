@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+
+    <base th:href="${#httpServletRequest.getContextPath() + '/'}" />
+	<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+	<title>融洽对讲管理平台--日志</title>
+	
+	<!-- Bootstrap -->
+    <link href="stylesheets/bootstrap.min.css" rel="stylesheet" />
+    
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+		<script src="javascripts/html5shiv.min.js"></script>
+		<script src="javascripts/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="container">
+        <h1>你好，世界！</h1>
+        <div class="well">
+            <table class="table table-bordered table-hover table-striped" th:object="${logPage}">
+            	<thead>
+            	   <tr>
+						<th>序号</th>
+						<th>用户</th>
+						<th>操作</th>
+						<th>资源</th>
+						<th>状态</th>
+						<th>消息</th>
+						<th>地址</th>
+						<th>时间</th>
+						<th>操作</th>
+            	   </tr>
+            	</thead>
+            	<tbody>
+            	   <tr th:each="l, s : *{content}">
+            	       <td th:text="${s.count}">1</td>
+            	       <td th:text="${l.operator.name}"></td>
+            	       <td th:text="${l.operation}"></td>
+            	       <td th:text="${l.resource}"></td>
+            	       <td th:text="${l.status.ordinal() == 0 ? '成功' : '失败'}"></td>
+            	       <td th:text="${l.message}"></td>
+            	       <td th:text="${l.url}"></td>
+            	       <td th:text="${l.createdAt}"></td>
+            	       <td>
+                            <a href="details.html" th:href="@{/log/{logId}/details.html(logId=${l.id})}">详细</a>
+            	       </td>
+            	   </tr>
+            	</tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

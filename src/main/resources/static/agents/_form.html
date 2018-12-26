@@ -1,0 +1,222 @@
+<div class="content-div">
+	<div class="table-div">
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" class="tb-title">
+						<span translate="content.agents.title"></span>
+					</th>
+					<th ></th>
+				</tr>
+			</thead>
+		</table>
+		<table >
+			<thead>
+				<tr>
+					<th width="20%" style="border-right: none;"><span translate="content.agents.form"></span></th>
+					<th style="border-left: none;"></th>
+				</tr>
+			</thead>
+		</table>
+		<form name="agentForm" data-ng-submit="createOrUpdateAgent(agent)">
+			<div>
+				<label><span translate="content.agents.name"></span></label>
+				<input type="text" class="text-class" data-ng-model="agent.name" required="required" maxlength="16"
+					pattern="^[\u4e00-\u9fa5a-zA-Z0-9]+$" name="name" title="是不超过16位的数字、字母、汉字的组合!"/>
+				<span style="color: #ff3138" data-ng-show="agentForm.name.$invalid">
+					<span data-ng-show="agentForm.name.$error.required"><font color="red">*</font></span>
+					<span data-ng-show="agentForm.name.$error.pattern" data-translate="content.errors.err5"></span>
+				</span>	
+			</div>
+			<div>
+				<label><span translate="content.agents.admin.name"></span></label>
+				<input type="text" class="text-class" data-ng-model="agent.administrator.name" required="required"
+					pattern="^[\u4e00-\u9fa5a-zA-Z0-9]+$" maxlength="16" name="adminname" title="是不超过16位的数字、字母、汉字的组合!"/>
+				<span style="color: #ff3138" data-ng-show="agentForm.adminname.$invalid">
+					<span data-ng-show="agentForm.adminname.$error.required"><font color="red">*</font></span>
+					<span data-ng-show="agentForm.adminname.$error.pattern" data-translate="content.errors.err5"></span>
+				</span>	
+			</div>
+			<div>
+				<label><span translate="content.agents.admin.username"></span></label>
+				<input type="text" id="administrator_username" class="text-class" data-ng-model="agent.administrator.username"
+					required="required" data-ng-if="!(agent.id)" name="username" data-ng-minlength="8" maxlength="16"
+					autocomplete="off" pattern="[\w\d_]*" title="由8-16位的数字、字母、下划线组成!"/>
+				<input type="text" id="administrator_username" class="disabled-class" data-ng-model="agent.administrator.username"
+					required="required" data-ng-if="agent.id" readonly="readonly" name="username" />
+				<span style="color: #ff3138" data-ng-show="agentForm.username.$invalid">
+					<span data-ng-show="agentForm.username.$error.required"><font color="red">*</font></span>
+					<span data-ng-show="agentForm.username.$error.minlength" data-translate="content.errors.err6"></span>
+					<span data-ng-show="agentForm.username.$error.pattern" data-translate="content.errors.err7"></span>
+				</span>
+			</div>
+			<div data-ng-if="!(agent.id)">
+				<label><span translate="content.agents.admin.password"></span></label>
+				<input type="password" class="text-class" data-ng-model="agent.administrator.password" required="required"
+					name="password" data-ng-minlength="8" maxlength="16" autocomplete="off" pattern="[\w\d@_]*" title="由8-16位的数字、字母、下划线和@组成!"/>
+				<span style="color: #ff3138" data-ng-show="agentForm.password.$invalid">
+					<span data-ng-show="agentForm.password.$error.required"><font color="red">*</font></span>
+					<span data-ng-show="agentForm.password.$error.minlength" data-translate="content.errors.err6"></span>
+					<span data-ng-show="agentForm.password.$error.pattern" data-translate="content.errors.err8"></span>
+				</span>
+			</div>
+			<div data-ng-if="!(agent.id)">
+				<label><span translate="content.agents.admin.re_password"></span></label>
+				<input type="password" class="text-class" data-ng-model="agent.administrator.re_password"
+					required="required" name="re_password" data-ng-minlength="8" maxlength="16" autocomplete="off" pattern="[\w\d@_]*"/>
+				<span style="color: #ff3138" data-ng-if="agentForm.re_password.$error.required || agentForm.re_password.$error.pattern || agent.administrator.password != agent.administrator.re_password">
+					<span data-ng-show="agentForm.re_password.$error.required"><font color="red">*</font></span>
+					<span data-ng-show="agentForm.re_password.$error.pattern" data-translate="content.errors.err8"></span>
+					<span data-ng-show="agent.administrator.password != agent.administrator.re_password" translate="content.errors.err1"></span>
+				</span>
+			</div>
+			<div data-ng-if="agent.id">
+				<label><span translate="content.agents.admin.password"></span></label>
+				<input type="password" value="********" required="required" disabled="disabled" class="disabled-class">
+				<button type="button" class="btn-sm btn-blue" data-toggle="modal" data-target="#updatePwd" style="width: auto !important;"
+					translate="content.agents.admin.modify"></button>
+			</div>
+			<div data-ng-if="loginUser.type==1 || !(agent.id)">
+				<label><span translate="content.agents.parent"></span></label>
+				<select class="text-class" data-ng-model="agent.parent" data-ng-if="loginUser.type==1 && !(agent.id)"
+						data-ng-options="agt as agt.name for agt in agentsList" data-ng-change="changeAgentToSegment(agent.parent)">
+				</select>
+				<input type="text" data-ng-model="agent.parent.name" data-ng-if="loginUser.type==1 && agent.id"
+						disabled="disabled" class="disabled-class" />
+						
+				<input type="text" data-ng-model="agent.parent.name" data-ng-if="loginUser.type>1 && !(agent.id)"
+						disabled="disabled" class="disabled-class" />
+			</div>
+			<div data-ng-if="agent.parent.level>0 && !(agent.id)">
+				<label><span translate="content.agents.parent_segment"></span></label>
+				<select class="text-class" data-ng-model="agent.segment" data-ng-options="sgt.id as sgt.value for sgt in segmentsList" >
+				</select>
+				<span ><font color="red">*</font></span>
+			</div>
+			<div data-ng-if="agent.parent.level==0 && !agent.id">
+				<label><span translate="content.agents.segment"></span></label>
+				<input type="number" class="text-class" data-ng-model="agent.segment" maxlength="2" pattern="[0-9][0-9]"
+						min="0" max="99" data-ng-if="loginUser.type==1 && !(agent.id)"
+						oninput="if(value.length>1)value=value.slice(0,2)" required="required"/>
+				<span ><font color="red">*</font></span>
+			</div>
+			<div>
+				<label><span translate="content.agents.price"></span></label>
+				<input type="number" class="text-class" data-ng-model="agent.creditUnitPrice" step="0.01" min="0" />
+			</div>
+			<div>
+				<label><span translate="content.agents.region"></span></label>
+				<input type="text" class="text-class" data-ng-model="agent.region" required="required"
+					pattern="^[\u4e00-\u9fa5a-zA-Z0-9]+$" maxlength="16" name="region" title="是不超过16位的数字、字母、汉字的组合!"/>
+				<span style="color: #ff3138" data-ng-show="agentForm.region.$invalid">
+					<span data-ng-show="agentForm.region.$error.required"><font color="red">*</font></span>
+					<span data-ng-show="agentForm.region.$error.pattern" data-translate="content.errors.err5"></span>
+				</span>	
+			</div>
+			<div>
+				<label><span translate="content.agents.linkman"></span></label>
+				<input type="text" class="text-class" data-ng-model="agent.linkman" maxlength="100" />
+			</div>
+			<div>
+				<label><span translate="content.agents.phone"></span></label>
+				<input type="tel" class="text-class" data-ng-model="agent.phone" maxlength="100" />
+			</div>
+			<div>
+				<label><span translate="content.agents.email"></span></label>
+				<input type="email" class="text-class" data-ng-model="agent.email" maxlength="100" />
+			</div>
+			<div data-ng-if="loginUser.type==1">
+				<label></label>
+				<label>
+					<input type="radio" data-ng-model="agent.type" data-ng-checked="!(agent.type) || agent.type==0" data-ng-value="0" name="type">
+					<span translate="content.agents.type1"></span>
+				</label>
+				<label>
+					<input type="radio" data-ng-model="agent.type" data-ng-value="1" name="type">
+					<span translate="content.agents.type0"></span>
+				</label>
+			</div>
+			<div>
+				<label></label>
+				<button type="submit" class="btn-sm btn-blue" data-ng-disabled="agentForm.password.$invalid
+					|| !(agent.type>-1) || agent.administrator.password != agent.administrator.re_password" data-ng-if="loginUser.type==1" translate="content.operations.submit"></button>
+				<button type="submit" class="btn-sm btn-blue" data-ng-disabled="agentForm.password.$invalid || agent.administrator.password != agent.administrator.re_password"
+					data-ng-if="loginUser.type>1" translate="content.operations.submit"></button>
+				<button type="reset" class="btn-sm btn-white" data-ng-if="!(agent.id)" translate="content.operations.reset"></button>
+<!-- 				<button type="button" class="btn-sm btn-white" translate="content.operations.return" -->
+<!-- 					data-ng-if="agent.id" data-ng-click="resetForm()" ></button> -->
+				<a class="btn btn-sm btn-white" translate="content.operations.return" href="javascript:history.go(-1)"
+					data-ng-if="agent.id" style="margin-left: 100px;width: 66px;"></a>
+			</div>
+		</form>
+	</div>
+	
+<!-- 	重置密码modal -->
+	<div class="modal fade" id="updatePwd" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">×</button>
+					<h4 class="modal-title" id="myModalLabel">
+						<span translate="content.agents.admin.modify"></span>
+					</h4>
+				</div>
+	            <form name="updatePwdForm" data-ng-submit="updatePwd(agent.administrator)">
+	            	<div class="modal-body">
+	            		<div>
+	            			<label><span translate="content.agents.admin.old_password"></span></label>
+	            			<input type="password" data-ng-model="agent.administrator.password" name="oldPassword" autocomplete="off" pattern="[\w\d@_]*"
+	            				data-ng-blur="updatePwdForm.oldPassword.error=true" data-ng-focus="updatePwdForm.oldPassword.error=false"
+	            				maxlength="50" data-ng-minlength="8" required class="text-class" />
+							<div class="error-msg" data-ng-show="updatePwdForm.oldPassword.error">
+								<span data-ng-show="updatePwdForm.oldPassword.$invalid" translate="content.errors.err2"></span>
+							</div>
+	            		</div>
+	            		<div>
+	            			<label><span translate="content.agents.admin.new_password"></span></label>
+	            			<input type="password" data-ng-model="agent.administrator.newPassword" name="newPassword" autocomplete="off" pattern="[\w\d@_]*"
+	            				data-ng-blur="updatePwdForm.newPassword.error=true" data-ng-focus="updatePwdForm.newPassword.error=false"
+	            				maxlength="50" data-ng-minlength="8" required class="text-class" />
+		            		<div class="error-msg" data-ng-show="updatePwdForm.newPassword.error && updatePwdForm.oldPassword.$valid">
+								<span data-ng-show="updatePwdForm.newPassword.$invalid" translate="content.errors.err3"></span>
+							</div>
+	            		</div>
+	            		<div>
+	            			<label><span translate="content.agents.admin.re_password"></span></label>
+	            			<input type="password" data-ng-model="agent.administrator.rePassword" name="rePassword" autocomplete="off" maxlength="50"
+	            				class="text-class" data-ng-minlength="8" required />
+							<div class="error-msg" data-ng-show="updatePwdForm.rePassword.error">
+								<span data-ng-show="agent.administrator.newPassword != agent.administrator.rePassword" translate="content.errors.err4"></span>
+							</div>
+						</div>
+						<div>
+							<div id="message" class="error-msg">
+							</div>
+						</div>
+		            </div>  
+		            <div class="modal-footer">  
+		                <button type="submit" class="btn-sm btn-blue" data-ng-disabled="updatePwdForm.$invalid 
+		                	|| agent.administrator.newPassword != agent.administrator.rePassword" translate="content.operations.ok"></button>  
+		                <button type="button" class="btn-sm btn-white" data-dismiss="modal" translate="content.operations.cancel"></button>  
+		            </div>
+	            </form>  
+	        </div>  
+	    </div> 
+	</div>
+	
+	<div class="modal fade" id="alertModal" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">×</button>
+					<h4 class="modal-title" data-ng-bind="alert_title"></h4>
+				</div>
+				<div class="modal-body">
+					<span data-ng-bind="alert_message"></span>
+				</div>
+	            <div class="modal-footer"></div>
+	        </div>  
+	    </div> 
+	</div>
+	
+</div>

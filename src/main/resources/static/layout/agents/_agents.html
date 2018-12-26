@@ -1,0 +1,51 @@
+<div data-ng-if="loginUser.type==1" class="details-view" >
+	<div class="table-title">
+		<i class="iconfont icon-cushuxian"></i>
+		<h4 translate="content.agents.title"></h4>
+	</div>
+	<div class="details-div" >
+<!-- 		<div id="agentTreeView" data-tree-view data-items="agents" data-adapter="agentAdapter"></div> -->
+		<div id="agentTreeView" >
+			<div class="tree-class">
+				<div data-ng-repeat="agentTree in agentsTree">
+					<a href="javascript:void(0)" data-ng-click="toggleMenu(agentTree)" >{{agentTree.name}}</a>
+					<div data-ng-repeat="agent1 in agentTree.children | orderBy:'-name'" data-ng-if="agentTree.showTree">
+						<hr />
+						<a href="javascript:void(0)" data-ng-click="toggleMenu(agent1)" class="icon-jianhao"
+							 data-ng-if="agent1.showTree">&nbsp;&nbsp;</a>
+					 	<a href="javascript:void(0)" data-ng-click="toggleMenu(agent1)" class="icon-jiahao"
+							 data-ng-if="!(agent1.showTree)">&nbsp;&nbsp;</a>
+						<a href="javascript:void(0)" data-ng-click="goAgentDetails(agent1)" >{{agent1.name}}</a>
+						<div data-ng-repeat="agent2 in agent1.children" data-ng-if="agent1.showTree">
+							<a href="javascript:void(0)" data-ng-click="toggleMenu(agent2)" class="icon-jianhao"
+								data-ng-if="agent2.showTree">&nbsp;&nbsp;</a>
+							<a href="javascript:void(0)" data-ng-click="toggleMenu(agent2)" class="icon-jiahao"
+								data-ng-if="!(agent2.showTree)">&nbsp;&nbsp;</a>
+							<a href="javascript:void(0)" data-ng-click="goAgentDetails(agent2)" >{{agent2.name}}</a>
+							<div data-ng-repeat="agent3 in agent2.children" data-ng-if="agent2.showTree">
+								<a href="javascript:void(0)" data-ng-click="goAgentDetails(agent3)" >{{agent3.name}}</a>
+								<div data-ng-repeat="agent4 in agent3.children" >
+									<a href="javascript:void(0)" data-ng-click="goAgentDetails(agent4)" >{{agent4.name}}</a>
+									<div data-ng-repeat="agent5 in agent4.children" >
+										<a href="javascript:void(0)" data-ng-click="goAgentDetails(agent5)" >{{agent5.name}}</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div data-ui-view="content" class="details-content0"></div>
+	</div>
+</div>
+
+<div data-ng-if="loginUser.type!=1" class="details-view" >
+	<div class="table-title">
+		<i class="iconfont icon-cushuxian"></i>
+		<h4 translate="content.agents.title"></h4>
+	</div>
+	<div class="details-div" >
+		<div data-ui-view="content" class="details-content1"></div>
+	</div>
+</div>
