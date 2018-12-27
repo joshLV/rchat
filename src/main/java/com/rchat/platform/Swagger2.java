@@ -33,7 +33,7 @@ public class Swagger2 {
                 .description("测试")
                 .termsOfServiceUrl("http://www.duanxiaowei.top")
                 .contact("wukeyang")
-                .version("1.0")
+                .version("2.0")    
                 .build();
     }
 
