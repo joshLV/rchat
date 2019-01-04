@@ -1,5 +1,6 @@
 package com.rchat.platform.web.controller.api;
 
+import com.rchat.platform.common.LogAPI;
 import com.rchat.platform.domain.Group;
 import com.rchat.platform.domain.Server;
 import com.rchat.platform.jms.TopicNameConstants;
@@ -31,7 +32,7 @@ public class ServerController {
     private TalkbackUserService talkbackUserService;
     @Autowired
     private JmsTemplate jms;
-
+    @LogAPI("新增服务器")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Server create(@RequestBody Server server) {

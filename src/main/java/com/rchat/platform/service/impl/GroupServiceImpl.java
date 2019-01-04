@@ -5,6 +5,7 @@ import com.rchat.platform.aop.ResourceType;
 import com.rchat.platform.aop.SecurityMethod;
 import com.rchat.platform.aop.SecurityService;
 import com.rchat.platform.common.RchatUtils;
+import com.rchat.platform.common.ToolsUtil;
 import com.rchat.platform.domain.*;
 import com.rchat.platform.domain.DepartmentPrivilege.OverLevelCallType;
 import com.rchat.platform.exception.CannotDeleteExeption;
@@ -55,6 +56,8 @@ public class GroupServiceImpl extends AbstractService<Group, String> implements 
     private ServerService serverService;
     @Autowired
     private SummaryService summaryService;
+    @Autowired
+    private AgentService agentService;
     
     @Autowired
     private JmsTemplate jms;
@@ -91,6 +94,14 @@ public class GroupServiceImpl extends AbstractService<Group, String> implements 
         group.setTotalSpace(512000);
         group.setUsedSpace(0);
         group.setDeadline(new Date(0));
+        //根据代理商id获取代理商信息
+        Agent agent=agentService.findOne(group.getAgent().getId()).get();
+        //判断是否存在默认的代理商服务器ip
+        if(ToolsUtil.isNotEmpty(agent)&&ToolsUtil.isNotEmpty(agent.getServerId())){
+        	Server server=new Server();
+        	server.setId(agent.getServerId());
+        	group.setServer(server);
+        }
 
         // 创建集团
         group = super.create(group);

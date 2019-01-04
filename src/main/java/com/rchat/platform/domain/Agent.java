@@ -99,6 +99,10 @@ public class Agent extends TimestampedResource implements Serializable, Comparab
     @ManyToOne
     @JoinColumn(name = "creator", nullable = false)
     private User creator;
+    /**
+     * 服务器ID
+     */
+    private String  serverId;
 
     /**
      * 代理商类型
@@ -367,5 +371,14 @@ public class Agent extends TimestampedResource implements Serializable, Comparab
 
         return detail;
     }
+
+	public String getServerId() {
+		return serverId;
+	}
+
+	public void setServerId(String serverId) {
+		this.serverId = serverId;
+	}
+
 
 }

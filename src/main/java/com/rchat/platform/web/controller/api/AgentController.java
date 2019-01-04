@@ -3,12 +3,16 @@ package com.rchat.platform.web.controller.api;
 import com.rchat.platform.common.LogAPI;
 import com.rchat.platform.common.RchatEnv;
 import com.rchat.platform.common.RchatUtils;
+import com.rchat.platform.common.ToolsUtil;
 import com.rchat.platform.domain.*;
 import com.rchat.platform.exception.NoRightAccessException;
 import com.rchat.platform.jms.TopicNameConstants;
 import com.rchat.platform.service.*;
 import com.rchat.platform.web.exception.*;
 import com.rchat.platform.web.format.AgentTypeFormatter;
+
+import io.swagger.annotations.Api;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,6 +31,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/agents")
+@Api(value="代理商模块")
 public class AgentController {
     @Autowired
     private RchatEnv env;
@@ -51,6 +56,8 @@ public class AgentController {
 
     @Autowired
     private JmsTemplate jms;
+    @Autowired
+    private ServerService serverService;
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
@@ -150,10 +157,15 @@ public class AgentController {
         if (level > 5) {
             throw new LevelDeepException();
         }
+        //判断是否存在服务器ip
+        if(ToolsUtil.isNotEmpty(agent.getServerId())){
+        	agent.setServerId(agent.getServerId());
+        }
 
         agent.setLevel(level);
         agent.setParent(parent);
         agent.setCreator(RchatUtils.currentUser());
+        
 
         // 如果level > 1 说明必须要指定上级代理商的号段，其实之后超级代理商才能创建 == 1 的代理商
         if (agent.getLevel() > 1) {
@@ -385,6 +397,10 @@ public class AgentController {
             throw new IdNotMatchException();
         }
 
+        //判断是否存在服务器ip
+        if(ToolsUtil.isNotEmpty(agent.getServerId())){
+        	agent.setServerId(agent.getServerId());
+        }
         agent = agentService.update(agent);
         jms.convertAndSend(TopicNameConstants.AGENT_UPDATE, agent);
 
