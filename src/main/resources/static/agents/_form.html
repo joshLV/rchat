@@ -100,6 +100,12 @@
 						oninput="if(value.length>1)value=value.slice(0,2)" required="required"/>
 				<span ><font color="red">*</font></span>
 			</div>
+			<div data-ng-if="loginUser.type < 4">
+				<label><span translate="content.servers.attach_server"></span></label>
+				<select class="text-class" data-ng-model="agent.serverId" data-ng-options="slt.id as slt.name for slt in serversList">
+					<option value="" translate="content.operations.selection"></option>
+				</select>
+			</div>
 			<div>
 				<label><span translate="content.agents.price"></span></label>
 				<input type="number" class="text-class" data-ng-model="agent.creditUnitPrice" step="0.01" min="0" />
