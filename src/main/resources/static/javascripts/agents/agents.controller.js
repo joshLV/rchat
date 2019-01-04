@@ -1,10 +1,10 @@
-define([ 'require', 'rchat.module', 'agents/agents.service', 'segments/segments.service', 'credits/credits.service' ],function(require, rchat) {
+define([ 'require', 'rchat.module', 'agents/agents.service', 'segments/segments.service', 'credits/credits.service', 'servers/servers.service' ],function(require, rchat) {
 	'use strict';
 
 	rchat.controller('agentsCtrl', [ '$scope', '$rootScope', '$http', '$state', '$stateParams', 'agentsService'
-		, 'segmentsService', 'creditsService', agentsCtrl ]);
+		, 'segmentsService', 'creditsService', 'serversService', agentsCtrl ]);
 
-	function agentsCtrl($scope, $rootScope, $http, $state, $stateParams, agentsService, segmentsService, creditsService) {
+	function agentsCtrl($scope, $rootScope, $http, $state, $stateParams, agentsService, segmentsService, creditsService, serversService) {
 //				$scope.agentAdapter = agentAdapter;
 		var actions = {
 			'agents' : agentTreeInit,
@@ -51,6 +51,27 @@ define([ 'require', 'rchat.module', 'agents/agents.service', 'segments/segments.
 		//点击树状图查看详情
 		$scope.goAgentDetails = function(agent) {
 			$state.go("agents.details", {id : agent.id}, {reload : false});
+		}
+		
+		function getServerList() {
+			serversService.find(0, 99, null).then(function(data) {
+				$scope.serversList = data.content;
+				$scope.pageInfo = data;
+				$scope.pageInfo.showPage = data.number + 1;
+				$rootScope.pageInfo = data;
+				if($scope.count) {
+					$.each(data.content, function(i) {
+						if($scope.count < data.content[i].remanentCapacity) {
+							data.content[i].enabled = 1;
+						} else {
+							data.content[i].enabled = 0;
+						}
+					});
+					$scope.serversList = data.content;
+				}
+			}, function(err) {
+				console.error(err);
+			});			
 		}
 				
 		//为select的options查询agents并处理从属关系
@@ -105,6 +126,7 @@ define([ 'require', 'rchat.module', 'agents/agents.service', 'segments/segments.
 		function create() {
 //			$scope.title = "新增代理商";
 			getAgentsOptions(4);
+			getServerList();
 		}
 				
 		//重新下拉时，去获取非0级代理商对应号段下拉列表
@@ -182,6 +204,7 @@ define([ 'require', 'rchat.module', 'agents/agents.service', 'segments/segments.
 		//根据ID查询agent，并进入修改页面
 		function update() {
 			var id = $stateParams.id;
+			getServerList();
 			agentsService.findOne(id).then(function(agent) {
 				//放置一个默认值，重置时使用
 				$scope.agent_init = angular.copy(agent);
