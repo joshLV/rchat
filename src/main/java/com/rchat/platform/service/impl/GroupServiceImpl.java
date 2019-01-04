@@ -101,20 +101,21 @@ public class GroupServiceImpl extends AbstractService<Group, String> implements 
         	Server server=new Server();
         	server.setId(agent.getServerId());
         	group.setServer(server);
-        }
-
-        // 创建集团
-        group = super.create(group);
-        
-        List<Server> servers = serverService.findAll();
-        Server server = new Server();
-        for (Server s : servers) {       	
-        	if(s.getStatus() == ServerStatus.ONLINE){
-        		server = s;
-        		setServer(Collections.singletonList(group), server); 
-        		group.setServer(server);
-        		break;
-        	}
+        	 // 创建集团
+            group = super.create(group);
+        }else{
+        	 // 创建集团
+            group = super.create(group);
+        	 List<Server> servers = serverService.findAll();
+             Server server = new Server();
+             for (Server s : servers) {       	
+             	if(s.getStatus() == ServerStatus.ONLINE){
+             		server = s;
+             		setServer(Collections.singletonList(group), server); 
+             		group.setServer(server);
+             		break;
+             	}
+             }
         }
               
         // 创建集团额度账户
