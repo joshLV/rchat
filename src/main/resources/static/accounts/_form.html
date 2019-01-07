@@ -142,7 +142,7 @@
 			<div class="row">
 				<label><span translate="content.groups.business_scope"></span></label>			
 				<div class="box-group" style="margin-left: 25.7%">
-					<label data-ng-repeat="business in busy" style="margin-right: 12px">
+					<label data-ng-repeat="business in busy" style="margin-right: 12px" data-ng-if="business.enabled">
 						<input name="business" type="checkbox" data-ng-checked="business.internal"
 							data-ng-value="business.id" data-ng-disabled="business.internal" />{{business.name}}
 					</label>
