@@ -708,7 +708,7 @@ public class TalkbackUserServiceImpl extends AbstractService<TalkbackUser, Strin
     }
 
     @Override
-    
+    @Transactional
     @SecurityMethod(operation = OperationType.UPDATE)
     public boolean enable(List<TalkbackUser> users) {
         return repository.setEnabled(users, true);
