@@ -457,7 +457,7 @@ public class AgentController {
     			file.transferTo(new File(filePath));
     			agent.setLogPath(filePath);
     		}
-    		agent=agentService.create(agent);
+    		agent=agentService.update(agent);
     		result.setCode(0);
     		result.setData(agent);
     	}else{
