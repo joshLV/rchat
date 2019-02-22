@@ -6,9 +6,9 @@
 	<groupId>com.rchat.platform</groupId>
 	<artifactId>rchat</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging> 
+<!-- 	<packaging>jar</packaging>  -->
 	<!-- 如果是web打包，打开这个 jar 换成 war -->
-	<!-- <packaging>war</packaging>-->
+	<packaging>war</packaging>
 
 	<name>rchat</name>
 	<description>融洽对讲管理平台</description>

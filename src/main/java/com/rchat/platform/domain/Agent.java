@@ -103,6 +103,15 @@ public class Agent extends TimestampedResource implements Serializable, Comparab
      * 服务器ID
      */
     private String  serverId;
+    
+    /**
+     * log图片路径
+     */
+    private String logPath;
+    /**
+     * 标题名称
+     */
+    private String titleName;
 
     /**
      * 代理商类型
@@ -325,8 +334,25 @@ public class Agent extends TimestampedResource implements Serializable, Comparab
     public void setCreditAccumulation(Long creditAccumulation) {
         this.creditAccumulation = creditAccumulation;
     }
+    
 
-    @Override
+    public String getLogPath() {
+		return logPath;
+	}
+
+	public void setLogPath(String logPath) {
+		this.logPath = logPath;
+	}
+
+	public String getTitleName() {
+		return titleName;
+	}
+
+	public void setTitleName(String titleName) {
+		this.titleName = titleName;
+	}
+
+	@Override
     public int compareTo(Agent o) {
         return 0;
     }

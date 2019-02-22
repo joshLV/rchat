@@ -12,6 +12,7 @@ import com.rchat.platform.web.exception.*;
 import com.rchat.platform.web.format.AgentTypeFormatter;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +25,15 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/agents")
@@ -58,6 +64,8 @@ public class AgentController {
     private JmsTemplate jms;
     @Autowired
     private ServerService serverService;
+    @Autowired
+    private UserService userService;
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
@@ -425,6 +433,38 @@ public class AgentController {
         boolean exists = agentService.exists(id);
         if (!exists)
             throw new AgentNotFoundException();
+    }
+    
+
+    @ApiOperation("代理商个性化配置")
+    @RequestMapping(value={"fileUpload"}, method={RequestMethod.POST})
+    public Result list(@RequestParam(value = "file", required = true) MultipartFile file,HttpServletRequest request,@RequestParam(value="titleName")String titleName) throws IllegalStateException, IOException{
+    	Result result=new Result();
+    	Agent agent =new Agent();
+    	String filePath = "";
+    	if(RchatUtils.isAgentAdmin()){
+    		User user=RchatUtils.currentUser();
+    		Optional<User> optionals=userService.findByUsername(user.getUsername());
+    		user=optionals.get();
+    		Optional<Agent> optional=agentService.findByAdministrator(user);
+    		agent=optional.get();
+    		agent.setTitleName(titleName);
+    		if (!file.isEmpty()){
+    			//使用StreamsAPI方式拷贝文件
+//    		    Streams.copy(file.getInputStream(),new FileOutputStream(filePath),true);
+    			String realPath = request.getSession().getServletContext().getRealPath("/");
+    			filePath = realPath+"/" + file.getOriginalFilename();
+    			file.transferTo(new File(filePath));
+    			agent.setLogPath(filePath);
+    		}
+    		agent=agentService.create(agent);
+    		result.setCode(0);
+    		result.setData(agent);
+    	}else{
+    		result.setCode(-1);
+    		result.setMsg("没有权限");
+    	}
+      return result;
     }
 
 }
