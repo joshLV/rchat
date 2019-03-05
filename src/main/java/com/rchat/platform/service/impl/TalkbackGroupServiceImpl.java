@@ -3,6 +3,7 @@ package com.rchat.platform.service.impl;
 import com.rchat.platform.aop.ResourceType;
 import com.rchat.platform.aop.SecurityMethod;
 import com.rchat.platform.aop.SecurityService;
+import com.rchat.platform.common.ToolsUtil;
 import com.rchat.platform.domain.*;
 import com.rchat.platform.service.TalkbackGroupService;
 import com.rchat.platform.service.TalkbackUserService;
@@ -16,6 +17,7 @@ import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -73,11 +75,29 @@ public class TalkbackGroupServiceImpl extends AbstractService<TalkbackGroup, Str
     @Override
     @Transactional
     public TalkbackGroup create(TalkbackGroup group) {
+    	group.setGroupOnlyId(this.getNumber());
         group = super.create(group);
         saveTalkbackUserGroups(group);
 
         return group;
     }
+    /**
+  	 * 生成16位唯一的数字
+  	 */
+  	public Integer getNumber(){
+  	        //随机生成一位整数
+  	        //生成uuid的hashCode值
+  	        int hashCode = UUID.randomUUID().toString().hashCode();
+  	        //可能为负数
+  	        if(hashCode<0){
+  	            hashCode = -hashCode;
+  	        }
+  	        TalkbackGroup old= this.findNum(hashCode);
+  	        if(ToolsUtil.isNotEmpty(old)){
+  	        	this.getNumber();
+  	        }
+  	        return hashCode;
+      }
 
     @Override
     @Transactional
@@ -154,4 +174,9 @@ public class TalkbackGroupServiceImpl extends AbstractService<TalkbackGroup, Str
     public Page<Brief> findBriefs(Server server, Pageable pageable) {
         return repository.findBriefs(server, pageable);
     }
+
+	@Override
+	public TalkbackGroup findNum(int hashCode) {
+		return repository.findNum(hashCode);
+	}
 }

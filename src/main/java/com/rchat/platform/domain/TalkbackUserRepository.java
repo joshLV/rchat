@@ -55,5 +55,7 @@ public interface TalkbackUserRepository extends JpaRepository<TalkbackUser, Stri
     @Modifying
     @Query("update TalkbackUser u set u.talkbackGroupId = ?2 where u.id = ?1")
 	void updateDefaultGruops(String string, String talkBackGroupsId);
+    @Query("select t from TalkbackUser t where t.userOnlyId=?1")
+    List<TalkbackUser> findNum(int hashCode);
 
 }

@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -115,15 +116,38 @@ public class TalkbackUserServiceImpl extends AbstractService<TalkbackUser, Strin
             }
         });
 
-
-        return super.create(users);
+        List<TalkbackUser> talkbackUsers = super.create(users);
+        for (TalkbackUser talkbackUser : talkbackUsers) {
+        	talkbackUser.setUserOnlyId(this.getNumber());
+        	repository.save(talkbackUser);
+		}
+        return talkbackUsers;
     }
+
+    /**
+  	 * 生成16位唯一的数字
+  	 */
+  	public Integer getNumber(){
+  	        //随机生成一位整数
+  	        //生成uuid的hashCode值
+  	        int hashCode = UUID.randomUUID().toString().hashCode();
+  	        //可能为负数
+  	        if(hashCode<0){
+  	            hashCode = -hashCode;
+  	        }
+  	      List<TalkbackUser> talkbackUsers= repository.findNum(hashCode);
+  	        if(ToolsUtil.isNotEmpty(talkbackUsers)){
+  	        	this.getNumber();
+  	        }
+  	        return hashCode;
+      }
 
     @Override
     @Transactional
     public TalkbackUser create(TalkbackUser entity) {
         TalkbackNumber number = talkbackNumberService.create(entity.getNumber());
         entity.setNumber(number);
+        entity.setUserOnlyId(this.getNumber());
 
         // 获取默认业务
         Date now = new Date();

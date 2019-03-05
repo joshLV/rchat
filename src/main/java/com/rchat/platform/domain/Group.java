@@ -142,7 +142,6 @@ public class Group extends TimestampedResource implements Serializable, Comparab
      * 是否开启存储空间
      */
     private boolean status;
-    
     /**
      * 存储总空间
      */

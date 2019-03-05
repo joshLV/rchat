@@ -23,4 +23,6 @@ public interface TalkbackGroupService extends GenericService<TalkbackGroup, Stri
 	Optional<TalkbackGroup> findByDepartmentAndType(Department department, TalkbackGroupType type);
 
 	Page<Brief> findBriefs(Server server, Pageable pageable);
+
+	TalkbackGroup findNum(int hashCode);
 }

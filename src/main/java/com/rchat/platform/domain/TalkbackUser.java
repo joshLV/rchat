@@ -162,6 +162,7 @@ public class TalkbackUser extends TimestampedResource implements Serializable, L
 	private Date deadline;
 	
 	private String fullValue;
+	private Integer userOnlyId;
 
 	public TalkbackUser() {
 	}
@@ -306,6 +307,15 @@ public class TalkbackUser extends TimestampedResource implements Serializable, L
 
 	public void setLastRenewed(Date lastRenewed) {
 		this.lastRenewed = lastRenewed;
+	}
+	
+
+	public Integer getUserOnlyId() {
+		return userOnlyId;
+	}
+
+	public void setUserOnlyId(Integer userOnlyId) {
+		this.userOnlyId = userOnlyId;
 	}
 
 	@Override

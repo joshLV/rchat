@@ -3,6 +3,7 @@ package com.rchat.platform.web.controller.api;
 import com.rchat.platform.common.LogAPI;
 import com.rchat.platform.common.RchatEnv;
 import com.rchat.platform.common.RchatUtils;
+import com.rchat.platform.common.ToolsUtil;
 import com.rchat.platform.domain.*;
 import com.rchat.platform.exception.NoRightAccessException;
 import com.rchat.platform.jms.TopicNameConstants;
@@ -26,11 +27,13 @@ import org.springframework.jms.support.converter.MessageConversionException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -266,12 +269,13 @@ public class GroupController extends MessageListenerAdapter{
             group.setDepartment(departmentService.findOne(group.getDepartment().getId())
                     .orElseThrow(DepartmentNotFoundException::new));
         });
-
+        
         TalkbackGroup g = talkbackGroupService.create(group);
         jms.convertAndSend(TopicNameConstants.TALKBACK_GROUP_CREATE, g);
 
         return g;
     }
+  
 
     @GetMapping("/{groupId}/talkback-groups")
     public Page<TalkbackGroup> talkbackGroups(@PathVariable String groupId, @PageableDefault Pageable pageable) {

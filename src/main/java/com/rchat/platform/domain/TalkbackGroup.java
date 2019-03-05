@@ -1,6 +1,7 @@
 package com.rchat.platform.domain;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -90,6 +91,10 @@ public class TalkbackGroup extends TimestampedResource implements Serializable {
 	 * 备注
 	 */
 	private String description;
+	/**
+	 * 唯一id
+	 */
+	private Integer groupOnlyId;
 
 	public TalkbackGroup() {
 	}
@@ -168,6 +173,15 @@ public class TalkbackGroup extends TimestampedResource implements Serializable {
 
 	public void setUserCount(long userCount) {
 		this.userCount = userCount;
+	}
+
+
+	public Integer getGroupOnlyId() {
+		return groupOnlyId;
+	}
+
+	public void setGroupOnlyId(Integer groupOnlyId) {
+		this.groupOnlyId = groupOnlyId;
 	}
 
 	@Transient
