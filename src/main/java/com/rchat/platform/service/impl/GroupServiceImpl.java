@@ -98,7 +98,7 @@ public class GroupServiceImpl extends AbstractService<Group, String> implements 
         Agent agent=agentService.findOne(group.getAgent().getId()).get();
         //判断是否存在默认的代理商服务器ip
         if(ToolsUtil.isNotEmpty(agent)&&ToolsUtil.isNotEmpty(agent.getServerId())){
-        	Server server=new Server();
+        	Server server=serverService.findOne(agent.getServerId()).get();
         	server.setId(agent.getServerId());
         	group.setServer(server);
         	 // 创建集团
