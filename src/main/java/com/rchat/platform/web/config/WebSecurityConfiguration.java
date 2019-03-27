@@ -65,6 +65,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         authorizeRequests.antMatchers("/v2/**").permitAll();
         authorizeRequests.antMatchers("/swagger-resources/**").permitAll();
         authorizeRequests.antMatchers("/swagger/**").permitAll();
+        authorizeRequests.antMatchers("/sdk/**").permitAll();
 
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry authenticated = authorizeRequests
                 .anyRequest().authenticated();

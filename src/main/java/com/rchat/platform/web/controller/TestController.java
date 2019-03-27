@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rchat.platform.service.TalkbackUserService;
+import com.rchat.platform.service.redis.RedisService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,10 +18,20 @@ import io.swagger.annotations.ApiOperation;
 public class TestController {
 	@Autowired
     private TalkbackUserService talkbackUserService;
+	@Autowired
+    private RedisService redisService;
 
 	@ApiOperation(value = "测试")
     @RequestMapping(value = "tel", method = RequestMethod.GET)
     public String add( @RequestParam("str") String str ) {
+        return "添加成功";
+    }
+	@ApiOperation(value = "测试缓存")
+    @RequestMapping(value = "ceshi", method = RequestMethod.GET)
+    public String ceshi() {
+		redisService.set("13324", "ceshi");
+		Object obj=redisService.get("13324");
+		System.out.println(obj);
         return "添加成功";
     }
 	/**

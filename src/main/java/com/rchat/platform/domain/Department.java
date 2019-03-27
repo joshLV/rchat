@@ -110,6 +110,10 @@ public class Department extends TimestampedResource implements Serializable, Com
     private Long expiredUserAmount;
     @Transient
     private Long expiringUserAmount;
+    @Transient
+    private String uid;
+    @Transient
+    private String token;
 
     public Department() {
     }
@@ -258,7 +262,23 @@ public class Department extends TimestampedResource implements Serializable, Com
         this.expiringUserAmount = expiringUserAmount;
     }
 
-    @Override
+    public String getUid() {
+		return uid;
+	}
+
+	public void setUid(String uid) {
+		this.uid = uid;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	@Override
     public String toString() {
         return String.format("Department [id=%s, name=%s, linkman=%s, parent=%s]", id, name, linkman, parent);
     }
