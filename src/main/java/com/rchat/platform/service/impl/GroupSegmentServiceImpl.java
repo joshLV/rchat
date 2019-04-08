@@ -1,6 +1,7 @@
 package com.rchat.platform.service.impl;
 
 import com.rchat.platform.aop.ResourceType;
+import com.rchat.platform.aop.SecurityMethod;
 import com.rchat.platform.aop.SecurityService;
 import com.rchat.platform.domain.*;
 import com.rchat.platform.service.GroupSegmentService;
@@ -54,7 +55,7 @@ public class GroupSegmentServiceImpl extends AbstractService<GroupSegment, Strin
 
         return page;
     }
-
+    @SecurityMethod(false)
     @Override
     public List<GroupSegment> findByGroup(Group group) {
         List<GroupSegment> segments = repository.findByGroup(group);
@@ -83,7 +84,7 @@ public class GroupSegmentServiceImpl extends AbstractService<GroupSegment, Strin
 
         return segments;
     }
-
+    @SecurityMethod(false)
     @Override
     public Optional<GroupSegment> findOne(String id) {
         Optional<GroupSegment> o = super.findOne(id);

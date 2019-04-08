@@ -17,6 +17,8 @@ public interface GroupRepository extends JpaRepository<Group, String>, GroupRepo
     boolean existsByAgent(Agent agent);
 
     Optional<Group> findByAdministrator(User user);
+    @Query("select g from  Group g where g.administrator.id=?1")
+    List<Group>  findByUserId(String userId);
 
     List<Group> findByAgent(Agent agent);
 

@@ -47,14 +47,14 @@ public class TalkbackGroupServiceImpl extends AbstractService<TalkbackGroup, Str
 
         return talkbackUserService.countByTalkbackGroup(group);
     }
-
+    @SecurityMethod(false)
     @Override
     public List<TalkbackGroup> findAll() {
         List<TalkbackGroup> groups = super.findAll();
         groups.forEach(g -> g.setUserCount(getUserCount(g)));
         return groups;
     }
-
+    @SecurityMethod(false)
     @Override
     public Page<TalkbackGroup> findAll(Pageable pageable) {
         Page<TalkbackGroup> page = super.findAll(pageable);
@@ -62,7 +62,7 @@ public class TalkbackGroupServiceImpl extends AbstractService<TalkbackGroup, Str
 
         return page;
     }
-
+    @SecurityMethod(false)
     @Override
     @Transactional
     public List<TalkbackGroup> create(List<TalkbackGroup> groups) {
@@ -71,7 +71,7 @@ public class TalkbackGroupServiceImpl extends AbstractService<TalkbackGroup, Str
 
         return groups;
     }
-
+    @SecurityMethod(false)
     @Override
     @Transactional
     public TalkbackGroup create(TalkbackGroup group) {
@@ -98,7 +98,7 @@ public class TalkbackGroupServiceImpl extends AbstractService<TalkbackGroup, Str
   	        }
   	        return hashCode;
       }
-
+  	@SecurityMethod(false)
     @Override
     @Transactional
     public TalkbackGroup update(TalkbackGroup group) {
@@ -126,7 +126,7 @@ public class TalkbackGroupServiceImpl extends AbstractService<TalkbackGroup, Str
         talkbackUserGroupRepository.delete(deletedUserGroups);
         talkbackUserGroupRepository.flush();
     }
-
+    @SecurityMethod(false)
     @Override
     public Optional<TalkbackGroup> findByDepartmentAndType(Department department, TalkbackGroupType type) {
         Optional<TalkbackGroup> o = repository.findByDepartmentAndType(department, type);
@@ -140,7 +140,7 @@ public class TalkbackGroupServiceImpl extends AbstractService<TalkbackGroup, Str
         page.forEach(g -> g.setUserCount(getUserCount(g)));
         return page;
     }
-
+    @SecurityMethod(false)
     @Override
     @Transactional
     public void setTalbackUsers(TalkbackGroup group) {

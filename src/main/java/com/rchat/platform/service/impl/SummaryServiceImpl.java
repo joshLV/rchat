@@ -1,5 +1,6 @@
 package com.rchat.platform.service.impl;
 
+import com.rchat.platform.aop.SecurityMethod;
 import com.rchat.platform.common.DateUtils;
 import com.rchat.platform.common.RchatEnv;
 import com.rchat.platform.common.RchatUtils;
@@ -83,7 +84,7 @@ public class SummaryServiceImpl implements SummaryService {
     public Summary count(Group group) {
         return doCount(null, group, null);
     }
-
+    @SecurityMethod(false)
     @Override
     public Summary count(Department department) {
         return doCount(null, null, department);

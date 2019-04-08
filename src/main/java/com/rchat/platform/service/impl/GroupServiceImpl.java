@@ -78,7 +78,7 @@ public class GroupServiceImpl extends AbstractService<Group, String> implements 
 
         return o;
     }
-
+    @SecurityMethod(false)
     @Override
     @Transactional
     public Group create(Group group) {
@@ -177,12 +177,12 @@ public class GroupServiceImpl extends AbstractService<Group, String> implements 
         jms.convertAndSend(TopicNameConstants.GROUP_CREATE, group);
         return group;
     }
-
+    @SecurityMethod(false)
     @Override
     public Page<Group> findByAgent(Agent agent, Pageable pageable) {
         return repository.findByAgent(agent, pageable);
     }
-
+    @SecurityMethod(false)
     @Override
     public boolean delete(Group group) {
         assertCanDelete(group);
@@ -267,14 +267,14 @@ public class GroupServiceImpl extends AbstractService<Group, String> implements 
     public Page<Brief> findBriefs(Pageable pageable) {
         return repository.findBriefs(null, pageable);
     }
-
+    @SecurityMethod(false)
     @Override
     @Transactional
     public void setServer(List<Group> groups, Server server) {
         List<String> groupIds = groups.parallelStream().map(Group::getId).collect(Collectors.toList());
         repository.setServer(groupIds, server);
     }
-
+    @SecurityMethod(false)
     @Override
     public boolean existsServer(Group group) {
         return repository.existsByIdAndServerNotNull(group.getId());
@@ -285,4 +285,10 @@ public class GroupServiceImpl extends AbstractService<Group, String> implements 
     public Page<Brief> findBriefs(Server server, Pageable pageable) {
         return repository.findBriefs(server, pageable);
     }
+    @SecurityMethod(false)
+	@Override
+	public List<Group> findByUserId(String userId) {
+		// TODO Auto-generated method stub
+		return repository.findByUserId(userId);
+	}
 }

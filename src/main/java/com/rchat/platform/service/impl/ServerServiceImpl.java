@@ -22,7 +22,7 @@ public class ServerServiceImpl extends AbstractService<Server, String> implement
     protected JpaRepository<Server, String> repository() {
         return repository;
     }
-
+    @SecurityMethod(false)
     @Override
     public Optional<Server> findByGroup(Group group) {
         return repository.findByGroup(group);

@@ -66,4 +66,6 @@ public interface GroupService extends GenericService<Group, String> {
     boolean existsServer(Group group);
 
     Page<Brief> findBriefs(Server server, Pageable pageable);
+
+	List<Group> findByUserId(String id);
 }

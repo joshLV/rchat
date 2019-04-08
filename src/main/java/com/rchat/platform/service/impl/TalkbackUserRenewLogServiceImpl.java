@@ -86,7 +86,7 @@ public class TalkbackUserRenewLogServiceImpl extends AbstractService<TalkbackUse
     }
 
     @Override
-    @SecurityMethod(operation = OperationType.RETRIEVE)
+    @SecurityMethod(false)
     public List<TalkbackUserRenewLog> findRenewLogs(String agentId, String groupId, Date start, Date end, String fullValue) {
         Agent agent;
         Group group;

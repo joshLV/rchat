@@ -86,6 +86,10 @@ public class TalkbackGroup extends TimestampedResource implements Serializable {
 	private Integer priority = 5;
 	@Transient
 	private long userCount;
+	@Transient
+	private String uid;
+	@Transient
+	private String token;
 
 	/**
 	 * 备注
@@ -182,6 +186,23 @@ public class TalkbackGroup extends TimestampedResource implements Serializable {
 
 	public void setGroupOnlyId(Integer groupOnlyId) {
 		this.groupOnlyId = groupOnlyId;
+	}
+	
+
+	public String getUid() {
+		return uid;
+	}
+
+	public void setUid(String uid) {
+		this.uid = uid;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 	@Transient

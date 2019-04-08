@@ -80,7 +80,7 @@ public class TalkbackGroupController {
 	}
 
 	@PutMapping("/{id}")
-	@LogAPI("删除对讲群组")
+	@LogAPI("修改对讲群组")
 	public TalkbackGroup update(@PathVariable String id, @Validated @RequestBody TalkbackGroup group) {
 		assertTalkbackGroupExists(id);
 

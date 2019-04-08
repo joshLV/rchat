@@ -37,7 +37,7 @@ public class DepartmentServiceImpl extends AbstractService<Department, String> i
     protected JpaRepository<Department, String> repository() {
         return repository;
     }
-
+    @SecurityMethod(false)
     @Override
     public Page<Department> search(Group group, Optional<String> departmentName, Optional<String> adminName,
                                    Optional<String> adminUsername, Pageable pageable) {
@@ -57,7 +57,7 @@ public class DepartmentServiceImpl extends AbstractService<Department, String> i
     public Page<Brief> findBriefs(Server server, Pageable pageable) {
         return repository.findBriefs(server, pageable);
     }
-
+    @SecurityMethod(false)
     @Override
     @Transactional
     public Department update(Department entity) {
@@ -65,7 +65,7 @@ public class DepartmentServiceImpl extends AbstractService<Department, String> i
 
         return repository.saveAndFlush(entity);
     }
-
+    @SecurityMethod(false)
     @Override
     @Transactional
     public Department create(Department department) {
@@ -113,7 +113,7 @@ public class DepartmentServiceImpl extends AbstractService<Department, String> i
         department.setDefaultGroup(talkbackGroup);
         return department;
     }
-
+    @SecurityMethod(false)
     @Override
     public Optional<Department> findOne(String id) {
         Optional<Department> o = super.findOne(id);

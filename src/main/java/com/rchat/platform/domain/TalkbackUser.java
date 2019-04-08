@@ -22,6 +22,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
@@ -163,6 +164,10 @@ public class TalkbackUser extends TimestampedResource implements Serializable, L
 	
 	private String fullValue;
 	private Integer userOnlyId;
+	@Transient
+	private String uid;
+	@Transient
+	private String token;
 
 	public TalkbackUser() {
 	}
@@ -316,6 +321,22 @@ public class TalkbackUser extends TimestampedResource implements Serializable, L
 
 	public void setUserOnlyId(Integer userOnlyId) {
 		this.userOnlyId = userOnlyId;
+	}
+	
+	public String getUid() {
+		return uid;
+	}
+
+	public void setUid(String uid) {
+		this.uid = uid;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 	@Override

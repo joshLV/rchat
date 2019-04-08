@@ -84,7 +84,7 @@ public class TalkbackUserServiceImpl extends AbstractService<TalkbackUser, Strin
     protected JpaRepository<TalkbackUser, String> repository() {
         return repository;
     }
-
+    @SecurityMethod(false)
     @Override
     @Transactional
     public List<TalkbackUser> create(List<TalkbackUser> users) {
@@ -141,7 +141,7 @@ public class TalkbackUserServiceImpl extends AbstractService<TalkbackUser, Strin
   	        }
   	        return hashCode;
       }
-
+  	@SecurityMethod(false)
     @Override
     @Transactional
     public TalkbackUser create(TalkbackUser entity) {
@@ -317,7 +317,7 @@ public class TalkbackUserServiceImpl extends AbstractService<TalkbackUser, Strin
     }
 
     @Transactional
-    @SecurityMethod(operation = OperationType.UPDATE)
+    @SecurityMethod(false)
     @Override
     public void batchRenew(List<TalkbackUser> users, List<BusinessRent> businessRents) {
         for (TalkbackUser user : users) {
@@ -330,7 +330,7 @@ public class TalkbackUserServiceImpl extends AbstractService<TalkbackUser, Strin
     public Page<TalkbackUser> findByTalkbackGroup(TalkbackGroup group, Pageable pageable) {
         return repository.findByGroups(group, pageable);
     }
-
+    @SecurityMethod(false)
     @Override
     public Page<TalkbackUser> search(Optional<String> fullValue, Optional<TalkbackRole> role, Optional<String> shortValue, Optional<String> name, Optional<Boolean> activated,
                                      Optional<Department> department, Optional<Group> group, Optional<Agent> agent, Optional<Date> createdStart,
@@ -369,7 +369,7 @@ public class TalkbackUserServiceImpl extends AbstractService<TalkbackUser, Strin
     public long countByGroup(Group g) {
         return repository.countByGroup(g);
     }
-
+    @SecurityMethod(false)
     @Override
     public long countByServer(Server server) {
         return repository.countByGroupServer(server);
@@ -680,22 +680,22 @@ public class TalkbackUserServiceImpl extends AbstractService<TalkbackUser, Strin
     public List<TalkbackUser> findExpired(Agent agent) {
         return repository.findExpired(agent, null, null);
     }
-
+    @SecurityMethod(false)
     @Override
     public List<TalkbackUser> findAll(Department department) {
         return repository.findAll(null, null, department);
     }
-
+    @SecurityMethod(false)
     @Override
     public List<TalkbackUser> findAll(Group group) {
         return repository.findAll(null, group, null);
     }
-
+    @SecurityMethod(false)
     @Override
     public List<TalkbackUser> findAll(Agent agent) {
         return repository.findAll(agent, null, null);
     }
-
+    @SecurityMethod(false)
     @Override
     public List<TalkbackUser> findAll() {
         if (RchatUtils.isRchatAdmin()) {

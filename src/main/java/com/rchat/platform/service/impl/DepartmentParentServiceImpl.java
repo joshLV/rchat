@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import com.rchat.platform.aop.SecurityMethod;
 import com.rchat.platform.domain.Department;
 import com.rchat.platform.domain.DepartmentParent;
 import com.rchat.platform.domain.DepartmentParentRepository;
@@ -18,7 +19,7 @@ public class DepartmentParentServiceImpl extends AbstractService<DepartmentParen
 		implements DepartmentParentService {
 	@Autowired
 	private DepartmentParentRepository repository;
-
+	@SecurityMethod(false)
 	@Override
 	public List<DepartmentParent> findParents(Department child) {
 		if (child == null) {

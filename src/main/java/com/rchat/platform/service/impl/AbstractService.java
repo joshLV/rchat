@@ -37,7 +37,7 @@ public abstract class AbstractService<T, ID extends Serializable> implements Gen
 		repository().deleteAllInBatch();
 		return SUCCEED;
 	}
-
+	@SecurityMethod(false)
 	@Override
 	@Transactional
 	public boolean delete(List<T> entities) {
@@ -141,7 +141,7 @@ public abstract class AbstractService<T, ID extends Serializable> implements Gen
 
 		return repository().save(entity);
 	}
-
+	@SecurityMethod(false)
 	@Override
 	public boolean exists(ID id) {
 		return repository().exists(id);

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import com.rchat.platform.aop.SecurityMethod;
 import com.rchat.platform.domain.Group;
 import com.rchat.platform.domain.GroupSegment;
 import com.rchat.platform.domain.TalkbackNumber;
@@ -46,7 +47,7 @@ public class TalkbackNumberServiceImpl extends AbstractService<TalkbackNumber, S
 	public boolean existsByGroupSegment(GroupSegment segment) {
 		return repository.existsByGroupSegment(segment);
 	}
-
+	@SecurityMethod(false)
 	@Override
 	public List<Integer> findNumberValuesByGroup(Group group) {
 		return repository.findNumberValuesByGroup(group);
